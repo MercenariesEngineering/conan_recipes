@@ -1,0 +1,33 @@
+# Dev Folders
+cd /x/Dev/ConanRecipes
+cd /x/Dev/Guerilla2.1
+cd /x/Dev/GuerillaMaster
+cd /x/Dev/GuerillaTemp
+
+conan remote list
+conan remote add hulud_repo https://api.bintray.com/conan/hulud/libs
+conan remote add pierousseau https://api.bintray.com/conan/pierousseau/libs
+
+./conan_update
+
+
+# New package
+conan create hdf5/1.10.1@pierousseau/stable
+
+
+# Export source package
+conan export hdf5/1.10.1@pierousseau/stable
+conan export openexrid/1.0-beta.11@pierousseau/stable
+conan export openimageio/1.6.18@pierousseau/stable
+conan export openvdb/4.0.2@pierousseau/stable
+
+
+# Export binary package
+conan export-pkg . GuerillaBinaries/1.0@pierousseau/stable -s os=Windows -s compiler.version=14 -s build_type=Debug -f
+conan export-pkg . GuerillaBinaries/1.0@pierousseau/stable -s os=Windows -s compiler.version=14 -s build_type=Release -f
+
+
+# Upload packages
+conan user -p 94cb8468316779a44cdd6d3666d64fd3e4864cbc -r pierousseau pierousseau
+conan upload "*" -r pierousseau --all
+conan upload GuerillaBinaries/1.0@pierousseau/stable -r pierousseau --all
