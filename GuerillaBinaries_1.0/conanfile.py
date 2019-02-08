@@ -38,6 +38,7 @@ class GuerillabinariesConan(ConanFile):
     libs_partio = ["partio.lib"]
     libs_ptex = ["ptex.lib"]
     libs_re2 = ["re2.lib"]
+    libs_tbb = ["tbb.lib"]
     libs_wx = ["wxbase28.lib", "wxbase28_net.lib", "wxbase28_odbc.lib", "wxbase28_xml.lib", "wxexpat.lib", "wxmsw28_adv.lib", "wxmsw28_aui.lib", "wxmsw28_core.lib", "wxmsw28_dbgrid.lib", "wxmsw28_gl.lib", "wxmsw28_html.lib", "wxmsw28_media.lib", "wxmsw28_qa.lib", "wxmsw28_richtext.lib", "wxmsw28_stc.lib", "wxmsw28_xrc.lib", "wxregex.lib"]
 
 
@@ -99,7 +100,7 @@ class GuerillabinariesConan(ConanFile):
             self.run("cp -R %s\\contrib\\wx-2.8.8\\include\\%s include\\" % (self.src_libs_path, path))
 
         ###
-        libs = [self.libs_curl, self.libs_embree, self.libs_freetype, self.libs_libxml, self.libs_llvm, self.libs_ocio, self.libs_partio, self.libs_ptex, self.libs_re2, self.libs_wx]
+        libs = [self.libs_curl, self.libs_embree, self.libs_freetype, self.libs_libxml, self.libs_llvm, self.libs_ocio, self.libs_partio, self.libs_ptex, self.libs_re2, self.libs_tbb, self.libs_wx]
         for lib in libs:
             for path in lib:
                 self.run("cp -R %s\\lib\\x64\\%s\\%s lib\\" % (self.src_libs_path, self.settings.build_type, path))
