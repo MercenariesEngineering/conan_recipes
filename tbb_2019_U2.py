@@ -27,12 +27,18 @@ class TBB(ConanFile):
         os.remove( zip_name )
 
     def build(self):
+        # TBBMALLOC PROXY is not included into this package because:
+        # - it prevent crashes when it is linked to, since it should be
+        # preloaded only to replace allocators.
+        # - it serves a different purpose and could be then included into
+        # another package if needed.
+
         definition_dict = {
           "CMAKE_BUILD_TYPE": self.settings.build_type,
           "TBB_BUILD_SHARED": self.options.shared,
           "TBB_BUILD_STATIC": not self.options.shared,
           "TBB_BUILD_TBBMALLOC": True,
-          "TBB_BUILD_TBBMALLOC_PROXY": True,
+          "TBB_BUILD_TBBMALLOC_PROXY": False,
           "TBB_BUILD_TESTS": False,
           "TBB_CI_BUILD": False
         }
@@ -40,7 +46,7 @@ class TBB(ConanFile):
         if self.settings.os == "Linux" and find_executable( "gcc" ) is not None:
             gcc_version = subprocess.check_output( [ "gcc", "-dumpversion" ] ).decode( "utf-8" )
 
-            # keep it simple to work on python 2.7 as well as on python 3+
+            # Keep it simple to work on python 2.7 as well as on python 3+
             major, minor, build = 0, 0, 0
             version_numbers = re.findall( r"\d+", gcc_version )
             version_numbers_count = len( version_numbers )
@@ -56,6 +62,10 @@ class TBB(ConanFile):
 
             tbb_glibcxx_version = major * 10000 + minor * 100 + build
             definition_dict[ "TBB_USE_GLIBCXX_VERSION" ] = tbb_glibcxx_version
+
+            # Normally not necessary, but it does not cost anything to enforce it.
+            if self.settings.build_type == "Debug":
+                definition_dict[ "CMAKE_CXX_FLAGS" ] = "-DTBB_USE_DEBUG=2"
 
         cmake = CMake(self)
         cmake.configure( defs = definition_dict, source_folder = self.name )
