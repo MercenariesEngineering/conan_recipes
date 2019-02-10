@@ -53,7 +53,7 @@ class EmbreeConan(ConanFile):
         self.copy( "*.h"   , src="embree/include", dst="include", keep_path = True )
         self.copy( "*.isph", src="embree/include", dst="include", keep_path = True )
         self.copy( "*.h"   , src="embree/kernels", dst="kernels", keep_path = True )
-        self.copy( "*.h"   , src="embree/command", dst="common" , keep_path = True )
+        self.copy( "*.h"   , src="embree/common",  dst="common" , keep_path = True )
 
         self.copy( "*.so*", dst="lib", symlinks = True )
 
@@ -62,4 +62,4 @@ class EmbreeConan(ConanFile):
         self.env_info.LD_LIBRARY_PATH.append(os.path.join(self.package_folder, "lib"))
         self.cpp_info.libs = tools.collect_libs(self)
         self.cpp_info.includedirs = [ 'include', 'kernels' ]
-        self.cpp_info.defines.append( "DTASKING_TBB" )
+        self.cpp_info.defines.append( "TASKING_TBB" )
