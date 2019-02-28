@@ -78,8 +78,8 @@ class PortAudio( ConanFile ):
             self.copy( "portaudio.h", src = "PortAudio/include", dst = "include" )
             self.copy( "pa_win_mme.h", src = "PortAudio/include", dst = "include" )
             if self.options.shared:
-                self.copy( "*.dll", dst ="lib" )
-            self.copy( "*.lib", dst ="lib" )
+                self.copy( "*.dll", dst ="lib", keep_path=False )
+            self.copy( "*.lib", dst ="lib", keep_path=False )
 
     def package_info(self):
         self.env_info.LD_LIBRARY_PATH.append(os.path.join(self.package_folder, "lib"))
