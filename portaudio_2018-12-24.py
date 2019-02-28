@@ -15,11 +15,9 @@ class PortAudio( ConanFile ):
     options = { "shared": [ True, False ] }
     default_options = { "shared": True }
 
-    build_requires = ( ( "cmake/3.11.2@tdelame/stable" ), ( "ninja/1.8.2@tdelame/stable" ) )
-
     def build_requirements( self ):
         if self.settings.os == "Linux":
-            self.build_requires( "alsa-lib/1.0.29@tdelame/stable" )
+            self.build_requires( "alsa-lib/1.0.29@tdelame/stable", "cmake/3.11.2@tdelame/stable", "ninja/1.8.2@tdelame/stable" )
 
     def source( self ):
         download_url = "https://app.assembla.com/spaces/portaudio/git/source/b7870b08f770c1e84b754e662c08b6942ff7d021?_format=zip&format=html"
@@ -62,7 +60,7 @@ class PortAudio( ConanFile ):
             definition_dict[ "PA_USE_DS" ] = False
 
 
-        cmake = CMake( self, generator = "Ninja" )
+        cmake = CMake( self )
         cmake.configure(
             defs = definition_dict,
             source_folder = self.name
@@ -79,8 +77,11 @@ class PortAudio( ConanFile ):
         elif self.settings.os == "Windows":
             self.copy( "portaudio.h", src = "PortAudio/include", dst = "include" )
             self.copy( "pa_win_mme.h", src = "PortAudio/include", dst = "include" )
-            #libs?
+            if self.options.shared:
+                self.copy( "*.dll", dst ="lib" )
+            self.copy( "*.lib", dst ="lib" )
 
     def package_info(self):
         self.env_info.LD_LIBRARY_PATH.append(os.path.join(self.package_folder, "lib"))
         self.cpp_info.libs = tools.collect_libs(self)
+
