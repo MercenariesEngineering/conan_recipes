@@ -1,0 +1,15 @@
+#!python
+
+import os, sys, platform
+
+options = {
+	"Windows" : [
+		"-s compiler.runtime=MD -s build_type=Release -o shared=False",
+		"-s compiler.runtime=MD -s build_type=Release -o shared=True",
+		"-s compiler.runtime=MDd -s build_type=Debug -o shared=False",
+		"-s compiler.runtime=MDd -s build_type=Debug -o shared=True",
+	]
+}
+
+for option in options[platform.system()]:
+	os.system("conan create %s tdelame/stable %s" % (sys.argv[1], option))
