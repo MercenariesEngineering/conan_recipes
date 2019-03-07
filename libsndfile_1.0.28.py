@@ -29,7 +29,9 @@ class LibSndFile( ConanFile ):
     options = { "shared": [ True, False ] }
     default_options = { "shared": True }
 
-    build_requires = ( ( "cmake/3.11.2@tdelame/stable" ), ( "ninja/1.8.2@tdelame/stable" ) )
+    def build_requirements( self ):
+        if self.settings.os == "Linux":
+            self.build_requires( "cmake/3.11.2@tdelame/stable", "ninja/1.8.2@tdelame/stable" )
 
     def source( self ):
         sha = "1a87c443fe37bd67c8d1e2d2b4c8b0291806eb90"
@@ -41,6 +43,10 @@ class LibSndFile( ConanFile ):
         tools.unzip( zipped_folder_name )
         shutil.move( folder_name, self.name )
         os.remove( zipped_folder_name )
+
+        if self.settings.os == "Windows":
+            tools.replace_in_file("libsndfile/src/common.c", "#if HAVE_UNISTD_H", '''#undef HAVE_UNISTD_H
+#if HAVE_UNISTD_H''')
 
     def configure_cmake( self ):
         #Note: I do not add ogg, flac, and vorbis dependences here since we do
@@ -69,7 +75,7 @@ class LibSndFile( ConanFile ):
                 definition_dict[ "CMAKE_SHARED_LINKER_FLAGS" ] = "-fuse-ld=lld"
                 definition_dict[ "CMAKE_EXE_LINKER_FLAGS"    ] = "-fuse-ld=lld"
 
-        cmake = CMake( self, generator = "Ninja" )
+        cmake = CMake( self )
         cmake.configure( defs = definition_dict, source_folder = self.name )
         return cmake
 
@@ -86,5 +92,5 @@ class LibSndFile( ConanFile ):
 
     def package_info( self ):
         self.env_info.LD_LIBRARY_PATH.append(os.path.join(self.package_folder, "lib"))
-        self.cpp_info.libs = tools.collect_libs(self)  
+        self.cpp_info.libs = tools.collect_libs(self)
 
