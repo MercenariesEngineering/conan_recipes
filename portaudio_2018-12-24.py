@@ -17,10 +17,12 @@ class PortAudio( ConanFile ):
 
     def build_requirements( self ):
         if self.settings.os == "Linux":
-            self.build_requires( "alsa-lib/1.0.29@tdelame/stable", "cmake/3.11.2@tdelame/stable", "ninja/1.8.2@tdelame/stable" )
+            self.build_requires( "alsa-lib/1.0.29@tdelame/stable" )
+            self.build_requires( "cmake/3.11.2@tdelame/stable" )
+            self.build_requires( "ninja/1.8.2@tdelame/stable" )
 
     def source( self ):
-        download_url = "https://app.assembla.com/spaces/portaudio/git/source/b7870b08f770c1e84b754e662c08b6942ff7d021?_format=zip&format=html"
+        download_url = "https://app.assembla.com/spaces/portaudio/git/source/b7870b08f770c1e84b754e662c08b6942ff7d021?_format=zip"
         zipped_folder_name = "root.zip"
 
         tools.download( download_url, zipped_folder_name )
@@ -45,6 +47,11 @@ class PortAudio( ConanFile ):
             definition_dict[ "PA_USE_ALSA" ] = True
             definition_dict[ "PA_USE_JACK" ] = False
 
+            if self.settings.build_type == "Release":
+                definition_dict[ "CMAKE_C_FLAGS" ] = "-fPIC -m64 -O3"
+            else:
+                definition_dict[ "CMAKE_C_FLAGS" ] = "-fPIC -m64 -Og -g"
+
             if find_executable( "lld" ) is not None:
                 definition_dict[ "CMAKE_SHARED_LINKER_FLAGS" ] = "-fuse-ld=lld"
                 definition_dict[ "CMAKE_EXE_LINKER_FLAGS"    ] = "-fuse-ld=lld"
@@ -58,7 +65,6 @@ class PortAudio( ConanFile ):
             definition_dict[ "PA_USE_WDMKS" ] = False
             definition_dict[ "PA_USE_ASIO" ] = False
             definition_dict[ "PA_USE_DS" ] = False
-
 
         cmake = CMake( self )
         cmake.configure(
@@ -84,4 +90,6 @@ class PortAudio( ConanFile ):
     def package_info(self):
         self.env_info.LD_LIBRARY_PATH.append(os.path.join(self.package_folder, "lib"))
         self.cpp_info.libs = tools.collect_libs(self)
+        if self.settings.os == "Linux" and not self.options.shared:
+            self.cpp_info.libs.append( "asound" )
 
