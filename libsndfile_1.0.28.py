@@ -31,7 +31,8 @@ class LibSndFile( ConanFile ):
 
     def build_requirements( self ):
         if self.settings.os == "Linux":
-            self.build_requires( "cmake/3.11.2@tdelame/stable", "ninja/1.8.2@tdelame/stable" )
+            self.build_requires( "cmake/3.11.2@tdelame/stable" )
+            self.build_requires( "ninja/1.8.2@tdelame/stable" )
 
     def source( self ):
         sha = "1a87c443fe37bd67c8d1e2d2b4c8b0291806eb90"
