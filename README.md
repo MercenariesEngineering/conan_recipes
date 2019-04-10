@@ -11,8 +11,6 @@ arch=x86_64
 compiler=Visual Studio
 compiler.version=14
 build_type=Release
-arch_build=x86_64
-os_build=Windows
 [options]
 [env]
 CONAN_CMAKE_GENERATOR="Visual Studio 14 2015 Win64"
