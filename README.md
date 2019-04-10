@@ -16,11 +16,6 @@ build_type=Release
 CONAN_CMAKE_GENERATOR="Visual Studio 14 2015 Win64"
 ```
 
-Because of a conan bug, you may have to add the following variable to the environment:
-```
-CONAN_CMAKE_GENERATOR="Visual Studio 14 2015 Win64"
-```
-
 ## Remove repository
 
 Add the remote repository:
@@ -37,7 +32,7 @@ conan user -p SECRET_API_KEY -r rumba_libs tdelame
 
 ## Build a lib in all required version
 
-To build portaudio in all versions for your os :
+To build portaudio in all versions for your os (only windows right now):
 
 ```
 cd conan_recipes
