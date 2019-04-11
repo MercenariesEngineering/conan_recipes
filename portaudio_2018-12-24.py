@@ -11,7 +11,7 @@ class PortAudio( ConanFile ):
     generators = "virtualrunenv"
 
     version = "2018-12-24"
-    settings = "os", "build_type", "compiler"
+    settings = "os", "build_type"
     options = { "shared": [ True, False ] }
     default_options = { "shared": True }
 
@@ -38,7 +38,7 @@ class PortAudio( ConanFile ):
             "PA_LIBNAME_ADD_SUFFIX": self.settings.os == "Windows",
             "PA_BUILD_EXAMPLES": False,
             "PA_BUILD_TESTS": False,
-            "PA_DLL_LINK_WITH_STATIC_RUNTIME": self.settings.compiler == "Visual Studio" and "MT" in self.settings.compiler.runtime
+            "PA_DLL_LINK_WITH_STATIC_RUNTIME": False
         }
 
         if self.settings.os == "Linux":
