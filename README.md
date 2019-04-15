@@ -42,7 +42,7 @@ cd conan_recipes
 ## Upload the binaries
 
 ```
-conan upload PortAudio/2018-12-24@tdelame/stable --all -r=rumba_libs
+conan upload PortAudio/2018-12-24@tdelame/stable --all -r=rumba_libs --force
 ```
 
 # Localy build a project
