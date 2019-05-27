@@ -13,7 +13,7 @@ class OpenimageioConan(ConanFile):
     version_patch = "1"
     version = version_base + "." + version_patch
     license = ""
-    url = "hdf5/%s@pierousseau/stable" % version
+    url = "https://www.hdfgroup.org/downloads/hdf5/"
     description = "Makes possible the management of extremely large and complex data collections. https://www.hdfgroup.org"
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False]}
@@ -44,7 +44,9 @@ if (HDF5_ENABLE_THREADSAFE)
         APPEND PROPERTY COMPILE_DEFINITIONS
             "H5_HAVE_THREADSAFE"
     )
-    target_link_libraries (${HDF5_LIB_TARGET} PUBLIC PRIVATE INTERFACE Threads::Threads)
+    if (MSVC)
+        target_link_libraries (${HDF5_LIB_TARGET} PUBLIC PRIVATE INTERFACE Threads::Threads)
+    endif ()
   endif ()
 ''')
 

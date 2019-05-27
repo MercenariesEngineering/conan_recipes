@@ -1,0 +1,38 @@
+--- IlmImf/ImfSystemSpecific.h.orig	2014-08-10 06:23:57.000000000 +0200
++++ IlmImf/ImfSystemSpecific.h	2016-12-10 17:02:56.804828700 +0100
+@@ -54,7 +54,23 @@
+ 
+ #ifdef IMF_HAVE_SSE2
+ 
+-#ifdef __GNUC__
++#if defined(__MINGW32__) || defined(__MINGW64_VERSION_MAJOR)
++
++#define EXR_FORCEINLINE inline
++#define EXR_RESTRICT __restrict
++
++static void* EXRAllocAligned(size_t size, size_t alignment)
++{
++  __mingw_aligned_malloc(alignment, size);
++}
++
++
++static void EXRFreeAligned(void* ptr)
++{
++  __mingw_aligned_free(ptr);
++}
++
++#elif defined(__GNUC__)
+ // Causes issues on certain gcc versions
+ //#define EXR_FORCEINLINE inline __attribute__((always_inline))
+ #define EXR_FORCEINLINE inline
+--- IlmImf/ImfOptimizedPixelReading.h.orig	2014-08-10 06:23:56.000000000 +0200
++++ IlmImf/ImfOptimizedPixelReading.h	2016-12-10 17:31:17.410230000 +0100
+@@ -70,7 +70,7 @@
+ bool
+ isPointerSSEAligned (const void* EXR_RESTRICT pPointer)
+ {
+-    unsigned long trailingBits = ((unsigned long)pPointer) & 15;
++    intptr_t trailingBits = ((intptr_t)pPointer) & 15;
+     return trailingBits == 0;
+ }
+ 

@@ -1,0 +1,4 @@
+1486280111
+FindBlosc.cmake: f5c9b434ea9afa74d03131e9439fb768
+conanfile.py: c3bfd08e908057c9462f7e2141bf1885
+fix-shared-lib-install.patch: 380e4d4a784fae8e08a829bc95aa1313

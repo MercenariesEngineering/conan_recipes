@@ -6,7 +6,7 @@ class OpenimageioConan(ConanFile):
     version = "1.6.18"
     license = "Modified BSD License"
     url = "openimageio/1.6.8@pierousseau/stable"
-    requires = "IlmBase/2.2.0@Mikayex/stable", "zlib/1.2.11@lasote/stable", "OpenEXR/2.2.0@Mikayex/stable", "boost/1.64.0@hoxnox/testing", "libpng/1.6.23@lasote/stable", "libjpeg-turbo/1.4.2@lasote/stable", "libtiff/4.0.6@bilke/stable"
+    requires = "IlmBase/2.2.0@Mikayex/stable", "zlib/1.2.11@conan/stable", "OpenEXR/2.2.0@pierousseau/stable", "boost/1.64.0@conan/stable", "libpng/1.6.37@bincrafters/stable", "libjpeg-turbo/1.5.2@bincrafters/stable", "libtiff/4.0.9@bincrafters/stable"
     description = "OpenImageIO http://www.openimageio.org"
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False]}
@@ -21,10 +21,15 @@ class OpenimageioConan(ConanFile):
         tools.untargz(filename)
         os.unlink(filename)
 
-        if self.settings.os == "Windows" and self.settings.build_type == "Debug" :
-            libpng = "libpng16_staticd.lib"
+        if self.settings.os == "Windows" :
+            if self.settings.build_type == "Debug" :
+                libpng = "libpng16_staticd.lib"
+            else :
+                libpng = "libpng16_static.lib"
+            libjpeg = "turbojpeg-static.lib"
         else :
-            libpng = "libpng16_static.lib"
+            libpng = "libpng.a"
+            libjpeg = "libturbojpeg.a"
         
         tools.replace_in_file("oiio-Release-%s/CMakeLists.txt" % self.version, "project (OpenImageIO)",
                               """project (OpenImageIO)
@@ -37,8 +42,8 @@ set(OPENEXR_HOME ${CONAN_OPENEXR_ROOT})
 find_package("ZLIB")
 set(PNG_LIBRARY ${CONAN_LIB_DIRS_LIBPNG}/%s)
 set(PNG_PNG_INCLUDE_DIR ${CONAN_INCLUDE_DIRS_LIBPNG})
-set(JPEG_LIBRARY ${CONAN_LIB_DIRS_LIBJPEG-TURBO}/turbojpeg-static.lib)
-""" % libpng)
+set(JPEG_LIBRARY ${CONAN_LIB_DIRS_LIBJPEG-TURBO}/%s)
+""" % (libpng, libjpeg))
         # Remove -DOPENEXR_DLL
         tools.replace_in_file("oiio-Release-%s/CMakeLists.txt" % self.version, "add_definitions (-DOPENEXR_DLL)", "")
 

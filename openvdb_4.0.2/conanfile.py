@@ -5,8 +5,8 @@ class OpenimageioConan(ConanFile):
     name = "openvdb"
     version = "4.0.2"
     license = ""
-    url = "openvdb/4.0.2@pierousseau/testing"
-    requires = "blosc/1.11.2@zogi/stable", "glew/2.0.0@lasote/vcpkg", "tbb/20160916@lasote/vcpkg", "zlib/1.2.8@lasote/stable", "IlmBase/2.2.0@Mikayex/stable", "OpenEXR/2.2.0@Mikayex/stable","boost/1.64.0@hoxnox/testing"
+    url = "https://github.com/dreamworksanimation/openvdb"
+    requires = "blosc/1.11.2@pierousseau/stable", "glew/2.1.0@bincrafters/stable", "glfw/3.3@bincrafters/stable", "TBB/2019_U4@conan/stable", "zlib/1.2.11@conan/stable", "IlmBase/2.2.0@Mikayex/stable", "OpenEXR/2.2.0@pierousseau/stable","boost/1.64.0@conan/stable"
     description = "OpenVDB - Sparse volume data structure and tools http://www.openvdb.org/"
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False]}
@@ -29,7 +29,9 @@ conan_basic_setup()
 set(BOOST_ROOT ${CONAN_BOOST_ROOT})
 set(BOOST_LIBRARYDIR ${CONAN_BOOST_ROOT}/lib)
 set(GLEW_LOCATION ${CONAN_GLEW_ROOT})
+set(GLFW_LOCATION ${CONAN_GLFW_ROOT})
 set(TBB_LOCATION ${CONAN_TBB_ROOT})
+set(ILMBASE_LOCATION ${CONAN_ILMBASE_ROOT})
 set(OPENVDB_BUILD_UNITTESTS OFF CACHE BOOL "unit tests")
 set(OPENVDB_DISABLE_BOOST_IMPLICIT_LINKING OFF CACHE BOOL "")
 set(Boost_IOSTREAMS_LIBRARY libboost_iostreams)
@@ -53,19 +55,23 @@ set(Boost_PYTHON_LIBRARY libboost_python)
             """FIND_LIBRARY ( GLEW_LIBRARY_PATH GLEW32D PATHS ${GLEW_LOCATION}/lib )
 FIND_LIBRARY ( GLEW_LIBRARY_PATH GLEW32 PATHS ${GLEW_LOCATION}/lib )""")
 
-        tools.replace_in_file("openvdb-%s/cmake/FindTBB.cmake" % self.version,
-            "FIND_LIBRARY ( TBB_LIBRARY_PATH tbb PATHS ${TBB_LIBRARYDIR} PATH_SUFFIXES ${TBB_PATH_SUFFIXES})",
-            """FIND_LIBRARY ( TBB_LIBRARY_PATH tbb_debug PATHS ${TBB_LIBRARYDIR} PATH_SUFFIXES ${TBB_PATH_SUFFIXES})
-FIND_LIBRARY ( TBB_LIBRARY_PATH tbb PATHS ${TBB_LIBRARYDIR} PATH_SUFFIXES ${TBB_PATH_SUFFIXES})""")
-        tools.replace_in_file("openvdb-%s/cmake/FindTBB.cmake" % self.version,
-            "FIND_LIBRARY ( TBB_PREVIEW_LIBRARY_PATH tbb_preview PATHS ${TBB_LIBRARYDIR}  PATH_SUFFIXES ${TBB_PATH_SUFFIXES})",
-            """FIND_LIBRARY ( TBB_PREVIEW_LIBRARY_PATH tbb_preview_debug PATHS ${TBB_LIBRARYDIR}  PATH_SUFFIXES ${TBB_PATH_SUFFIXES})
-FIND_LIBRARY ( TBB_PREVIEW_LIBRARY_PATH tbb_preview PATHS ${TBB_LIBRARYDIR}  PATH_SUFFIXES ${TBB_PATH_SUFFIXES})""")
-        tools.replace_in_file("openvdb-%s/cmake/FindTBB.cmake" % self.version,
-            "FIND_LIBRARY ( TBBMALLOC_LIBRARY_PATH tbbmalloc PATHS ${TBB_LIBRARYDIR}  PATH_SUFFIXES ${TBB_PATH_SUFFIXES})",
-            """FIND_LIBRARY ( TBBMALLOC_LIBRARY_PATH tbbmalloc_debug PATHS ${TBB_LIBRARYDIR}  PATH_SUFFIXES ${TBB_PATH_SUFFIXES})
-FIND_LIBRARY ( TBBMALLOC_LIBRARY_PATH tbbmalloc PATHS ${TBB_LIBRARYDIR}  PATH_SUFFIXES ${TBB_PATH_SUFFIXES})""")
+        tools.replace_in_file("openvdb-%s/cmake/FindGLFW.cmake" % self.version,
+            "SET( GLFW_glfw_LIBRARY ${GLFW_LIBRARY_PATH} CACHE STRING \"GLFW library\")",
+            """SET( GLFW_glfw_LIBRARY ${GLFW_LIBRARY_PATH})""")
 
+        tools.replace_in_file("openvdb-%s/cmake/FindGLFW.cmake" % self.version,
+            "FIND_LIBRARY ( GLFW_LIBRARY_PATH glfw PATHS ${GLFW_LOCATION}/lib ${GLFW_LOCATION}/lib64",
+            """FIND_LIBRARY ( GLFW_LIBRARY_PATH glfw3 PATHS ${GLFW_LOCATION}/lib ${GLFW_LOCATION}/lib64""")
+
+        tools.replace_in_file("openvdb-%s/cmake/FindTBB.cmake" % self.version,
+            "FIND_LIBRARY ( TBB_LIBRARY_PATH tbb PATHS ${TBB_LIBRARYDIR} PATH_SUFFIXES ${TBB_PATH_SUFFIXES}",
+            """FIND_LIBRARY ( TBB_LIBRARY_PATH NAMES tbb tbb_debug PATHS ${TBB_LIBRARYDIR} PATH_SUFFIXES ${TBB_PATH_SUFFIXES}""")
+        tools.replace_in_file("openvdb-%s/cmake/FindTBB.cmake" % self.version,
+            "FIND_LIBRARY ( TBB_PREVIEW_LIBRARY_PATH tbb_preview PATHS ${TBB_LIBRARYDIR}  PATH_SUFFIXES ${TBB_PATH_SUFFIXES}",
+            """FIND_LIBRARY ( TBB_PREVIEW_LIBRARY_PATH NAMES tbb_preview tbb_preview_debug PATHS ${TBB_LIBRARYDIR}  PATH_SUFFIXES ${TBB_PATH_SUFFIXES}""")
+        tools.replace_in_file("openvdb-%s/cmake/FindTBB.cmake" % self.version,
+            "FIND_LIBRARY ( TBBMALLOC_LIBRARY_PATH tbbmalloc PATHS ${TBB_LIBRARYDIR}  PATH_SUFFIXES ${TBB_PATH_SUFFIXES}",
+            """FIND_LIBRARY ( TBBMALLOC_LIBRARY_PATH NAMES tbbmalloc tbbmalloc_debug PATHS ${TBB_LIBRARYDIR}  PATH_SUFFIXES ${TBB_PATH_SUFFIXES}""")
 
     def build(self):
         cmake = CMake(self)

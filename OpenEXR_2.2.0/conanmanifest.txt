@@ -1,0 +1,4 @@
+1485783170
+FindOpenEXR.cmake: cf38e3c9b10a6ea532df9d68ff6ef083
+conanfile.py: 095e66a43e9706b48337f2c9cdffd4cb
+mingw-fix.patch: dda259c76727d5f3bcfa9c81be0b85c0
