@@ -5,8 +5,8 @@ class OpenimageioConan(ConanFile):
     name = "openimageio"
     version = "1.6.18"
     license = "Modified BSD License"
-    url = "openimageio/1.6.8@pierousseau/stable"
-    requires = "IlmBase/2.2.0@Mikayex/stable", "zlib/1.2.11@conan/stable", "OpenEXR/2.2.0@pierousseau/stable", "boost/1.64.0@conan/stable", "libpng/1.6.37@bincrafters/stable", "libjpeg-turbo/1.5.2@bincrafters/stable", "libtiff/4.0.9@bincrafters/stable"
+    url = "http://www.openimageio.org"
+    requires = "IlmBase/2.2.0@Mikayex/stable", "zlib/1.2.11@conan/stable", "OpenEXR/2.2.0@pierousseau/stable", "boost/1.70.0@conan/stable", "libpng/1.6.37@bincrafters/stable", "libjpeg-turbo/1.5.2@pierousseau/stable", "libtiff/4.0.9@bincrafters/stable"
     description = "OpenImageIO http://www.openimageio.org"
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False]}
@@ -22,13 +22,8 @@ class OpenimageioConan(ConanFile):
         os.unlink(filename)
 
         if self.settings.os == "Windows" :
-            if self.settings.build_type == "Debug" :
-                libpng = "libpng16_staticd.lib"
-            else :
-                libpng = "libpng16_static.lib"
             libjpeg = "turbojpeg-static.lib"
         else :
-            libpng = "libpng.a"
             libjpeg = "libturbojpeg.a"
         
         tools.replace_in_file("oiio-Release-%s/CMakeLists.txt" % self.version, "project (OpenImageIO)",
@@ -37,13 +32,12 @@ include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
 set(ILMBASE_HOME ${CONAN_ILMBASE_ROOT})
 set(BOOST_ROOT ${CONAN_BOOST_ROOT})
-set(BOOST_LIBRARYDIR ${CONAN_BOOST_ROOT}/lib)
+set(BOOST_LIBRARYDIR ${CONAN_LIB_DIRS_BOOST})
 set(OPENEXR_HOME ${CONAN_OPENEXR_ROOT})
 find_package("ZLIB")
-set(PNG_LIBRARY ${CONAN_LIB_DIRS_LIBPNG}/%s)
 set(PNG_PNG_INCLUDE_DIR ${CONAN_INCLUDE_DIRS_LIBPNG})
 set(JPEG_LIBRARY ${CONAN_LIB_DIRS_LIBJPEG-TURBO}/%s)
-""" % (libpng, libjpeg))
+""" % libjpeg)
         # Remove -DOPENEXR_DLL
         tools.replace_in_file("oiio-Release-%s/CMakeLists.txt" % self.version, "add_definitions (-DOPENEXR_DLL)", "")
 

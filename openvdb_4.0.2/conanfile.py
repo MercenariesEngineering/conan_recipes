@@ -6,7 +6,7 @@ class OpenimageioConan(ConanFile):
     version = "4.0.2"
     license = ""
     url = "https://github.com/dreamworksanimation/openvdb"
-    requires = "blosc/1.11.2@pierousseau/stable", "glew/2.1.0@bincrafters/stable", "glfw/3.3@bincrafters/stable", "TBB/2019_U4@conan/stable", "zlib/1.2.11@conan/stable", "IlmBase/2.2.0@Mikayex/stable", "OpenEXR/2.2.0@pierousseau/stable","boost/1.64.0@conan/stable"
+    requires = "blosc/1.11.2@pierousseau/stable", "glew/2.1.0@bincrafters/stable", "glfw/3.3@bincrafters/stable", "TBB/2019_U4@conan/stable", "zlib/1.2.11@conan/stable", "IlmBase/2.2.0@Mikayex/stable", "OpenEXR/2.2.0@pierousseau/stable","boost/1.70.0@conan/stable"
     description = "OpenVDB - Sparse volume data structure and tools http://www.openvdb.org/"
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False]}
@@ -72,6 +72,12 @@ FIND_LIBRARY ( GLEW_LIBRARY_PATH GLEW32 PATHS ${GLEW_LOCATION}/lib )""")
         tools.replace_in_file("openvdb-%s/cmake/FindTBB.cmake" % self.version,
             "FIND_LIBRARY ( TBBMALLOC_LIBRARY_PATH tbbmalloc PATHS ${TBB_LIBRARYDIR}  PATH_SUFFIXES ${TBB_PATH_SUFFIXES}",
             """FIND_LIBRARY ( TBBMALLOC_LIBRARY_PATH NAMES tbbmalloc tbbmalloc_debug PATHS ${TBB_LIBRARYDIR}  PATH_SUFFIXES ${TBB_PATH_SUFFIXES}""")
+
+    def configure(self):
+        if self.settings.os == "Windows" :
+            self.options["TBB"].shared = True
+        else :
+            self.options["TBB"].shared = False
 
     def build(self):
         cmake = CMake(self)
