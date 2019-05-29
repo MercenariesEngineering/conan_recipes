@@ -1,21 +1,16 @@
-import os
 from conans import CMake, ConanFile
 from conans.tools import replace_in_file
 
-
-def cmake_flag(name, type, value_str):
-    return str.format("-D{}:{}={}", name, type, value_str)
-
+def cmake_flag(name, flag_type, value_str):
+    return str.format("-D{}:{}={}", name, flag_type, value_str)
 
 def cmake_bool_flag(name, bool_value):
     cmake_bool_string = "ON" if bool_value else "OFF"
     return cmake_flag(name, "BOOL", cmake_bool_string)
 
-
 def cmake_path_flag(name, path_str):
     path_with_quotes = '"' + path_str + '"'
     return cmake_flag(name, "PATH", path_with_quotes)
-
 
 class BloscConan(ConanFile):
     description = "A blocking, shuffling and lossless compression library"
@@ -25,9 +20,7 @@ class BloscConan(ConanFile):
     url = "https://github.com/zogi/conan-blosc.git"
     generators = "cmake"
     settings = "os", "arch", "compiler", "build_type"
-    options = { "shared": [True, False]
-              , "fPIC": [True, False]
-              }
+    options = { "shared": [True, False], "fPIC": [True, False] }
     default_options = "shared=False", "fPIC=False"
     exports = ["FindBlosc.cmake", "fix-shared-lib-install.patch"]
     

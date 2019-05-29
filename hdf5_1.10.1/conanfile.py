@@ -20,7 +20,6 @@ class OpenimageioConan(ConanFile):
     default_options = "shared=False"
     generators = "cmake"
 
-
     def source(self):
         filename = "hdf5-%s.tar.gz" % self.version
         tools.download("https://support.hdfgroup.org/ftp/HDF5/prev-releases/hdf5-%s/hdf5-%s/src/%s" % (self.version_base, self.version, filename), filename)
@@ -35,8 +34,8 @@ include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
 """)
 
-        file = "hdf5-%s/src/CMakeLists.txt" % self.version
-        with open(file, "a") as myfile:
+        cmakelists_file = "hdf5-%s/src/CMakeLists.txt" % self.version
+        with open(cmakelists_file, "a") as myfile:
             myfile.write('''
 # Hulud : Force threadsafe in static library
 if (HDF5_ENABLE_THREADSAFE) 
