@@ -40,8 +40,6 @@ class LibjpegTurboConan(ConanFile):
             self.requires.add("nasm/2.13.01@pierousseau/stable", private=True)
         if self.settings.compiler == "Visual Studio":
             self.options.remove("fPIC")
-        if self.settings.os == "Emscripten":
-            del self.options.SIMD
 
     def source(self):
         tools.get("http://downloads.sourceforge.net/project/libjpeg-turbo/%s/libjpeg-turbo-%s.tar.gz" % (self.version, self.version))
@@ -54,16 +52,13 @@ class LibjpegTurboConan(ConanFile):
 
     @property
     def _simd(self):
-        if self.settings.os == "Emscripten":
-            return False
         return self.options.SIMD
 
     def build_configure(self):
         prefix = os.path.abspath(self.package_folder)
         with tools.chdir(self._source_subfolder):
             # works for unix and mingw environments
-            env_build = AutoToolsBuildEnvironment(self, win_bash=self.settings.os == 'Windows' and
-                                                  platform.system() == 'Windows')
+            env_build = AutoToolsBuildEnvironment(self, win_bash=self.settings.os == 'Windows' and platform.system() == 'Windows')
             env_build.fpic = self.options.fPIC
             if self.settings.os == 'Windows':
                 prefix = tools.unix_path(prefix)
