@@ -30,7 +30,7 @@ class ptexConan(ConanFile):
                 "include/Ptexture.h",
                 "include/PtexUtils.h"]
             libs = [
-                "lib/libPTex.a"]
+                "lib/libPtex.a"]
 
         for path in includes:
             self.run("cp -R %s%s include\\" % (src_path, path))
@@ -45,3 +45,4 @@ class ptexConan(ConanFile):
 
     def package_info(self):
         self.cpp_info.libs = tools.collect_libs(self)
+
