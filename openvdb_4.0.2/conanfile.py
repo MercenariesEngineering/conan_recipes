@@ -21,6 +21,19 @@ class OpenvdbConan(ConanFile):
         tools.untargz(filename)
         os.unlink(filename)
 
+        if self.settings.os == "Windows" :
+            boost_libs = """
+set(Boost_IOSTREAMS_LIBRARY boost_iostreams)
+set(Boost_SYSTEM_LIBRARY boost_system)
+set(Boost_THREAD_LIBRARY boost_thread)
+set(Boost_PYTHON_LIBRARY boost_python)"""
+        else :
+            boost_libs = """
+set(Boost_IOSTREAMS_LIBRARY libboost_iostreams)
+set(Boost_SYSTEM_LIBRARY libboost_system)
+set(Boost_THREAD_LIBRARY libboost_thread)
+set(Boost_PYTHON_LIBRARY libboost_python)"""
+
         tools.replace_in_file("openvdb-%s/CMakeLists.txt" % self.version, 
             "PROJECT ( OpenVDB )",
             """PROJECT ( OpenVDB )
@@ -34,11 +47,8 @@ set(TBB_LOCATION ${CONAN_TBB_ROOT})
 set(ILMBASE_LOCATION ${CONAN_ILMBASE_ROOT})
 set(OPENVDB_BUILD_UNITTESTS OFF CACHE BOOL "unit tests")
 set(OPENVDB_DISABLE_BOOST_IMPLICIT_LINKING OFF CACHE BOOL "")
-set(Boost_IOSTREAMS_LIBRARY libboost_iostreams)
-set(Boost_SYSTEM_LIBRARY libboost_system)
-set(Boost_THREAD_LIBRARY libboost_thread)
-set(Boost_PYTHON_LIBRARY libboost_python)
-""")
+%s
+""" % boost_libs)
 
         tools.replace_in_file("openvdb-%s/openvdb/CMakeLists.txt" % self.version,
             "COMPILE_FLAGS \"-DOPENVDB_PRIVATE -DOPENVDB_USE_BLOSC ${OPENVDB_USE_GLFW_FLAG}\"",

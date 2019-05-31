@@ -23,8 +23,18 @@ class OpenimageioConan(ConanFile):
 
         if self.settings.os == "Windows" :
             libjpeg = "turbojpeg-static.lib"
+            boost_libs = """
+set(Boost_FILESYSTEM_LIBRARY boost_filesystem)
+set(Boost_REGEX_LIBRARY boost_regex)
+set(Boost_SYSTEM_LIBRARY boost_system)
+set(Boost_THREAD_LIBRARY boost_thread)"""
         else :
             libjpeg = "libturbojpeg.a"
+            boost_libs = """
+set(Boost_FILESYSTEM_LIBRARY libboost_filesystem)
+set(Boost_REGEX_LIBRARY libboost_regex)
+set(Boost_SYSTEM_LIBRARY libboost_system)
+set(Boost_THREAD_LIBRARY libboost_thread)"""
         
         tools.replace_in_file("oiio-Release-%s/CMakeLists.txt" % self.version, "project (OpenImageIO)",
                               """project (OpenImageIO)
@@ -33,11 +43,13 @@ conan_basic_setup()
 set(ILMBASE_HOME ${CONAN_ILMBASE_ROOT})
 set(BOOST_ROOT ${CONAN_BOOST_ROOT})
 set(BOOST_LIBRARYDIR ${CONAN_BOOST_ROOT}/lib)
+%s
 set(OPENEXR_HOME ${CONAN_OPENEXR_ROOT})
 find_package("ZLIB")
 set(PNG_PNG_INCLUDE_DIR ${CONAN_INCLUDE_DIRS_LIBPNG})
 set(JPEG_LIBRARY ${CONAN_LIB_DIRS_LIBJPEG-TURBO}/%s)
-""" % libjpeg)
+""" % (boost_libs, libjpeg))
+        
         # Remove -DOPENEXR_DLL
         tools.replace_in_file("oiio-Release-%s/CMakeLists.txt" % self.version, "add_definitions (-DOPENEXR_DLL)", "")
 
