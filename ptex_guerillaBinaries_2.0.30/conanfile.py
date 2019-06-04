@@ -33,10 +33,10 @@ class ptexConan(ConanFile):
                 "lib/libPtex.a"]
 
         for path in includes:
-            self.run("cp -R %s%s include\\" % (src_path, path))
+            self.run("cp -R %s%s include/" % (src_path, path))
 
         for path in libs:
-            self.run("cp -R %s%s lib\\" % (src_path, path))
+            self.run("cp -R %s%s lib/" % (src_path, path))
 
         self.copy("*.h")
         self.copy("*.lib")

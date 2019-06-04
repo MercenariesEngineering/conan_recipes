@@ -11,7 +11,7 @@ class fumefxConan(ConanFile):
 
     def package(self):
         self.run("rm -Rf include lib")
-        self.run("mkdir include include\\fumefx lib")
+        self.run("mkdir \"include\" \"include/fumefx\" \"lib\"")
 
         if self.settings.os == "Windows" :
             src_path = "X:\\Dev\\GuerillaLibs2015\\"
@@ -43,10 +43,10 @@ class fumefxConan(ConanFile):
                 "lib/libfumefx.a"]
 
         for path in includes:
-            self.run("cp -R %s%s include\\fumefx\\" % (src_path, path))
+            self.run("cp -R %s%s include/fumefx/" % (src_path, path))
 
         for path in libs:
-            self.run("cp -R %s%s lib\\" % (src_path, path))
+            self.run("cp -R %s%s lib/" % (src_path, path))
 
         self.copy("*.h")
         self.copy("*.lib")

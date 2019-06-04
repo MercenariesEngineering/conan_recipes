@@ -11,7 +11,7 @@ class opencolorioConan(ConanFile):
 
     def package(self):
         self.run("rm -Rf include lib")
-        self.run("mkdir include include\\OpenColorIO lib")
+        self.run("mkdir \"include\" \"include/OpenColorIO\" \"lib\"")
 
         if self.settings.os == "Windows" :
             src_path = "X:\\Dev\\GuerillaLibs2015\\"
@@ -37,10 +37,10 @@ class opencolorioConan(ConanFile):
                 "lib/libtinyxml.a"]
 
         for path in includes:
-            self.run("cp -R %s%s include\\OpenColorIO" % (src_path, path))
+            self.run("cp -R %s%s include/OpenColorIO/" % (src_path, path))
 
         for path in libs:
-            self.run("cp -R %s%s lib\\" % (src_path, path))
+            self.run("cp -R %s%s lib/" % (src_path, path))
 
         self.copy("*.h")
         self.copy("*.lib")

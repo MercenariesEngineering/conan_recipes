@@ -110,6 +110,6 @@ class pythonConan(ConanFile):
             # We don't package python on linux
 
         for path in includes:
-            self.run("cp -R %s%s include\\" % (src_path, path))
+            self.run("cp -R %s%s include/" % (src_path, path))
 
         self.copy("*.h")
