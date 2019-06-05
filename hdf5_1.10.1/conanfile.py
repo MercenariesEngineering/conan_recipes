@@ -7,7 +7,7 @@ import os
 #   write this content to conanfile.py
 # conan create hdf5/1.10.1@pierousseau/stable
 
-class OpenimageioConan(ConanFile):
+class Hdf5Conan(ConanFile):
     name = "hdf5"
     version_base = "1.10"
     version_patch = "1"
@@ -67,7 +67,13 @@ if (HDF5_ENABLE_THREADSAFE)
         self.copy("*.a", dst="lib", keep_path=False)
 
     def package_info(self):
-        if self.settings.build_type == "Debug" :
-            self.cpp_info.libs = ["libhdf5_D"]
+        if self.settings.os == "Windows" :
+            if self.settings.build_type == "Debug" :
+                self.cpp_info.libs = ["libhdf5_D"]
+            else :
+                self.cpp_info.libs = ["libhdf5"]
         else :
-            self.cpp_info.libs = ["libhdf5"]
+            if self.settings.build_type == "Debug" :
+                self.cpp_info.libs = ["hdf5_D"]
+            else :
+                self.cpp_info.libs = ["hdf5"]
