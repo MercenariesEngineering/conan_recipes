@@ -6,18 +6,16 @@ class AlembicConan(ConanFile):
     version = "1.7.3"
     license = ""
     url = "Alembic/1.7.3@pierousseau/stable"
-    requires = "hdf5/1.10.1@pierousseau/stable", "IlmBase/2.2.0@Mikayex/stable", "OpenEXR/2.2.0@Mikayex/stable", "zlib/1.2.11@conan/stable"
+    requires = "hdf5/1.10.1@pierousseau/stable", "IlmBase/2.2.0@Mikayex/stable", "OpenEXR/2.2.0@pierousseau/stable", "zlib/1.2.11@conan/stable"
     description = "Alembic is an open framework for storing and sharing scene data that includes a C++ library, a file format, and client plugins and applications. http://alembic.io/"
     settings = "os", "compiler", "build_type", "arch"
-    options = {"shared": [True, False]}
-    default_options = "shared=False", "hdf5:shared=False", "IlmBase:shared=False", "OpenEXR:shared=False", "zlib:shared=False"
+    options = {"shared": [True, False], "fPIC": [True, False]}
+    default_options = "shared=False", "hdf5:shared=False", "IlmBase:shared=False", "OpenEXR:shared=False", "zlib:shared=False", "fPIC=True", "IlmBase:fPIC=True", "zlib:fPIC=True"
     generators = "cmake"
 
     def source(self):
         filename = "Release-%s.tar.gz" % self.version
         tools.download("https://github.com/alembic/alembic/archive/%s.tar.gz" % self.version, filename)
-        #from shutil import copyfile
-        #copyfile("c:/tmp/"+filename, filename)
         tools.untargz(filename)
         os.unlink(filename)
 
@@ -27,20 +25,11 @@ include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
 set(ILMBASE_HOME ${CONAN_ILMBASE_ROOT})
 set(BOOST_HOME ${CONAN_BOOST_ROOT})
-#set(ALEMBIC_ILMBASE_LINK_STATIC ON)
-#set(ALEMBIC_SHARED_LIBS OFF)
 set(HDF5_ROOT ${CONAN_HDF5_ROOT})
-set(HDF5_INCLUDE_DIRS ${CONAN_INCLUDE_DIRS_HDF5})
-set(HDF5_LIBRARIES ${CONAN_LIB_DIRS_HDF5}/libhdf5.lib)
-set(HDF5_FOUND TRUE)
 """)
 
     def build(self):
         cmake = CMake(self)
-        #cmake.configure(source_dir="%s/alembic-%s" % (self.source_folder, self.version))
-        #cmake.build()
-
-        # Explicit way:
         self.run('cmake %s/alembic-%s %s -DALEMBIC_ILMBASE_LINK_STATIC="ON" -DALEMBIC_SHARED_LIBS="OFF" -DUSE_BINARIES="OFF" -DUSE_TESTS="OFF" -DUSE_HDF5="ON" -DUSE_STATIC_BOOST="ON" -DUSE_STATIC_HDF5="ON" -DCMAKE_INSTALL_PREFIX="%s"' % (self.source_folder, self.version, cmake.command_line, self.package_folder))
         self.run("cmake --build . --target install %s" % cmake.build_config)
 
