@@ -1,23 +1,21 @@
 from conans import ConanFile, CMake, tools
 import os
 
-class OpenvdbConan(ConanFile):
-    name = "openvdb"
+class OpenVdbConan(ConanFile):
+    name = "OpenVdb"
     version = "4.0.2"
     license = ""
     url = "https://github.com/dreamworksanimation/openvdb"
     requires = "blosc/1.11.2@pierousseau/stable", "boost/1.64.0@conan/stable", "glew/2.1.0@bincrafters/stable", "glfw/3.3@bincrafters/stable", "IlmBase/2.2.0@Mikayex/stable", "OpenEXR/2.2.0@pierousseau/stable", "TBB/2019_U4@conan/stable", "zlib/1.2.11@conan/stable"
     description = "OpenVDB - Sparse volume data structure and tools http://www.openvdb.org/"
     settings = "os", "compiler", "build_type", "arch"
-    options = {"shared": [True, False]}
+    options = {"shared": [True, False], "fPIC": [True, False]}
     default_options = "shared=False", "blosc:shared=False","OpenEXR:shared=False","IlmBase:shared=False","zlib:shared=False", "boost:shared=False", "boost:without_filesystem=False", "boost:without_regex=False", "boost:without_system=False", "boost:without_thread=False"
     generators = "cmake"
 
     def source(self):
         filename = "Release-%s.tar.gz" % self.version
         tools.download("https://github.com/dreamworksanimation/openvdb/archive/v%s.tar.gz" % self.version, filename)
-        #from shutil import copyfile
-        #copyfile("c:/tmp/"+filename, filename)
         tools.untargz(filename)
         os.unlink(filename)
 
@@ -99,13 +97,8 @@ FIND_LIBRARY ( GLEW_LIBRARY_PATH GLEW32 PATHS ${GLEW_LOCATION}/lib )""")
     def package(self):
         self.copy("*.h", dst="include/openvdb", src="openvdb-%s/openvdb"%self.version)
         self.copy("*.lib", dst="lib", keep_path=False)
-        #self.copy("*.dll", dst="bin", keep_path=False)
-        #self.copy("*.so", dst="lib", keep_path=False)
-        #self.copy("*.dylib", dst="lib", keep_path=False)
         self.copy("*.a", dst="lib", keep_path=False)
 
     def package_info(self):
-        self.cpp_info.libs = ["libopenvdb"]
+        self.cpp_info.libs = tools.collect_libs(self)
         self.cpp_info.defines = ["OPENVDB_STATICLIB","OPENVDB_OPENEXR_STATICLIB","OPENVDB_USE_BLOSC","OPENVDB_3_ABI_COMPATIBLE"]
-
-# cmake C:\\Users\\pierre\\.conan\\data\\openvdb\\4.0.2\\hulud\\guerilla\\build\\8ba1feb74f0941c9756c4b137f7ec7c259af0c50/openvdb-4.0.2 -G "Visual Studio 14 2015 Win64" -DCONAN_LINK_RUNTIME="/MDd" -DCONAN_EXPORTED="1" -DCONAN_COMPILER="Visual Studio" -DCONAN_COMPILER_VERSION="14" -DBUILD_SHARED_LIBS="OFF" -DCMAKE_INSTALL_PREFIX="C:\\Users\\pierre\\.conan\\data\\openvdb\\4.0.2\\hulud\\guerilla\\package\\8ba1feb74f0941c9756c4b137f7ec7c259af0c50" -DCONAN_CXX_FLAGS="/MP40" -DCONAN_C_FLAGS="/MP40" -Wno-dev -DCMAKE_INSTALL_PREFIX="C:\\Users\\pierre\\.conan\\data\\openvdb\\4.0.2\\hulud\\guerilla\\package\\8ba1feb74f0941c9756c4b137f7ec7c259af0c50"        
