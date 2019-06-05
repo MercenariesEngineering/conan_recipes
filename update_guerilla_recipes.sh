@@ -12,7 +12,7 @@ conan export opencolorio_guerillaBinaries_1.0.8/conanfile.py opencolorio/guerill
 conan export OpenEXR_2.2.0/conanfile.py OpenEXR/2.2.0@pierousseau/stable
 conan export openexrid_1.0-beta.11/conanfile.py openexrid/1.0-beta.11@pierousseau/stable
 conan export OpenImageDenoise_0.9.0/conanfile.py OpenImageDenoise/0.9.0@pierousseau/stable
-conan export openimageio_1.6.18/conanfile.py openimageio/1.6.18@pierousseau/stable
+conan export OpenImageIO_1.6.18/conanfile.py OpenImageIO/1.6.18@pierousseau/stable
 conan export openvdb_4.0.2/conanfile.py openvdb/4.0.2@pierousseau/stable
 conan export partio_1.7.4/conanfile.py partio/1.7.4@pierousseau/stable
 conan export ptex_guerillaBinaries_2.0.30/conanfile.py ptex/guerillaBinaries_2.0.30@pierousseau/stable

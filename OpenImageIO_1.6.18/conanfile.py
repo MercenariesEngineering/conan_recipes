@@ -2,7 +2,7 @@ from conans import ConanFile, CMake, tools
 import os
 
 class OpenimageioConan(ConanFile):
-    name = "openimageio"
+    name = "OpenImageIO"
     version = "1.6.18"
     license = "Modified BSD License"
     url = "http://www.openimageio.org"
@@ -66,5 +66,5 @@ set(JPEG_LIBRARY ${CONAN_LIB_DIRS_LIBJPEG-TURBO}/%s)
         pass
 
     def package_info(self):
-        self.cpp_info.libs = ["openimageio"]
+        self.cpp_info.libs = ["OpenImageIO"]
         self.cpp_info.defines = ["OIIO_STATIC_BUILD"]
