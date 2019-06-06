@@ -11,7 +11,7 @@ conan export llvm_guerillaBinaries_3.5.1/conanfile.py llvm/guerillaBinaries_3.5.
 conan export nasm_2.13.01/conanfile.py nasm/2.13.01@pierousseau/stable
 conan export opencolorio_guerillaBinaries_1.0.8/conanfile.py opencolorio/guerillaBinaries_1.0.8@pierousseau/stable
 conan export OpenEXR_2.2.0/conanfile.py OpenEXR/2.2.0@pierousseau/stable
-conan export openexrid_1.0-beta.11/conanfile.py openexrid/1.0-beta.11@pierousseau/stable
+conan export OpenExrId_1.0-beta.11/conanfile.py OpenExrId/1.0-beta.11@pierousseau/stable
 conan export OpenImageDenoise_0.9.0/conanfile.py OpenImageDenoise/0.9.0@pierousseau/stable
 conan export OpenImageIO_1.6.18/conanfile.py OpenImageIO/1.6.18@pierousseau/stable
 conan export OpenVdb_4.0.2/conanfile.py OpenVdb/4.0.2@pierousseau/stable
