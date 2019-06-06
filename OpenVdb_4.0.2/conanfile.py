@@ -13,6 +13,10 @@ class OpenVdbConan(ConanFile):
     default_options = "shared=False", "blosc:shared=False","OpenEXR:shared=False","IlmBase:shared=False","zlib:shared=False", "boost:shared=False", "boost:without_filesystem=False", "boost:without_regex=False", "boost:without_system=False", "boost:without_thread=False"
     generators = "cmake"
 
+    def config_options(self):
+        if self.settings.os == "Windows":
+            self.options.remove("fPIC")
+
     def source(self):
         filename = "Release-%s.tar.gz" % self.version
         tools.download("https://github.com/dreamworksanimation/openvdb/archive/v%s.tar.gz" % self.version, filename)

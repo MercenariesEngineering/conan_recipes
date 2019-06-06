@@ -10,8 +10,12 @@ class AlembicConan(ConanFile):
     description = "Alembic is an open framework for storing and sharing scene data that includes a C++ library, a file format, and client plugins and applications. http://alembic.io/"
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False], "fPIC": [True, False]}
-    default_options = "shared=False", "hdf5:shared=False", "IlmBase:shared=False", "OpenEXR:shared=False", "zlib:shared=False", "fPIC=True", "IlmBase:fPIC=True", "zlib:fPIC=True"
+    default_options = "shared=False", "hdf5:shared=False", "IlmBase:shared=False", "OpenEXR:shared=False", "zlib:shared=False", "fPIC=True"
     generators = "cmake"
+
+    def config_options(self):
+        if self.settings.os == "Windows":
+            self.options.remove("fPIC")
 
     def source(self):
         filename = "Release-%s.tar.gz" % self.version
