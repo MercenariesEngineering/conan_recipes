@@ -50,7 +50,7 @@ conan_basic_setup()""")
         cmake.build()
 
     def package(self):
-        self.copy("*.h", dst="include", keep_path=False)
+        self.copy("*.h", dst="include/partio/", keep_path=False)
         self.copy("*.lib", dst="lib", keep_path=False)
         self.copy("*.a", dst="lib", keep_path=False)
 
