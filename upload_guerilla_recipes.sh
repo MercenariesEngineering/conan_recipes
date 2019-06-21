@@ -22,4 +22,5 @@ conan upload OpenVdb/4.0.2@pierousseau/stable -r pierousseau --all
 conan upload partio/1.7.4@pierousseau/stable -r pierousseau --all
 conan upload ptex/guerillaBinaries_2.0.30@pierousseau/stable -r pierousseau --all
 conan upload python/guerillaBinaries_2.6@pierousseau/stable -r pierousseau --all
+conan upload re2/2019-06-01@pierousseau/stable -r pierousseau --all
 conan upload wx/guerillaBinaries_2.8.8@pierousseau/stable -r pierousseau --all

@@ -19,4 +19,5 @@ conan export OpenVdb_4.0.2/conanfile.py OpenVdb/4.0.2@pierousseau/stable
 conan export partio_1.7.4/conanfile.py partio/1.7.4@pierousseau/stable
 conan export ptex_guerillaBinaries_2.0.30/conanfile.py ptex/guerillaBinaries_2.0.30@pierousseau/stable
 conan export python_guerillaBinaries_2.6/conanfile.py python/guerillaBinaries_2.6@pierousseau/stable
+conan export re2_2019-06-01/conanfile.py re2/2019-06-01@pierousseau/stable
 conan export wx_guerillaBinaries_2.8.8/conanfile.py wx/guerillaBinaries_2.8.8@pierousseau/stable
