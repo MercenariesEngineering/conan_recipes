@@ -9,6 +9,7 @@ conan upload embree/guerillaBinaries_3.2.0@pierousseau/stable -r pierousseau --a
 conan upload fumefx/guerillaBinaries_4@pierousseau/stable -r pierousseau --all
 #conan upload GuerillaBinaries/1.0@pierousseau/stable -r pierousseau --all
 conan upload hdf5/1.10.1@pierousseau/stable -r pierousseau --all
+conan upload jemalloc/4.3.1@pierousseau/stable -r pierousseau --all
 conan upload libjpeg-turbo/1.5.2@pierousseau/stable -r pierousseau --all
 conan upload llvm/guerillaBinaries_3.5.1@pierousseau/stable -r pierousseau --all
 conan upload nasm/2.13.01@pierousseau/stable -r pierousseau --all
