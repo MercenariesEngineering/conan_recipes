@@ -24,12 +24,8 @@ class JeMallocConan(ConanFile):
             self.options.remove("fPIC")
 
     def build(self):
-        """ Define your project building. You decide the way of building it
-            to reuse it later in any other project.
-        """
-
         if self.settings.os == "Windows":
-            cmake = CMake(self.settings)
+            cmake = CMake(self)
             build_dir = self.ZIP_FOLDER_NAME + '/build'
             if not os.path.exists(build_dir):
                 os.makedirs(build_dir)
@@ -47,10 +43,6 @@ class JeMallocConan(ConanFile):
             self.run("cd %s && make" % self.ZIP_FOLDER_NAME)
 
     def package(self):
-        """ Define your conan structure: headers, libs, bins and data. After building your
-            project, this method is called to create a defined structure:
-        """
-        
         self.copy("FindJemalloc.cmake", ".", ".")
         self.copy(pattern="*.h", dst="include", src="%s/include" % (self.ZIP_FOLDER_NAME), keep_path=True)
 
@@ -59,7 +51,6 @@ class JeMallocConan(ConanFile):
             src = self.ZIP_FOLDER_NAME + '/build'
             bin = src + "/" + str(self.settings.build_type)
             self.copy(pattern="*.lib", dst="lib", src=bin, keep_path=False)
-
         else:
             self.copy(pattern="*.so", dst="lib", src=self.ZIP_FOLDER_NAME, keep_path=False)
             self.copy(pattern="*.so.*", dst="lib", src=self.ZIP_FOLDER_NAME, keep_path=False)
