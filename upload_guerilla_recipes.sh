@@ -12,6 +12,7 @@ conan upload hdf5/1.10.1@pierousseau/stable -r pierousseau --all
 conan upload jemalloc/4.3.1@pierousseau/stable -r pierousseau --all
 conan upload libjpeg-turbo/1.5.2@pierousseau/stable -r pierousseau --all
 conan upload llvm/guerillaBinaries_3.5.1@pierousseau/stable -r pierousseau --all
+conan upload llvm/3.5.1@pierousseau/stable -r pierousseau --all
 conan upload nasm/2.13.01@pierousseau/stable -r pierousseau --all
 conan upload opencolorio/guerillaBinaries_1.0.8@pierousseau/stable -r pierousseau --all
 conan upload OpenEXR/2.2.0@pierousseau/stable -r pierousseau --all

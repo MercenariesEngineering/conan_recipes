@@ -9,6 +9,7 @@ conan export hdf5_1.10.1/conanfile.py hdf5/1.10.1@pierousseau/stable
 conan export jemalloc_4.3.1/conanfile.py jemalloc/4.3.1@pierousseau/stable
 conan export libjpeg-turbo_1.5.2/conanfile.py libjpeg-turbo/1.5.2@pierousseau/stable
 conan export llvm_guerillaBinaries_3.5.1/conanfile.py llvm/guerillaBinaries_3.5.1@pierousseau/stable
+conan export llvm_3.5.1/conanfile.py llvm/3.5.1@pierousseau/stable
 conan export nasm_2.13.01/conanfile.py nasm/2.13.01@pierousseau/stable
 conan export opencolorio_guerillaBinaries_1.0.8/conanfile.py opencolorio/guerillaBinaries_1.0.8@pierousseau/stable
 conan export OpenEXR_2.2.0/conanfile.py OpenEXR/2.2.0@pierousseau/stable
