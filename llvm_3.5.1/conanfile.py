@@ -11,24 +11,30 @@ class LlvmConan(ConanFile):
     options = {"shared": [True, False], "fPIC": [True, False]}
     default_options = "shared=False", "fPIC=True"
     generators = "cmake"
+    exports = ["llvm_3.5.1.diff"]
+    short_paths = True # LLVM uses long filenames, which are a problem on windows. This helps.
 
     def configure(self):
         if self.settings.os == "Windows":
             self.options.remove("fPIC")
 
     def source(self):
-        # http://releases.llvm.org/3.5.1/llvm-3.5.1.src.tar.xz , but xz is not suported
-        # https://github.com/llvm/llvm-project/archive/llvmorg-3.5.1.tar.gz
+        # "http://releases.llvm.org/3.5.1/llvm-3.5.1.src.tar.xz" but xz is not suported so use "https://github.com/llvm/llvm-project/archive/llvmorg-3.5.1.tar.gz"
         filename = "llvmorg-%s.tar.gz" % self.version
         tools.download("https://github.com/llvm/llvm-project/archive/%s" % filename, filename)
         tools.untargz(filename)
         os.unlink(filename)
+
+        # diff -r -u "C:\.conan\517d7e\1\llvm-project-llvmorg-3.5.1/llvm" "X:\Dev\GuerillaLibs1.1\contrib\llvm-3.5.1" > /x/Dev/ConanRecipes/llvm_3.5.1/llvm_3.5.1.diff
+        #tools.patch(patch_file="llvm_3.5.1.diff") # This should work but doesn't...
+        self.run("patch -p0 < llvm_3.5.1.diff")
 
     def build(self):
         cmake = CMake(self)
         if ("fPIC" in self.options.fields and self.options.fPIC == True):
             cmake.definitions["CMAKE_POSITION_INDEPENDENT_CODE"] = True
         cmake.configure(source_dir="llvm-project-llvmorg-%s/llvm/" % self.version)
+
         cmake.build()
 
     def package(self):
@@ -83,6 +89,7 @@ class LlvmConan(ConanFile):
                 "LLVMX86Disassembler.lib",
                 "LLVMX86Info.lib",
                 "LLVMX86Utils.lib"]
+            src_path = "%s\\lib\\" % self.settings.build_type
         elif self.settings.os == "Linux" :
             libs = [
                 "libLLVMLTO.a",
@@ -188,11 +195,12 @@ class LlvmConan(ConanFile):
                 "libLLVMMC.a",
                 "libLLVMCore.a",
                 "libLLVMSupport.a"]
+            src_path = "lib/"
         else :
             libs = []
 
         for l in libs:
-            self.copy("lib/"+l, dst="lib", keep_path=False)
+            self.copy(l, dst="lib", src=src_path, keep_path=False)
 
     def package_info(self):
         self.cpp_info.libs = tools.collect_libs(self)

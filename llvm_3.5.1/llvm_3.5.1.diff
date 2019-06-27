@@ -1,0 +1,130 @@
+--- "llvm-project-llvmorg-3.5.1/llvm/include/llvm/ADT/APInt.h"	2014-12-18 11:43:48.000000000 +0100
++++ "llvm-project-llvmorg-3.5.1/llvm/include/llvm/ADT/APInt.h"	2019-02-04 21:05:28.939823100 +0100
+@@ -1514,7 +1514,7 @@
+     // get 0. If VAL is 0, we get UINT64_MAX which gets truncated to
+     // UINT32_MAX.
+     if (BitWidth == 1)
+-      return VAL - 1;
++      return (unsigned)VAL - 1;
+ 
+     // Handle the zero case.
+     if (!getBoolValue())
+--- "llvm-project-llvmorg-3.5.1/llvm/include/llvm/CodeGen/PBQP/CostAllocator.h"	2014-12-18 11:43:48.000000000 +0100
++++ "llvm-project-llvmorg-3.5.1/llvm/include/llvm/CodeGen/PBQP/CostAllocator.h"	2019-02-04 21:05:35.189803100 +0100
+@@ -87,11 +87,11 @@
+                !std::is_same<PoolEntry*,
+                              typename std::remove_const<CostKeyT>::type>::value,
+                bool>::type
+-    operator()(const PoolEntry* a, const CostKeyT &b) {
+-      return compare(a->getCost(), b);
++    operator()(const PoolEntry* a, const CostKeyT &b) const {
++      return const_cast<EntryComparator*> (this)->compare(a->getCost(), b);
+     }
+-    bool operator()(const PoolEntry* a, const PoolEntry* b) {
+-      return compare(a->getCost(), b->getCost());
++    bool operator()(const PoolEntry* a, const PoolEntry* b) const {
++      return const_cast<EntryComparator*> (this)->compare(a->getCost(), b->getCost());
+     }
+   private:
+     CostKeyTComparator compare;
+--- "llvm-project-llvmorg-3.5.1/llvm/include/llvm/IR/Operator.h"	2014-12-18 11:43:48.000000000 +0100
++++ "llvm-project-llvmorg-3.5.1/llvm/include/llvm/IR/Operator.h"	2019-02-04 21:05:38.096034900 +0100
+@@ -460,7 +460,7 @@
+ 
+       // Handle a struct index, which adds its field offset to the pointer.
+       if (StructType *STy = dyn_cast<StructType>(*GTI)) {
+-        unsigned ElementIdx = OpC->getZExtValue();
++		  unsigned ElementIdx = (unsigned)OpC->getZExtValue();
+         const StructLayout *SL = DL.getStructLayout(STy);
+         Offset += APInt(Offset.getBitWidth(),
+                         SL->getElementOffset(ElementIdx));
+--- "llvm-project-llvmorg-3.5.1/llvm/lib/Target/X86/X86FrameLowering.cpp"	2014-12-18 11:43:48.000000000 +0100
++++ "llvm-project-llvmorg-3.5.1/llvm/lib/Target/X86/X86FrameLowering.cpp"	2019-02-04 21:06:34.173912900 +0100
+@@ -690,6 +690,8 @@
+         .addReg(X86::EAX, RegState::Kill)
+         .setMIFlag(MachineInstr::FrameSetup);
+     }
++    
++    MachineInstrBuilder MIB;
+ 
+     if (Is64Bit) {
+       // Handle the 64-bit Windows ABI case where we need to call __chkstk.
+@@ -697,19 +699,28 @@
+       BuildMI(MBB, MBBI, DL, TII.get(X86::MOV64ri), X86::RAX)
+         .addImm(NumBytes)
+         .setMIFlag(MachineInstr::FrameSetup);
+-    } else {
++
++	  // R11 will be used to contain the address of __chkstk.
++      // R11 is a volotiale register and assumed to be destoyed by the callee, 
++      // so there is no need to save and restore it.
++      BuildMI(MBB, MBBI, DL, TII.get(X86::MOV64ri), X86::R11)
++        .addExternalSymbol(StackProbeSymbol);
++      // Create a call to __chkstk function which address contained in R11.
++      MIB = BuildMI(MBB, MBBI, DL, TII.get(X86::CALL64r))
++              .addReg(X86::R11, RegState::Kill);
++	} else {
+       // Allocate NumBytes-4 bytes on stack in case of isEAXAlive.
+       // We'll also use 4 already allocated bytes for EAX.
+       BuildMI(MBB, MBBI, DL, TII.get(X86::MOV32ri), X86::EAX)
+         .addImm(isEAXAlive ? NumBytes - 4 : NumBytes)
+         .setMIFlag(MachineInstr::FrameSetup);
+-    }
++        
++      MIB = BuildMI(MBB, MBBI, DL, TII.get(X86::CALLpcrel32))
++              .addExternalSymbol(StackProbeSymbol);
++	}
+ 
+-    BuildMI(MBB, MBBI, DL,
+-            TII.get(Is64Bit ? X86::W64ALLOCA : X86::CALLpcrel32))
+-      .addExternalSymbol(StackProbeSymbol)
+-      .addReg(StackPtr,    RegState::Define | RegState::Implicit)
+-      .addReg(X86::EFLAGS, RegState::Define | RegState::Implicit)
++	MIB.addReg(StackPtr,    RegState::Define | RegState::Implicit)
++		.addReg(X86::EFLAGS, RegState::Define | RegState::Implicit)
+       .setMIFlag(MachineInstr::FrameSetup);
+ 
+     if (Is64Bit) {
+--- "llvm-project-llvmorg-3.5.1/llvm/lib/Target/X86/X86ISelLowering.cpp"	2014-12-18 11:43:48.000000000 +0100
++++ "llvm-project-llvmorg-3.5.1/llvm/lib/Target/X86/X86ISelLowering.cpp"	2019-02-04 21:06:35.408281300 +0100
+@@ -17650,13 +17650,24 @@
+   // non-trivial part is impdef of ESP.
+ 
+   if (Subtarget->isTargetWin64()) {
+-    if (Subtarget->isTargetCygMing()) {
++    const char *StackProbeSymbol = 
++      Subtarget->isTargetCygMing() ? "___chkstk" : "__chkstk";
++    
++    // R11 will be used to contain the address of __chkstk.
++    // R11 is a volotiale register and assumed to be destoyed by the callee, 
++    // so there is no need to save and restore it.
++    BuildMI(*BB, MI, DL, TII->get(X86::MOV64ri), X86::R11)
++      .addExternalSymbol(StackProbeSymbol);
++    // Create a call to __chkstk function which address contained in R11.
++    MachineInstrBuilder MIB = BuildMI(*BB, MI, DL, TII->get(X86::CALL64r))
++                  .addReg(X86::R11, RegState::Kill); 
++		  
++	if (Subtarget->isTargetCygMing()) {
+       // ___chkstk(Mingw64):
+       // Clobbers R10, R11, RAX and EFLAGS.
+       // Updates RSP.
+-      BuildMI(*BB, MI, DL, TII->get(X86::W64ALLOCA))
+-        .addExternalSymbol("___chkstk")
+-        .addReg(X86::RAX, RegState::Implicit)
++      MIB
++		.addReg(X86::RAX, RegState::Implicit)
+         .addReg(X86::RSP, RegState::Implicit)
+         .addReg(X86::RAX, RegState::Define | RegState::Implicit)
+         .addReg(X86::RSP, RegState::Define | RegState::Implicit)
+@@ -17664,9 +17675,8 @@
+     } else {
+       // __chkstk(MSVCRT): does not update stack pointer.
+       // Clobbers R10, R11 and EFLAGS.
+-      BuildMI(*BB, MI, DL, TII->get(X86::W64ALLOCA))
+-        .addExternalSymbol("__chkstk")
+-        .addReg(X86::RAX, RegState::Implicit)
++	  MIB
++			.addReg(X86::RAX, RegState::Implicit)
+         .addReg(X86::EFLAGS, RegState::Define | RegState::Implicit);
+       // RAX has the offset to be subtracted from RSP.
+       BuildMI(*BB, MI, DL, TII->get(X86::SUB64rr), X86::RSP)
