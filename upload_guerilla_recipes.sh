@@ -6,6 +6,7 @@ conan user -p 94cb8468316779a44cdd6d3666d64fd3e4864cbc -r pierousseau pieroussea
 conan upload Alembic/1.7.3@pierousseau/stable -r pierousseau --all
 conan upload blosc/1.11.2@pierousseau/stable -r pierousseau --all
 conan upload embree/guerillaBinaries_3.2.0@pierousseau/stable -r pierousseau --all
+conan upload embree/3.5.2@pierousseau/stable -r pierousseau --all
 conan upload fumefx/guerillaBinaries_4@pierousseau/stable -r pierousseau --all
 #conan upload GuerillaBinaries/1.0@pierousseau/stable -r pierousseau --all
 conan upload hdf5/1.10.1@pierousseau/stable -r pierousseau --all

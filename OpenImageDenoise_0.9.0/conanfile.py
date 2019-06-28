@@ -15,7 +15,7 @@ class OpenImageDenoiseConan(ConanFile):
     license = ""
     url = "OpenImageDenoise/%s@pierousseau/stable" % version
     description = "High-Performance Denoising Library for Ray Tracing. https://openimagedenoise.github.io"
-    requires = "tbb/20160916@lasote/vcpkg"
+    requires = "TBB/4.4.4@conan/stable"
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False]}
     default_options = "shared=False"
