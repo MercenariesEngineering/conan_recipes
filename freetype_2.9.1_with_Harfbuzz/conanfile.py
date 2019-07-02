@@ -141,6 +141,11 @@ conan_basic_setup()""")
     def _configure_cmake_ft_2(self, cmake):
         cmake.definitions["WITH_HARFBUZZ"] = True
         cmake.definitions["CMAKE_DISABLE_FIND_PACKAGE_HarfBuzz"] = False
+        cmake.definitions["HARFBUZZ_ROOT"] = self.package_folder
+        cmake.definitions["CONAN_LIBS_HARFBUZZ"] = "harfbuzz"
+        cmake.definitions["CONAN_LIB_DIRS_HARFBUZZ"] = self.package_folder+"/lib"
+        cmake.definitions["CONAN_INCLUDE_DIRS_HARFBUZZ"] = self.package_folder+"/include"
+        cmake.definitions["CMAKE_MODULE_PATH"] = ".."
         cmake.configure(source_dir="../"+self._ft_src, build_dir=self._ft_bld)
         return cmake
 
@@ -151,7 +156,7 @@ conan_basic_setup()""")
         cmake.definitions["HB_BUILD_UTILS"] = False
         cmake.definitions["HB_BUILD_SUBSET"] = False
         cmake.definitions["HB_HAVE_ICU"] = self.options.with_icu
-        cmake.definitions["CMAKE_PREFIX_PATH"] = self.package_folder+"/lib"# + ";" + cmake.definitions["CMAKE_PREFIX_PATH"]
+        cmake.definitions["CMAKE_PREFIX_PATH"] = self.package_folder+"/lib"
         cmake.definitions["CMAKE_INCLUDE_PATH"] = self.package_folder+"/include"
 
         if self.options.with_icu:
@@ -169,6 +174,7 @@ conan_basic_setup()""")
 
         cmake_hb = self._configure_cmake_hb()
         cmake_hb.build()
+        cmake_hb.install()
 
         self._configure_cmake_ft_2(cmake_ft)
         cmake_ft.build()
