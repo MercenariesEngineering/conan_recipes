@@ -24,6 +24,25 @@ class Ptex(ConanFile):
         tools.untargz(filename)
         os.unlink(filename)
 
+        tools.replace_in_file("ptex-%s/CMakeLists.txt" % self.version,
+            """# Use pkg-config to create a PkgConfig::Ptex_ZLIB imported target
+find_package(PkgConfig REQUIRED)
+pkg_checK_modules(Ptex_ZLIB REQUIRED zlib IMPORTED_TARGET)""",
+            """include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+conan_basic_setup()
+find_package(zlib)""")
+        tools.replace_in_file("ptex-%s/src/build/ptex-config.cmake" % self.version,
+            """# Provide PkgConfig::ZLIB to downstream dependents
+find_package(PkgConfig REQUIRED)
+pkg_checK_modules(Ptex_ZLIB REQUIRED zlib IMPORTED_TARGET)""",
+            "")
+        tools.replace_in_file("ptex-%s/src/ptex/CMakeLists.txt" % self.version,
+            """PkgConfig::Ptex_ZLIB""",
+            """${ZLIB_LIBRARIES}""")
+        tools.replace_in_file("ptex-%s/src/utils/CMakeLists.txt" % self.version,
+            """PkgConfig::Ptex_ZLIB""",
+            """${ZLIB_LIBRARIES}""")
+
     def build(self):
         cmake = CMake(self)
         cmake.definitions["PTEX_SHA"] = "1b8bc985a71143317ae9e4969fa08e164da7c2e5"
