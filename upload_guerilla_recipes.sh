@@ -23,4 +23,4 @@ conan upload partio/1.7.4@pierousseau/stable -r pierousseau --all
 conan upload ptex/2.3.2@pierousseau/stable -r pierousseau --all
 conan upload python/guerillaBinaries_2.6@pierousseau/stable -r pierousseau --all
 conan upload re2/2019-06-01@pierousseau/stable -r pierousseau --all
-conan upload wx/guerillaBinaries_2.8.8@pierousseau/stable -r pierousseau --all
+conan upload wxwidgets/2.8.12@pierousseau/stable -r pierousseau --all
