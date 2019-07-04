@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from conans import ConanFile, AutoToolsBuildEnvironment, tools
+from conans import ConanFile, AutoToolsBuildEnvironment, MSBuild, tools
 import os
 
 
@@ -13,7 +13,7 @@ class wxWidgetsConan(ConanFile):
     url = "https://github.com/bincrafters/conan-wxwidgets"
     homepage = "https://www.wxwidgets.org/"
     license = "wxWidgets"
-    exports = ["LICENSE.md", "*.patch"]
+    exports = ["LICENSE.md", "*.patch", "vc140.tar.gz"]
     settings = "os", "arch", "compiler", "build_type"
     options = {"shared": [True, False],
                "fPIC": [True, False],
@@ -126,9 +126,18 @@ class wxWidgetsConan(ConanFile):
         tools.untargz(filename)
         os.unlink(filename)
         os.rename("wxWidgets-" + self.version, self._source_subfolder)
-        tools.replace_in_file("%s/configure" % self._source_subfolder,
-                              """SEARCH_INCLUDE="\\""",
-                              """SEARCH_INCLUDE="/usr/lib/x86_64-linux-gnu/\\""")
+
+        #tools.patch(base_path=self._source_subfolder, patch_file="wx_2.8.12.patch")
+        self.run("cd " + self._source_subfolder + " && patch -p0 < ../wx_2.8.12.patch && cd ..")
+        
+        if self.settings.compiler == 'Visual Studio':
+            #tools.download("http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD", "config.guess")
+            #tools.download("http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub;hb=HEAD", "config.sub")
+            #os.remove(self._source_subfolder+"/config.guess")
+            #os.remove(self._source_subfolder+"/config.sub")
+            #os.rename("config.guess", self._source_subfolder+"/config.guess")
+            #os.rename("config.sub"  , self._source_subfolder+"/config.sub")
+            tools.untargz("vc140.tar.gz", self._source_subfolder)
 
     def add_libraries_from_pc(self, library):
         pkg_config = tools.PkgConfig(library)
@@ -138,59 +147,6 @@ class wxWidgetsConan(ConanFile):
         self.cpp_info.libdirs.extend(lib_paths)
         self.cpp_info.sharedlinkflags.extend(pkg_config.libs_only_other)
         self.cpp_info.exelinkflags.extend(pkg_config.libs_only_other)
-
-#    def _configure_cmake(self):
-#        def option_value(option):
-#            return 'OFF' if option is None else 'sys'
-#        cmake = CMake(self)
-#
-#        # generic build options
-#        cmake.definitions['wxBUILD_SHARED'] = self.options.shared
-#        cmake.definitions['wxBUILD_SAMPLES'] = 'OFF'
-#        cmake.definitions['wxBUILD_TESTS'] = 'OFF'
-#        cmake.definitions['wxBUILD_DEMOS'] = 'OFF'
-#        cmake.definitions['wxBUILD_INSTALL'] = True
-#        cmake.definitions['wxBUILD_COMPATIBILITY'] = self.options.compatibility
-#        if self.settings.compiler == 'clang':
-#            cmake.definitions['wxBUILD_PRECOMP'] = 'OFF'
-#
-#        # platform-specific options
-#        if self.settings.compiler == 'Visual Studio':
-#            cmake.definitions['wxBUILD_USE_STATIC_RUNTIME'] = 'MT' in str(self.settings.compiler.runtime)
-#            cmake.definitions['wxBUILD_MSVC_MULTIPROC'] = True
-#        if self.settings.os == 'Linux':
-#            # TODO : GTK3
-#            # cmake.definitions['wxBUILD_TOOLKIT'] = 'gtk3'
-#            cmake.definitions['wxUSE_CAIRO'] = self.options.cairo
-#
-#        # 3rd-party libraries
-#        cmake.definitions['wxUSE_LIBPNG'] = option_value(self.options.png)
-#        cmake.definitions['wxUSE_LIBJPEG'] = option_value(self.options.jpeg)
-#        cmake.definitions['wxUSE_LIBTIFF'] = option_value(self.options.tiff)
-#        cmake.definitions['wxUSE_ZLIB'] = option_value(self.options.zlib)
-#        cmake.definitions['wxUSE_EXPAT'] = option_value(self.options.expat)
-#
-#        # wxWidgets features
-#        cmake.definitions['wxUSE_UNICODE'] = self.options.unicode
-#        cmake.definitions['wxUSE_SECRETSTORE'] = self.options.secretstore
-#
-#        # wxWidgets libraries
-#        cmake.definitions['wxUSE_AUI'] = self.options.aui
-#        cmake.definitions['wxUSE_OPENGL'] = self.options.opengl
-#        cmake.definitions['wxUSE_HTML'] = self.options.html
-#        cmake.definitions['wxUSE_MEDIACTRL'] = self.options.mediactrl
-#        cmake.definitions['wxUSE_PROPGRID'] = self.options.propgrid
-#        cmake.definitions['wxUSE_DEBUGREPORT'] = self.options.debugreport
-#        cmake.definitions['wxUSE_RIBBON'] = self.options.ribbon
-#        cmake.definitions['wxUSE_RICHTEXT'] = self.options.richtext
-#        cmake.definitions['wxUSE_SOCKETS'] = self.options.sockets
-#        cmake.definitions['wxUSE_STC'] = self.options.stc
-#        cmake.definitions['wxUSE_WEBVIEW'] = self.options.webview
-#        cmake.definitions['wxUSE_XML'] = self.options.xml
-#        cmake.definitions['wxUSE_XRC'] = self.options.xrc
-#
-#        cmake.configure(build_folder=self._build_subfolder)
-#        return cmake
 
     def _configure_autotools(self):
         autotools = AutoToolsBuildEnvironment(self)
@@ -236,9 +192,9 @@ class wxWidgetsConan(ConanFile):
         #if self.options.stc :
         #    configure_args.append("--enable-stc")
         #if self.options.webview :
-        #    configure_args.append("--enable-aui")
+        #    configure_args.append("--enable-webview")
         #if self.options.xml :
-        #    configure_args.append("--enable-aui")
+        #    configure_args.append("--enable-xml")
         if self.options.xrc :
             configure_args.append("--enable-xrc")
 
@@ -248,12 +204,15 @@ class wxWidgetsConan(ConanFile):
         return autotools
 
     def build(self):
-        autotools = self._configure_autotools()
-        autotools.make()
-
-        if self.options.stc :
-            with tools.environment_append(autotools.vars):
-                self.run("cd contrib/src/stc && make && cd ../../..")
+        if self.settings.compiler == "Visual Studio":
+            msbuild = MSBuild(self)
+            msbuild.build(self._source_subfolder+"\\build\\msw\\wx.sln")            
+        else:
+            autotools = self._configure_autotools()
+            autotools.make()
+            if self.options.stc :
+                with tools.environment_append(autotools.vars):
+                    self.run("cd contrib/src/stc && make && cd ../../..")
 
     def package(self):
         self.copy(pattern="LICENSE", dst="licenses", src=self._source_subfolder)
@@ -262,10 +221,12 @@ class wxWidgetsConan(ConanFile):
         self.copy(pattern='*.h', dst='include/wx', src=self._source_subfolder+'/include/wx', keep_path=True)
         self.copy(pattern='*.h', dst='include/wx', src=self._source_subfolder+'/contrib/include/wx', keep_path=True)
         self.copy(pattern='*.a', dst='lib', src='lib/', keep_path=True)
-        self.copy(pattern='*.lib', dst='lib', src='lib/', keep_path=True)
+        self.copy(pattern='*.lib', dst='lib', src=self._source_subfolder+'/build/msw/lib/x64/Release', keep_path=True)
+        self.copy(pattern='*.lib', dst='lib', src=self._source_subfolder+'/build/msw/lib/x64/Debug', keep_path=True)
 
         # copy setup.h
         self.copy(pattern='*setup.h', dst=os.path.join('include', 'wx'), src='lib', keep_path=False)
+        self.copy(pattern='*setup.h', dst=os.path.join('include', 'wx'), src=self._source_subfolder+'/lib', keep_path=False)
 
         #if self.settings.os == 'Windows':
         #    # copy wxrc.exe
@@ -283,73 +244,78 @@ class wxWidgetsConan(ConanFile):
         #                os.symlink(rel, filename)
 
     def package_info(self):
-        version_tokens = self.version.split('.')
-        version_major = version_tokens[0]
-        version_minor = version_tokens[1]
-        version_suffix_major_minor = '-%s.%s' % (version_major, version_minor)
-        unicode = 'u' if self.options.unicode else ''
-        debug = 'd' if self.settings.build_type == 'Debug' else ''
+
         if self.settings.os == 'Linux':
-            prefix = 'wx_'
-            toolkit = 'gtk2'
-            version = ''
-            suffix = version_suffix_major_minor
-        elif self.settings.os == 'Macos':
-            prefix = 'wx_'
-            toolkit = 'osx_cocoa'
-            version = ''
-            suffix = version_suffix_major_minor
+            version_tokens = self.version.split('.')
+            version_major = version_tokens[0]
+            version_minor = version_tokens[1]
+            version_suffix_major_minor = '-%s.%s' % (version_major, version_minor)
+            unicode = 'u' if self.options.unicode else ''
+            debug = 'd' if self.settings.build_type == 'Debug' else ''
+            if self.settings.os == 'Linux':
+                prefix = 'wx_'
+                toolkit = 'gtk2'
+                version = ''
+                suffix = version_suffix_major_minor
+            elif self.settings.os == 'Macos':
+                prefix = 'wx_'
+                toolkit = 'osx_cocoa'
+                version = ''
+                suffix = version_suffix_major_minor
+            elif self.settings.os == 'Windows':
+                prefix = 'wx'
+                toolkit = 'msw'
+                version = '%s%s' % (version_major, version_minor)
+                suffix = ''
+
+            def base_library_pattern(library):
+                return '{prefix}base{version}{unicode}{debug}_%s{suffix}' % library
+
+            def library_pattern(library):
+                return '{prefix}{toolkit}{version}{unicode}{debug}_%s{suffix}' % library
+
+            libs = ['{prefix}base{version}{unicode}{debug}{suffix}',
+                    library_pattern('core'),
+                    library_pattern('adv')]
+            if self.options.sockets:
+                libs.append(base_library_pattern('net'))
+            if self.options.xml:
+                libs.append(base_library_pattern('xml'))
+            if self.options.aui:
+                libs.append(library_pattern('aui'))
+            if self.options.opengl:
+                libs.append(library_pattern('gl'))
+            if self.options.html:
+                libs.append(library_pattern('html'))
+            if self.options.mediactrl:
+                libs.append(library_pattern('media'))
+            if self.options.propgrid:
+                libs.append(library_pattern('propgrid'))
+            if self.options.debugreport:
+                libs.append(library_pattern('qa'))
+            if self.options.ribbon:
+                libs.append(library_pattern('ribbon'))
+            if self.options.richtext:
+                libs.append(library_pattern('richtext'))
+            if self.options.stc:
+                #if not self.options.shared:
+                #    scintilla_suffix = '{debug}' if self.settings.os == "Windows" else '{suffix}'
+                #    libs.append('wxscintilla' + scintilla_suffix)
+                libs.append(library_pattern('stc'))
+            if self.options.webview:
+                libs.append(library_pattern('webview'))
+            if self.options.xrc:
+                libs.append(library_pattern('xrc'))
+            for lib in reversed(libs):
+                self.cpp_info.libs.append(lib.format(prefix=prefix,
+                                                     toolkit=toolkit,
+                                                     version=version,
+                                                     unicode=unicode,
+                                                     debug=debug,
+                                                     suffix=suffix))
         elif self.settings.os == 'Windows':
-            prefix = 'wx'
-            toolkit = 'msw'
-            version = '%s%s' % (version_major, version_minor)
-            suffix = ''
+            self.cpp_info.libs = tools.collect_libs(self)
 
-        def base_library_pattern(library):
-            return '{prefix}base{version}{unicode}{debug}_%s{suffix}' % library
-
-        def library_pattern(library):
-            return '{prefix}{toolkit}{version}{unicode}{debug}_%s{suffix}' % library
-
-        libs = ['{prefix}base{version}{unicode}{debug}{suffix}',
-                library_pattern('core'),
-                library_pattern('adv')]
-        if self.options.sockets:
-            libs.append(base_library_pattern('net'))
-        if self.options.xml:
-            libs.append(base_library_pattern('xml'))
-        if self.options.aui:
-            libs.append(library_pattern('aui'))
-        if self.options.opengl:
-            libs.append(library_pattern('gl'))
-        if self.options.html:
-            libs.append(library_pattern('html'))
-        if self.options.mediactrl:
-            libs.append(library_pattern('media'))
-        if self.options.propgrid:
-            libs.append(library_pattern('propgrid'))
-        if self.options.debugreport:
-            libs.append(library_pattern('qa'))
-        if self.options.ribbon:
-            libs.append(library_pattern('ribbon'))
-        if self.options.richtext:
-            libs.append(library_pattern('richtext'))
-        if self.options.stc:
-            #if not self.options.shared:
-            #    scintilla_suffix = '{debug}' if self.settings.os == "Windows" else '{suffix}'
-            #    libs.append('wxscintilla' + scintilla_suffix)
-            libs.append(library_pattern('stc'))
-        if self.options.webview:
-            libs.append(library_pattern('webview'))
-        if self.options.xrc:
-            libs.append(library_pattern('xrc'))
-        for lib in reversed(libs):
-            self.cpp_info.libs.append(lib.format(prefix=prefix,
-                                                 toolkit=toolkit,
-                                                 version=version,
-                                                 unicode=unicode,
-                                                 debug=debug,
-                                                 suffix=suffix))
 
         self.cpp_info.defines.append('wxUSE_GUI=1')
         if self.settings.build_type == 'Debug':
