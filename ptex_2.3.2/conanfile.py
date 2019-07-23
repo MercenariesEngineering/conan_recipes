@@ -30,7 +30,7 @@ find_package(PkgConfig REQUIRED)
 pkg_checK_modules(Ptex_ZLIB REQUIRED zlib IMPORTED_TARGET)""",
             """include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
-find_package(zlib)""")
+find_package(ZLIB)""")
         tools.replace_in_file("ptex-%s/src/build/ptex-config.cmake" % self.version,
             """# Provide PkgConfig::ZLIB to downstream dependents
 find_package(PkgConfig REQUIRED)

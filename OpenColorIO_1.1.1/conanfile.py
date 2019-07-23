@@ -37,6 +37,9 @@ class OpenColorIOConan(ConanFile):
         cmake.definitions["OCIO_BUILD_STATIC"] = not self.options.shared
         cmake.definitions["OCIO_BUILD_TESTS"] = False
         cmake.definitions["OCIO_BUILD_TRUELIGHT"] = False
+        if self.settings.os == "Linux":
+            cmake.definitions["CMAKE_CXX_FLAGS"] = "-Wno-deprecated-declarations"
+
         cmake.configure(source_dir="OpenColorIO-%s" % self.version)
         cmake.build()
 
