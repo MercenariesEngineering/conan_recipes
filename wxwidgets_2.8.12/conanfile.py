@@ -200,6 +200,9 @@ class wxWidgetsConan(ConanFile):
 
         configure_args.append("--with-zlib=sys")
 
+        autotools.cxx_flags.append("-Wno-narrowing")
+        autotools.cxx_flags.append("-Wno-unused-local-typedefs")
+
         autotools.configure(configure_dir=self._source_subfolder, args=configure_args)
         return autotools
 
