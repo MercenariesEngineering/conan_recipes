@@ -21,7 +21,7 @@ class BloscConan(ConanFile):
     generators = "cmake"
     settings = "os", "arch", "compiler", "build_type"
     options = { "shared": [True, False], "fPIC": [True, False] }
-    default_options = "shared=False", "fPIC=False"
+    default_options = "shared=False", "fPIC=True"
     exports = ["FindBlosc.cmake", "fix-shared-lib-install.patch"]
     
     def config_options(self):
