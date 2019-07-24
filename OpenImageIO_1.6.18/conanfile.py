@@ -59,8 +59,8 @@ set(JPEG_LIBRARY ${CONAN_LIB_DIRS_LIBJPEG-TURBO}/%s)
         # cmake.build()
 
         # Explicit way:
-        self.run('cmake %s/oiio-Release-%s %s -DBUILDSTATIC:BOOLEAN=ON -DLINKSTATIC:BOOLEAN=ON -DCMAKE_INSTALL_PREFIX="%s"' % (self.source_folder, self.version, cmake.command_line, self.package_folder))
-        self.run("cmake --build . --target install %s" % cmake.build_config)
+        self.run(('cmake %s/oiio-Release-%s %s -DBUILDSTATIC:BOOLEAN=ON -DLINKSTATIC:BOOLEAN=ON -DCMAKE_INSTALL_PREFIX="%s" -DSTOP_ON_WARNING=OFF') % (self.source_folder, self.version, cmake.command_line, self.package_folder))
+        self.run("cmake --build . --target install %s -- -j20" % cmake.build_config)
         
     def package(self):
         pass
