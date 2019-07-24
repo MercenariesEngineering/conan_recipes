@@ -1,0 +1,18 @@
+{
+ "graph_lock": {
+  "nodes": {
+   "c352ec04-ad56-11e9-a810-0242ac120002": {
+    "pref": "glew/2.1.0@pierousseau/stable#8ae1d0122966f02f4c1a511493017313:73a861bc8b122d54fdfffcbcb1c144f50df1b7c2#467e9031f9663857041422c27a6b8d27",
+    "options": "shared=False"
+   },
+   "c352ef60-ad56-11e9-a810-0242ac120002": {
+    "pref": "None/None@pierousseau/stable:4e1edaa06e6cf83cbe5a6e996dcfdc0e73763d48",
+    "requires": {
+     "glew/2.1.0@pierousseau/stable#8ae1d0122966f02f4c1a511493017313": "c352ec04-ad56-11e9-a810-0242ac120002"
+    },
+    "options": "glew:shared=False"
+   }
+  }
+ },
+ "profile": "[settings]\narch=x86_64\narch_build=x86_64\nbuild_type=Release\ncompiler=gcc\ncompiler.cppstd=11\ncompiler.libcxx=libstdc++\ncompiler.version=7.3\nos=Linux\nos_build=Linux\n[options]\n[build_requires]\n[env]\nCC=/opt/rh/devtoolset-7/root/usr/bin/gcc\nCXX=/opt/rh/devtoolset-7/root/usr/bin/g++"
+}

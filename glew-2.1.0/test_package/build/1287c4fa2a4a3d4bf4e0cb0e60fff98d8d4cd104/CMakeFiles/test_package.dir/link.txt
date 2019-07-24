@@ -1,0 +1,1 @@
+/opt/rh/devtoolset-7/root/usr/bin/gcc   -m64 -O3 -DNDEBUG        -rdynamic CMakeFiles/test_package.dir/test_package.c.o  -o bin/test_package  -L/root/.conan/data/glew/2.1.0/pierousseau/stable/package/73a861bc8b122d54fdfffcbcb1c144f50df1b7c2/lib -Wl,-rpath,/root/.conan/data/glew/2.1.0/pierousseau/stable/package/73a861bc8b122d54fdfffcbcb1c144f50df1b7c2/lib -lGLEW -lGL 

@@ -1,0 +1,14 @@
+{
+ "options": [
+  [
+   "glew:shared",
+   "False"
+  ]
+ ],
+ "root": {
+  "user": "pierousseau",
+  "channel": "stable",
+  "version": null,
+  "name": null
+ }
+}

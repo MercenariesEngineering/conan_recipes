@@ -47,10 +47,12 @@ class EmbreeConan(ConanFile):
 
     def package(self):
         self.copy("*.h", src="embree-%s/" % self.version, dst="include/embree/")
-        self.copy("*/libmath.a", dst="lib", keep_path=False)
-        self.copy("*/libsimd.a", dst="lib", keep_path=False)
-        self.copy("*/math.lib", dst="lib", keep_path=False)
-        self.copy("*/simd.lib", dst="lib", keep_path=False)
+        if self.settings.os == "Windows":
+            self.copy("*/math.lib", dst="lib/", keep_path=False)
+            self.copy("*/simd.lib", dst="lib/", keep_path=False)
+        else:
+            self.copy("libmath.a", dst="lib/", keep_path=False)
+            self.copy("libsimd.a", dst="lib/", keep_path=False)
 
     def package_info(self):
         self.cpp_info.libs = tools.collect_libs(self)
