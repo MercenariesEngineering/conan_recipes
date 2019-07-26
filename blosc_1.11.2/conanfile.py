@@ -47,7 +47,7 @@ class BloscConan(ConanFile):
                          , cmake_bool_flag("BUILD_BENCHMARKS", False)
                          , cmake_bool_flag("PREFER_EXTERNAL_LZ4", False)
                          , cmake_bool_flag("PREFER_EXTERNAL_SNAPPY", False)
-                         , cmake_bool_flag("PREFER_EXTERNAL_ZLIB", False)
+                         , cmake_bool_flag("PREFER_EXTERNAL_ZLIB", True)
                          , cmake_bool_flag("PREFER_EXTERNAL_ZSTD", False)
                          , cmake_path_flag("CMAKE_INSTALL_PREFIX", self.package_folder)
                          ]

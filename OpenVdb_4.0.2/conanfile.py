@@ -6,11 +6,11 @@ class OpenVdbConan(ConanFile):
     version = "4.0.2"
     license = ""
     url = "https://github.com/dreamworksanimation/openvdb"
-    requires = "blosc/1.11.2@pierousseau/stable", "boost/1.64.0@conan/stable", "glew/2.1.0@bincrafters/stable", "glfw/3.3@bincrafters/stable", "IlmBase/2.2.0@Mikayex/stable", "OpenEXR/2.2.0@pierousseau/stable", "TBB/4.4.4@conan/stable", "zlib/1.2.11@conan/stable"
+    requires = "blosc/1.11.2@pierousseau/stable", "boost/1.64.0@conan/stable", "glew/2.1.0@pierousseau/stable", "glfw/3.3@pierousseau/stable", "IlmBase/2.2.0@Mikayex/stable", "OpenEXR/2.2.0@pierousseau/stable", "TBB/4.4.4@conan/stable", "zlib/1.2.11@conan/stable"
     description = "OpenVDB - Sparse volume data structure and tools http://www.openvdb.org/"
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False], "fPIC": [True, False]}
-    default_options = "shared=False", "blosc:shared=False","OpenEXR:shared=False","IlmBase:shared=False","zlib:shared=False", "boost:shared=False", "boost:without_filesystem=False", "boost:without_regex=False", "boost:without_system=False", "boost:without_thread=False"
+    default_options = "shared=False", "fPIC=True", "blosc:shared=False","OpenEXR:shared=False","IlmBase:shared=False","zlib:shared=False", "boost:shared=False", "boost:without_filesystem=False", "boost:without_regex=False", "boost:without_system=False", "boost:without_thread=False"
     generators = "cmake"
 
     def config_options(self):
