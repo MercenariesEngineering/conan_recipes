@@ -8,6 +8,8 @@ conan upload blosc/1.11.2@pierousseau/stable -r pierousseau --all
 conan upload embree/3.5.2@pierousseau/stable -r pierousseau --all
 conan upload freetype/2.9.1_with_Harfbuzz@pierousseau/stable -r pierousseau --all
 conan upload fumefx/guerillaBinaries_4@pierousseau/stable -r pierousseau --all
+conan upload glew/2.1.0@pierousseau/stable -r pierousseau --all
+conan upload glfw/3.3@pierousseau/stable -r pierousseau --all
 conan upload hdf5/1.10.1@pierousseau/stable -r pierousseau --all
 conan upload jemalloc/4.3.1@pierousseau/stable -r pierousseau --all
 conan upload libjpeg-turbo/1.5.2@pierousseau/stable -r pierousseau --all
@@ -23,5 +25,6 @@ conan upload partio/1.7.4@pierousseau/stable -r pierousseau --all
 conan upload ptex/2.3.2@pierousseau/stable -r pierousseau --all
 conan upload python/guerillaBinaries_2.6@pierousseau/stable -r pierousseau --all
 conan upload re2/2019-06-01@pierousseau/stable -r pierousseau --all
+conan upload TBB/2019_U6@pierousseau/stable -r pierousseau --all
 conan upload USD/19.05@pierousseau/stable -r pierousseau --all
 conan upload wxwidgets/2.8.12@pierousseau/stable -r pierousseau --all

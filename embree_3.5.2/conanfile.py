@@ -9,7 +9,7 @@ class EmbreeConan(ConanFile):
     description = "High Performance Ray Tracing Kernels"
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False], "fPIC": [True, False]}
-    requires = "TBB/4.4.4@conan/stable"
+    requires = "TBB/2019_U6@pierousseau/stable"
     default_options = "shared=False", "fPIC=True"
     generators = "cmake"
 
@@ -24,21 +24,12 @@ class EmbreeConan(ConanFile):
         tools.untargz(filename)
         os.unlink(filename)
 
-        tools.replace_in_file("embree-%s/common/cmake/FindTBB.cmake" % self.version,
-            "FIND_LIBRARY(TBB_LIBRARY tbb",
-            """FIND_LIBRARY(TBB_LIBRARY NAMES tbb tbb_debug""")
-        tools.replace_in_file("embree-%s/common/cmake/FindTBB.cmake" % self.version,
-            "FIND_LIBRARY(TBB_LIBRARY_MALLOC tbbmalloc",
-            """FIND_LIBRARY(TBB_LIBRARY_MALLOC NAMES tbbmalloc tbbmalloc_debug""")
-
     def build(self):
         cmake = CMake(self)
         cmake.definitions["EMBREE_TUTORIALS"] = False
         if ("fPIC" in self.options.fields and self.options.fPIC == True):
             cmake.definitions["CMAKE_POSITION_INDEPENDENT_CODE"] = True
         cmake.definitions["TBB_ROOT"] = self.deps_cpp_info["TBB"].rootpath
-        if self.settings.os == "Windows" and self.settings.build_type == "Debug":
-            cmake.definitions["TBB_LIBRARY"] = self.deps_cpp_info["TBB"].rootpath
         cmake.configure(source_dir="embree-%s" % self.version)
 
         #cmake.build()

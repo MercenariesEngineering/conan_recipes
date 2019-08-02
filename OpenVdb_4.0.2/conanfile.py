@@ -6,7 +6,7 @@ class OpenVdbConan(ConanFile):
     version = "4.0.2"
     license = ""
     url = "https://github.com/dreamworksanimation/openvdb"
-    requires = "blosc/1.11.2@pierousseau/stable", "boost/1.64.0@conan/stable", "glew/2.1.0@pierousseau/stable", "glfw/3.3@pierousseau/stable", "IlmBase/2.2.0@Mikayex/stable", "OpenEXR/2.2.0@pierousseau/stable", "TBB/4.4.4@conan/stable", "zlib/1.2.11@conan/stable"
+    requires = "blosc/1.11.2@pierousseau/stable", "boost/1.64.0@conan/stable", "glew/2.1.0@pierousseau/stable", "glfw/3.3@pierousseau/stable", "IlmBase/2.2.0@Mikayex/stable", "OpenEXR/2.2.0@pierousseau/stable", "TBB/2019_U6@pierousseau/stable", "zlib/1.2.11@conan/stable"
     description = "OpenVDB - Sparse volume data structure and tools http://www.openvdb.org/"
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False], "fPIC": [True, False]}
@@ -74,16 +74,6 @@ FIND_LIBRARY ( GLEW_LIBRARY_PATH GLEW32 PATHS ${GLEW_LOCATION}/lib )""")
         tools.replace_in_file("openvdb-%s/cmake/FindGLFW.cmake" % self.version,
             "FIND_LIBRARY ( GLFW_LIBRARY_PATH glfw PATHS ${GLFW_LOCATION}/lib ${GLFW_LOCATION}/lib64",
             """FIND_LIBRARY ( GLFW_LIBRARY_PATH glfw3 PATHS ${GLFW_LOCATION}/lib ${GLFW_LOCATION}/lib64""")
-
-        tools.replace_in_file("openvdb-%s/cmake/FindTBB.cmake" % self.version,
-            "FIND_LIBRARY ( TBB_LIBRARY_PATH tbb PATHS ${TBB_LIBRARYDIR} PATH_SUFFIXES ${TBB_PATH_SUFFIXES}",
-            """FIND_LIBRARY ( TBB_LIBRARY_PATH NAMES tbb tbb_debug PATHS ${TBB_LIBRARYDIR} PATH_SUFFIXES ${TBB_PATH_SUFFIXES}""")
-        tools.replace_in_file("openvdb-%s/cmake/FindTBB.cmake" % self.version,
-            "FIND_LIBRARY ( TBB_PREVIEW_LIBRARY_PATH tbb_preview PATHS ${TBB_LIBRARYDIR}  PATH_SUFFIXES ${TBB_PATH_SUFFIXES}",
-            """FIND_LIBRARY ( TBB_PREVIEW_LIBRARY_PATH NAMES tbb_preview tbb_preview_debug PATHS ${TBB_LIBRARYDIR}  PATH_SUFFIXES ${TBB_PATH_SUFFIXES}""")
-        tools.replace_in_file("openvdb-%s/cmake/FindTBB.cmake" % self.version,
-            "FIND_LIBRARY ( TBBMALLOC_LIBRARY_PATH tbbmalloc PATHS ${TBB_LIBRARYDIR}  PATH_SUFFIXES ${TBB_PATH_SUFFIXES}",
-            """FIND_LIBRARY ( TBBMALLOC_LIBRARY_PATH NAMES tbbmalloc tbbmalloc_debug PATHS ${TBB_LIBRARYDIR}  PATH_SUFFIXES ${TBB_PATH_SUFFIXES}""")
 
     def configure(self):
         if self.settings.os == "Windows" :
