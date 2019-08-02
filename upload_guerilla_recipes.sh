@@ -19,6 +19,7 @@ conan upload OpenColorIO/1.1.1@pierousseau/stable -r pierousseau --all
 conan upload OpenEXR/2.2.0@pierousseau/stable -r pierousseau --all
 conan upload OpenExrId/1.0-beta.11@pierousseau/stable -r pierousseau --all
 conan upload OpenImageDenoise/0.9.0@pierousseau/stable -r pierousseau --all
+conan upload OpenImageDenoise/1.0.0@pierousseau/stable -r pierousseau --all
 conan upload OpenImageIO/1.6.18@pierousseau/stable -r pierousseau --all
 conan upload OpenVdb/4.0.2@pierousseau/stable -r pierousseau --all
 conan upload partio/1.7.4@pierousseau/stable -r pierousseau --all
