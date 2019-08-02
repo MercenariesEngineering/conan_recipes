@@ -54,12 +54,13 @@ class OpenImageDenoiseConan(ConanFile):
         self.copy("*.h", src="oidn-%s/include" % self.version, dst="include")
         self.copy("*.hpp", src="oidn-%s/include" % self.version, dst="include")
         self.copy("*.lib", dst="lib", keep_path=False)
+        self.copy("*.exe", dst="bin", keep_path=False)
         self.copy("*.dll", dst="bin", keep_path=False)
-        self.copy("*.so", dst="lib", keep_path=False)
+        self.copy("libOpenImageDenoise.so*", dst="lib", keep_path=False)
         self.copy("*.dylib", dst="lib", keep_path=False)
         self.copy("*.a", dst="lib", keep_path=False)
 
     def package_info(self):
         self.cpp_info.libs = tools.collect_libs(self)
-        #if (not self.options.shared) :
-        #    self.cpp_info.defines.append("OIDN_STATIC_LIB")
+        if (not self.options.shared) :
+            self.cpp_info.defines.append("OIDN_STATIC_LIB")
