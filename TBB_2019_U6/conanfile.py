@@ -1,6 +1,5 @@
-from distutils.spawn import find_executable
 from conans import ConanFile, CMake, tools
-import os, re, shutil, subprocess
+import os, shutil
 
 class TBB(ConanFile):
     name = "TBB"
@@ -11,6 +10,7 @@ class TBB(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False], "fPIC": [True, False]}
     default_options = "shared=False", "fPIC=True"
+    generators = "cmake"
 
     def configure(self):
         if self.settings.os == "Windows":
@@ -26,6 +26,13 @@ class TBB(ConanFile):
         tools.unzip( zip_name )
         shutil.move( unzipped_folder, self.name )
         os.remove( zip_name )
+
+        tools.replace_in_file("%s/CMakeLists.txt" % self.name,
+            """tbb_static""",
+            """tbb""")
+        tools.replace_in_file("%s/CMakeLists.txt" % self.name,
+            """tbbmalloc_static""",
+            """tbbmalloc""")
 
     def build(self):
         # TBBMALLOC PROXY is not included into this package because:
@@ -46,29 +53,9 @@ class TBB(ConanFile):
         cmake.definitions["TBB_BUILD_TESTS"] = False
         cmake.definitions["TBB_CI_BUILD"] = False
 
-        if self.settings.os == "Linux" and find_executable( "gcc" ) is not None:
-            gcc_version = subprocess.check_output( [ "gcc", "-dumpversion" ] ).decode( "utf-8" )
-
-            # Keep it simple to work on python 2.7 as well as on python 3+
-            major, minor, build = 0, 0, 0
-            version_numbers = re.findall( r"\d+", gcc_version )
-            version_numbers_count = len( version_numbers )
-
-            if version_numbers_count > 0:
-                major = int( version_numbers[ 0 ] )
-
-            if version_numbers_count > 1:
-                minor = int( version_numbers[ 1 ] )
-
-            if version_numbers_count > 2:
-                build = int( version_numbers[ 2 ] )
-
-            tbb_glibcxx_version = major * 10000 + minor * 100 + build
-            cmake.definitions["TBB_USE_GLIBCXX_VERSION"] = tbb_glibcxx_version
-
-            # Normally not necessary, but it does not cost anything to enforce it.
-            if self.settings.build_type == "Debug":
-                cmake.definitions["CMAKE_CXX_FLAGS"] = "-DTBB_USE_DEBUG=2"
+        # Normally not necessary, but it does not cost anything to enforce it.
+        if self.settings.os == "Linux" and self.settings.build_type == "Debug":
+            cmake.definitions["CMAKE_CXX_FLAGS"] = "-DTBB_USE_DEBUG=2"
 
         cmake.configure(source_folder = self.name)
         cmake.build()
