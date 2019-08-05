@@ -31,6 +31,12 @@ class OpenImageDenoiseConan(ConanFile):
         tools.untargz(filename)
         os.unlink(filename)
 
+        tools.replace_in_file("oidn-%s/mkl-dnn/cmake/OpenMP.cmake" % self.version,
+            """else()
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fopenmp-simd")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp-simd")""",
+            """""")
+
     def build(self):
         cmake = CMake(self)
 
@@ -55,5 +61,5 @@ class OpenImageDenoiseConan(ConanFile):
 
     def package_info(self):
         self.cpp_info.libs = tools.collect_libs(self)
-        if (not self.options.shared) :
-            self.cpp_info.defines.append("OIDN_STATIC_LIB")
+        #if (not self.options.shared) :
+        #    self.cpp_info.defines.append("OIDN_STATIC_LIB")
