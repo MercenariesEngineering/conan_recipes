@@ -11,6 +11,7 @@ conan upload fumefx/guerillaBinaries_4@pierousseau/stable -r pierousseau --all
 conan upload glew/2.1.0@pierousseau/stable -r pierousseau --all
 conan upload glfw/3.3@pierousseau/stable -r pierousseau --all
 conan upload hdf5/1.10.1@pierousseau/stable -r pierousseau --all
+conan upload IlmBase/2.2.0@pierousseau/stable -r pierousseau --all
 conan upload jemalloc/4.3.1@pierousseau/stable -r pierousseau --all
 conan upload libjpeg-turbo/1.5.2@pierousseau/stable -r pierousseau --all
 conan upload llvm/3.5.1@pierousseau/stable -r pierousseau --all
