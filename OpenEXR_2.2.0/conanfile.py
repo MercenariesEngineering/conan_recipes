@@ -7,7 +7,7 @@ class OpenEXRConan(ConanFile):
     version = "2.2.0"
     license = "BSD"
     url = "https://github.com/Mikayex/conan-openexr.git"
-    requires = "IlmBase/2.2.0@Mikayex/stable", "zlib/1.2.11@conan/stable"
+    requires = "IlmBase/2.2.0@pierousseau/stable", "zlib/1.2.11@conan/stable"
     exports = "mingw-fix.patch", "FindOpenEXR.cmake"
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False], "namespace_versioning": [True, False]}
