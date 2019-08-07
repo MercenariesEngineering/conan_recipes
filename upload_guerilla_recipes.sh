@@ -1,6 +1,6 @@
 #!/bin/sh
 
-conan user -p 94cb8468316779a44cdd6d3666d64fd3e4864cbc -r pierousseau pierousseau
+#conan user -p $CONAN_BINTRAY_API_KEY -r pierousseau pierousseau
 #conan upload "*" -r pierousseau --all
 
 conan upload Alembic/1.7.3@pierousseau/stable -r pierousseau --all

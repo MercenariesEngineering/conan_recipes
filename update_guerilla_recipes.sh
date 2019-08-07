@@ -8,6 +8,7 @@ conan export fumefx_guerillaBinaries_4/conanfile.py fumefx/guerillaBinaries_4@pi
 conan export glew_2.1.0/conanfile.py glew/2.1.0@pierousseau/stable
 conan export glfw_3.3/conanfile.py glfw/3.3@pierousseau/stable
 conan export hdf5_1.10.1/conanfile.py hdf5/1.10.1@pierousseau/stable
+conan export IlmBase_2.2.0/conanfile.py IlmBase/2.2.0@pierousseau/stable
 conan export jemalloc_4.3.1/conanfile.py jemalloc/4.3.1@pierousseau/stable
 conan export libjpeg-turbo_1.5.2/conanfile.py libjpeg-turbo/1.5.2@pierousseau/stable
 conan export llvm_3.5.1/conanfile.py llvm/3.5.1@pierousseau/stable

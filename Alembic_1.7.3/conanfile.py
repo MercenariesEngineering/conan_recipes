@@ -6,7 +6,7 @@ class AlembicConan(ConanFile):
     version = "1.7.3"
     license = ""
     url = "Alembic/1.7.3@pierousseau/stable"
-    requires = "hdf5/1.10.1@pierousseau/stable", "IlmBase/2.2.0@Mikayex/stable", "OpenEXR/2.2.0@pierousseau/stable", "zlib/1.2.11@conan/stable"
+    requires = "hdf5/1.10.1@pierousseau/stable", "IlmBase/2.2.0@pierousseau/stable", "OpenEXR/2.2.0@pierousseau/stable", "zlib/1.2.11@conan/stable"
     description = "Alembic is an open framework for storing and sharing scene data that includes a C++ library, a file format, and client plugins and applications. http://alembic.io/"
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False], "fPIC": [True, False]}

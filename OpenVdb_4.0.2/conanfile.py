@@ -6,7 +6,7 @@ class OpenVdbConan(ConanFile):
     version = "4.0.2"
     license = ""
     url = "https://github.com/dreamworksanimation/openvdb"
-    requires = "blosc/1.11.2@pierousseau/stable", "boost/1.64.0@conan/stable", "glew/2.1.0@pierousseau/stable", "glfw/3.3@pierousseau/stable", "IlmBase/2.2.0@Mikayex/stable", "OpenEXR/2.2.0@pierousseau/stable", "TBB/2019_U6@pierousseau/stable", "zlib/1.2.11@conan/stable"
+    requires = "blosc/1.11.2@pierousseau/stable", "boost/1.64.0@conan/stable", "glew/2.1.0@pierousseau/stable", "glfw/3.3@pierousseau/stable", "IlmBase/2.2.0@pierousseau/stable", "OpenEXR/2.2.0@pierousseau/stable", "TBB/2019_U6@pierousseau/stable", "zlib/1.2.11@conan/stable"
     description = "OpenVDB - Sparse volume data structure and tools http://www.openvdb.org/"
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False], "fPIC": [True, False]}

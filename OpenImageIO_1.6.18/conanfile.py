@@ -6,7 +6,7 @@ class OpenimageioConan(ConanFile):
     version = "1.6.18"
     license = "Modified BSD License"
     url = "http://www.openimageio.org"
-    requires = "boost/1.64.0@conan/stable", "IlmBase/2.2.0@Mikayex/stable", "libjpeg-turbo/1.5.2@pierousseau/stable", "libpng/1.6.37@bincrafters/stable", "libtiff/4.0.9@bincrafters/stable", "OpenEXR/2.2.0@pierousseau/stable", "zlib/1.2.11@conan/stable"
+    requires = "boost/1.64.0@conan/stable", "IlmBase/2.2.0@pierousseau/stable", "libjpeg-turbo/1.5.2@pierousseau/stable", "libpng/1.6.37@bincrafters/stable", "libtiff/4.0.9@bincrafters/stable", "OpenEXR/2.2.0@pierousseau/stable", "zlib/1.2.11@conan/stable"
     description = "OpenImageIO http://www.openimageio.org"
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False]}
