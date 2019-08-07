@@ -9,9 +9,13 @@ class OpenimageioConan(ConanFile):
     requires = "boost/1.64.0@conan/stable", "IlmBase/2.2.0@pierousseau/stable", "libjpeg-turbo/1.5.2@pierousseau/stable", "libpng/1.6.37@bincrafters/stable", "libtiff/4.0.9@bincrafters/stable", "OpenEXR/2.2.0@pierousseau/stable", "zlib/1.2.11@conan/stable"
     description = "OpenImageIO http://www.openimageio.org"
     settings = "os", "compiler", "build_type", "arch"
-    options = {"shared": [True, False]}
-    default_options = "shared=False","IlmBase:shared=False", "zlib:shared=False", "OpenEXR:shared=False", "libpng:shared=False", "libjpeg-turbo:shared=False", "libtiff:shared=False", "boost:shared=False", "boost:without_filesystem=False", "boost:without_regex=False", "boost:without_system=False", "boost:without_thread=False"
+    options = {"shared": [True, False], "fPIC": [True, False]}
+    default_options = "shared=False","IlmBase:shared=False", "zlib:shared=False", "OpenEXR:shared=False", "libpng:shared=False", "libjpeg-turbo:shared=False", "libtiff:shared=False", "boost:shared=False", "boost:without_filesystem=False", "boost:without_regex=False", "boost:without_system=False", "boost:without_thread=False", "fPIC=True"
     generators = "cmake"
+
+    def config_options(self):
+        if self.settings.os == "Windows":
+            self.options.remove("fPIC")
 
     def source(self):
         filename = "Release-%s.tar.gz" % self.version

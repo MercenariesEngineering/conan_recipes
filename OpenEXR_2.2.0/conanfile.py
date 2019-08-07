@@ -10,10 +10,14 @@ class OpenEXRConan(ConanFile):
     requires = "IlmBase/2.2.0@pierousseau/stable", "zlib/1.2.11@conan/stable"
     exports = "mingw-fix.patch", "FindOpenEXR.cmake"
     settings = "os", "compiler", "build_type", "arch"
-    options = {"shared": [True, False], "namespace_versioning": [True, False]}
-    default_options = "shared=True", "namespace_versioning=True"
+    options = {"shared": [True, False], "namespace_versioning": [True, False], "fPIC": [True, False]}
+    default_options = "shared=True", "namespace_versioning=True", "fPIC=True"
     generators = "cmake"
     build_policy = "missing"
+
+    def config_options(self):
+        if self.settings.os == "Windows":
+            self.options.remove("fPIC")
 
     def configure(self):
         self.options["IlmBase"].namespace_versioning = self.options.namespace_versioning

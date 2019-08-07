@@ -9,9 +9,13 @@ class OpenExrIdConan(ConanFile):
     description = "OpenEXR files able to isolate any object of a CG image with a perfect antialiazing "
     requires = "OpenEXR/2.2.0@pierousseau/stable"
     settings = "os", "compiler", "build_type", "arch"
-    options = {"shared": [True, False]}
-    default_options = "shared=False","OpenEXR:shared=False"
+    options = {"shared": [True, False], "fPIC": [True, False] }
+    default_options = "shared=False","OpenEXR:shared=False","fPIC=True"
     generators = "cmake"
+
+    def config_options(self):
+        if self.settings.os == 'Windows':
+            del self.options.fPIC
 
     def source(self):
         self.run("git clone http://github.com/MercenariesEngineering/openexrid.git")

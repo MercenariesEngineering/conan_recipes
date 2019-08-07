@@ -37,15 +37,9 @@ class LlvmConan(ConanFile):
 
         cmake.build()
 
-    def package(self):
-        self.copy("*.h", src="llvm-project-llvmorg-%s/llvm/include/" % self.version, dst="include")
-        self.copy("*.def", src="llvm-project-llvmorg-%s/llvm/include/" % self.version, dst="include")
-        self.copy("*.h", src="include/llvm/", dst="include/llvm/")
-        self.copy("*.def", src="include/llvm/", dst="include/llvm/")
-        self.copy("*.gen", src="include/llvm/", dst="include/llvm/")
-
+    def _libs(self):
         if self.settings.os == "Windows" :
-            libs = [
+            return [
                 "LLVMAnalysis.lib",
                 "LLVMAsmParser.lib",
                 "LLVMAsmPrinter.lib",
@@ -89,9 +83,8 @@ class LlvmConan(ConanFile):
                 "LLVMX86Disassembler.lib",
                 "LLVMX86Info.lib",
                 "LLVMX86Utils.lib"]
-            src_path = "%s\\lib\\" % self.settings.build_type
         elif self.settings.os == "Linux" :
-            libs = [
+            return [
                 "libLLVMLTO.a",
                 "libLLVMObjCARCOpts.a",
                 "libLLVMLinker.a",
@@ -195,6 +188,19 @@ class LlvmConan(ConanFile):
                 "libLLVMMC.a",
                 "libLLVMCore.a",
                 "libLLVMSupport.a"]
+
+    def package(self):
+        self.copy("*.h", src="llvm-project-llvmorg-%s/llvm/include/" % self.version, dst="include")
+        self.copy("*.def", src="llvm-project-llvmorg-%s/llvm/include/" % self.version, dst="include")
+        self.copy("*.h", src="include/llvm/", dst="include/llvm/")
+        self.copy("*.def", src="include/llvm/", dst="include/llvm/")
+        self.copy("*.gen", src="include/llvm/", dst="include/llvm/")
+
+        if self.settings.os == "Windows" :
+            libs = self._libs()
+            src_path = "%s\\lib\\" % self.settings.build_type
+        elif self.settings.os == "Linux" :
+            libs = self._libs()
             src_path = "lib/"
         else :
             libs = []
@@ -203,4 +209,8 @@ class LlvmConan(ConanFile):
             self.copy(l, dst="lib", src=src_path, keep_path=False)
 
     def package_info(self):
-        self.cpp_info.libs = tools.collect_libs(self)
+        if self.settings.os == "Windows" :
+            self.cpp_info.libs = tools.collect_libs(self)
+        else:
+            self.cpp_info.libs = self._libs()
+

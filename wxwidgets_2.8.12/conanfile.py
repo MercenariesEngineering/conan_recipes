@@ -277,7 +277,8 @@ class wxWidgetsConan(ConanFile):
             def library_pattern(library):
                 return '{prefix}{toolkit}{version}{unicode}{debug}_%s{suffix}' % library
 
-            libs = ['{prefix}base{version}{unicode}{debug}{suffix}',
+            libs = ['wxregex{version}{unicode}{debug}{suffix}',
+                    '{prefix}base{version}{unicode}{debug}{suffix}',
                     library_pattern('core'),
                     library_pattern('adv')]
             if self.options.sockets:
