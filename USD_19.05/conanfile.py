@@ -9,7 +9,7 @@ class USDConan(ConanFile):
     description = "Universal scene description"
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False], "fPIC": [True, False]}
-    requires = "boost/1.64.0@conan/stable", "hdf5/1.10.1@pierousseau/stable", "OpenEXR/2.2.0@pierousseau/stable", "OpenImageIO/1.6.18@pierousseau/stable", "OpenColorIO/1.1.1@pierousseau/stable", "ptex/2.3.2@pierousseau/stable", "TBB/2019_U6@pierousseau/stable"
+    requires = "Alembic/1.7.3@pierousseau/stable", "boost/1.64.0@conan/stable", "hdf5/1.10.1@pierousseau/stable", "IlmBase/2.2.0@pierousseau/stable", "OpenImageIO/1.6.18@pierousseau/stable", "OpenColorIO/1.1.1@pierousseau/stable", "ptex/2.3.2@pierousseau/stable", "TBB/2019_U6@pierousseau/stable", "zlib/1.2.11@conan/stable"
     default_options = "shared=True", "fPIC=True", "*:shared=False", "*:fPIC=True"
     generators = "cmake"
     short_paths = True
@@ -38,9 +38,22 @@ class USDConan(ConanFile):
                               """project(usd)
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
+
+IF (DEFINED HDF5_ROOT)
+    MESSAGE(STATUS "Using HDF5_ROOT: ${HDF5_ROOT}")
+    # set HDF5_ROOT in the env so FindHDF5.cmake can find it
+    SET(ENV{HDF5_ROOT} ${HDF5_ROOT})
+ENDIF()
+SET(HDF5_USE_STATIC_LIBRARIES ${USE_STATIC_HDF5})
 """)
+
+        tools.replace_in_file("USD-%s/pxr/usd/plugin/usdAbc/CMakeLists.txt" % self.version, """${OPENEXR_Iex_LIBRARY}""", """${ILMBASE_Iex_LIBRARY}""")
+        tools.replace_in_file("USD-%s/pxr/usd/plugin/usdAbc/CMakeLists.txt" % self.version, """${OPENEXR_Half_LIBRARY}""", """${ILMBASE_Half_LIBRARY}""")
+
         # keeping this would mess up dllimport directives in MSVC
         tools.replace_in_file("USD-%s/cmake/defaults/msvcdefaults.cmake" % self.version, """_add_define("BOOST_ALL_DYN_LINK")""", "")
+        # nope, openEXR is not built as a dll.
+        tools.replace_in_file("USD-%s/cmake/defaults/msvcdefaults.cmake" % self.version, """_add_define("OPENEXR_DLL")""", "")
 
     def _configure_cmake(self):
         cmake = CMake(self)
@@ -51,12 +64,15 @@ conan_basic_setup()
         if ("fPIC" in self.options.fields and self.options.fPIC == True):
             cmake.definitions["CMAKE_POSITION_INDEPENDENT_CODE"] = True
 
-        cmake.definitions["TBB_ROOT"] = self.deps_cpp_info["TBB"].rootpath
         if self.settings.os == "Windows" and self.settings.build_type == "Debug":
-            cmake.definitions["TBB_LIBRARY"] = self.deps_cpp_info["TBB"].rootpath
             cmake.definitions["TBB_USE_DEBUG_BUILD"] = True # link against tbb_debug.lib/a
 
-        cmake.definitions["BUILD_SHARED_LIBS"] = self.options.shared        
+        cmake.definitions["BUILD_SHARED_LIBS"] = self.options.shared
+
+        cmake.definitions["PXR_BUILD_ALEMBIC_PLUGIN"] = True
+        cmake.definitions["PXR_ENABLE_HDF5_SUPPORT"] = True
+        cmake.definitions["USE_STATIC_HDF5"] = True
+
         cmake.definitions["PXR_BUILD_TESTS"] = False
         cmake.definitions["PXR_BUILD_USDVIEW"] = False
         cmake.definitions["PXR_BUILD_IMAGING"] = False

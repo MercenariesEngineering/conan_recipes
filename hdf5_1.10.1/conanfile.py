@@ -55,7 +55,7 @@ if (HDF5_ENABLE_THREADSAFE)
         #cmake.build()
 
         # Explicit way:
-        self.run('cmake %s/hdf5-%s %s -DHDF5_ENABLE_THREADSAFE="ON" -DHDF5_BUILD_HL_LIB="OFF" -DHDF5_BUILD_CPP_LIB="OFF" -DHDF5_BUILD_EXAMPLES="OFF" -DHDF5_BUILD_TOOLS="OFF" -DBUILD_TESTING="OFF" -DCMAKE_INSTALL_PREFIX="%s"' % (self.source_folder, self.version, cmake.command_line, self.package_folder))
+        self.run('cmake %s/hdf5-%s %s -DHDF5_ENABLE_THREADSAFE="ON" -DHDF5_BUILD_HL_LIB="ON" -DALLOW_UNSUPPORTED="ON" -DHDF5_BUILD_CPP_LIB="ON" -DHDF5_BUILD_EXAMPLES="OFF" -DHDF5_BUILD_TOOLS="OFF" -DBUILD_TESTING="OFF" -DCMAKE_INSTALL_PREFIX="%s"' % (self.source_folder, self.version, cmake.command_line, self.package_folder))
         self.run("cmake --build . --target install %s" % cmake.build_config)
 
     def package(self):
