@@ -37,6 +37,19 @@ class OpenImageDenoiseConan(ConanFile):
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp-simd")""",
             """""")
 
+        if self.settings.os == "Linux":
+            # force static linking of libstdc++/libgcc
+            tools.replace_in_file("oidn-%s/CMakeLists.txt" % self.version,
+                """target_link_libraries(${PROJECT_NAME}
+  PRIVATE
+    common mkldnn
+)""",
+                """target_link_libraries(${PROJECT_NAME}
+  PRIVATE
+    "-static-libstdc++ -static-libgcc"
+    common mkldnn
+)""")
+
     def build(self):
         cmake = CMake(self)
 
