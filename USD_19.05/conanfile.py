@@ -55,6 +55,12 @@ SET(HDF5_USE_STATIC_LIBRARIES ${USE_STATIC_HDF5})
         # nope, openEXR is not built as a dll.
         tools.replace_in_file("USD-%s/cmake/defaults/msvcdefaults.cmake" % self.version, """_add_define("OPENEXR_DLL")""", "")
 
+        tools.replace_in_file("USD-%s/CMakeLists.txt" % self.version,
+            """set(CMAKE_CXX_FLAGS "${_PXR_CXX_FLAGS} ${CMAKE_CXX_FLAGS}")""", 
+"""set(CMAKE_CXX_FLAGS "${_PXR_CXX_FLAGS} ${CMAKE_CXX_FLAGS}")
+set(CMAKE_CXX_STANDARD_LIBRARIES "-static-libgcc -static-libstdc++ ${CMAKE_CXX_STANDARD_LIBRARIES}")
+""")
+
     def _configure_cmake(self):
         cmake = CMake(self)
 
