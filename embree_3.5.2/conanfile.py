@@ -10,7 +10,7 @@ class EmbreeConan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False], "fPIC": [True, False]}
     requires = "TBB/2019_U6@pierousseau/stable"
-    default_options = "shared=False", "fPIC=True"
+    default_options = "shared=False", "fPIC=True", "TBB:shared=True"
     generators = "cmake"
 
     def configure(self):

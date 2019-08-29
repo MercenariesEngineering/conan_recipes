@@ -10,7 +10,7 @@ class USDConan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False], "fPIC": [True, False]}
     requires = "Alembic/1.7.3@pierousseau/stable", "boost/1.64.0@conan/stable", "hdf5/1.10.1@pierousseau/stable", "IlmBase/2.2.0@pierousseau/stable", "OpenImageIO/1.6.18@pierousseau/stable", "OpenColorIO/1.1.1@pierousseau/stable", "ptex/2.3.2@pierousseau/stable", "TBB/2019_U6@pierousseau/stable", "zlib/1.2.11@conan/stable"
-    default_options = "shared=True", "fPIC=True", "*:shared=False", "*:fPIC=True"
+    default_options = "shared=True", "fPIC=True", "*:shared=False", "TBB:shared=True", "*:fPIC=True"
     generators = "cmake"
     short_paths = True
 

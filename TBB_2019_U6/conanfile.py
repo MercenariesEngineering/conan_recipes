@@ -9,7 +9,7 @@ class TBB(ConanFile):
     version = "2019_U6"
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False], "fPIC": [True, False]}
-    default_options = "shared=False", "fPIC=True"
+    default_options = "shared=True", "fPIC=True"
     generators = "cmake"
 
     def configure(self):
@@ -33,6 +33,15 @@ class TBB(ConanFile):
         tools.replace_in_file("%s/CMakeLists.txt" % self.name,
             """tbbmalloc_static""",
             """tbbmalloc""")
+
+        tools.replace_in_file("%s/CMakeLists.txt" % self.name,
+            """  if (SUPPORTS_STDCXX11)
+    set (CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
+  endif ()""",
+            """  if (SUPPORTS_STDCXX11)
+    set (CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
+  endif ()
+  set(CMAKE_CXX_STANDARD_LIBRARIES "-static-libgcc -static-libstdc++ ${CMAKE_CXX_STANDARD_LIBRARIES}")""")
 
     def build(self):
         # TBBMALLOC PROXY is not included into this package because:

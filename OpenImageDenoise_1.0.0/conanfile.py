@@ -18,7 +18,7 @@ class OpenImageDenoiseConan(ConanFile):
     requires = "TBB/2019_U6@pierousseau/stable"
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False], "fPIC": [True, False]}
-    default_options = "shared=False", "fPIC=True"
+    default_options = "shared=True", "fPIC=True"
     generators = "cmake"
 
     def configure(self):

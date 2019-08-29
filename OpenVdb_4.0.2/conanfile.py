@@ -80,7 +80,7 @@ FIND_LIBRARY ( GLEW_LIBRARY_PATH GLEW32 PATHS ${GLEW_LOCATION}/lib )""")
         if self.settings.os == "Windows" :
             self.options["TBB"].shared = True
         else :
-            self.options["TBB"].shared = False
+            self.options["TBB"].shared = True
 
     def build(self):
         cmake = CMake(self)
