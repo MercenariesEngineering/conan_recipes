@@ -11,7 +11,7 @@ class OpenVdbConan(ConanFile):
     description = "OpenVDB - Sparse volume data structure and tools http://www.openvdb.org/"
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False], "fPIC": [True, False]}
-    default_options = "shared=False", "fPIC=True", "blosc:shared=False","OpenEXR:shared=False","IlmBase:shared=False","zlib:shared=False", "boost:shared=False", "boost:without_filesystem=False", "boost:without_regex=False", "boost:without_system=False", "boost:without_thread=False"
+    default_options = "shared=False", "fPIC=True", "TBB:shared=True", "blosc:shared=False","OpenEXR:shared=False","IlmBase:shared=False","zlib:shared=False", "boost:shared=False", "boost:without_filesystem=False", "boost:without_regex=False", "boost:without_system=False", "boost:without_thread=False"
     generators = "cmake"
 
     def config_options(self):
@@ -77,10 +77,7 @@ FIND_LIBRARY ( GLEW_LIBRARY_PATH GLEW32 PATHS ${GLEW_LOCATION}/lib )""")
             """FIND_LIBRARY ( GLFW_LIBRARY_PATH glfw3 PATHS ${GLFW_LOCATION}/lib ${GLFW_LOCATION}/lib64""")
 
     def configure(self):
-        if self.settings.os == "Windows" :
-            self.options["TBB"].shared = True
-        else :
-            self.options["TBB"].shared = True
+        pass
 
     def build(self):
         cmake = CMake(self)
