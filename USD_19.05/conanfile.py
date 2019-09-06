@@ -9,7 +9,7 @@ class USDConan(ConanFile):
     description = "Universal scene description"
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False], "fPIC": [True, False]}
-    requires = "Alembic/1.7.3@pierousseau/stable", "boost/1.64.0@conan/stable", "hdf5/1.10.1@pierousseau/stable", "IlmBase/2.2.0@pierousseau/stable", "OpenImageIO/1.6.18@pierousseau/stable", "OpenColorIO/1.1.1@pierousseau/stable", "ptex/2.3.2@pierousseau/stable", "TBB/2019_U6@pierousseau/stable", "zlib/1.2.11@conan/stable"
+    requires = "Alembic/1.7.3@pierousseau/stable", "boost/1.64.0@conan/stable", "hdf5/1.10.1@pierousseau/stable", "IlmBase/2.2.0@pierousseau/stable", "materialx/1.36.3@pierousseau/stable", "OpenImageIO/1.6.18@pierousseau/stable", "OpenColorIO/1.1.1@pierousseau/stable", "ptex/2.3.2@pierousseau/stable", "TBB/2019_U6@pierousseau/stable", "zlib/1.2.11@conan/stable"
     default_options = "shared=True", "fPIC=True", "*:shared=False", "TBB:shared=True", "*:fPIC=True"
     generators = "cmake"
     short_paths = True
@@ -55,11 +55,14 @@ SET(HDF5_USE_STATIC_LIBRARIES ${USE_STATIC_HDF5})
         # nope, openEXR is not built as a dll.
         tools.replace_in_file("USD-%s/cmake/defaults/msvcdefaults.cmake" % self.version, """_add_define("OPENEXR_DLL")""", "")
 
-        tools.replace_in_file("USD-%s/CMakeLists.txt" % self.version,
+        if self.settings.os == "Linux":
+            tools.replace_in_file("USD-%s/CMakeLists.txt" % self.version,
             """set(CMAKE_CXX_FLAGS "${_PXR_CXX_FLAGS} ${CMAKE_CXX_FLAGS}")""", 
 """set(CMAKE_CXX_FLAGS "${_PXR_CXX_FLAGS} ${CMAKE_CXX_FLAGS}")
 set(CMAKE_CXX_STANDARD_LIBRARIES "-static-libgcc -static-libstdc++ ${CMAKE_CXX_STANDARD_LIBRARIES}")
 """)
+
+        tools.replace_in_file("USD-%s/cmake/modules/FindMaterialX.cmake" % self.version, """documents/Libraries""", """libraries/stdlib""")
 
     def _configure_cmake(self):
         cmake = CMake(self)
@@ -78,6 +81,10 @@ set(CMAKE_CXX_STANDARD_LIBRARIES "-static-libgcc -static-libstdc++ ${CMAKE_CXX_S
         cmake.definitions["PXR_BUILD_ALEMBIC_PLUGIN"] = True
         cmake.definitions["PXR_ENABLE_HDF5_SUPPORT"] = True
         cmake.definitions["USE_STATIC_HDF5"] = True
+        #cmake.definitions["PXR_BUILD_OPENIMAGEIO_PLUGIN"] = True
+        #cmake.definitions["PXR_BUILD_OPENCOLORIO_PLUGIN"] = True
+        #cmake.definitions["PXR_ENABLE_PTEX_SUPPORT"] = True
+        cmake.definitions["PXR_BUILD_MATERIALX_PLUGIN"] = True
 
         cmake.definitions["PXR_BUILD_TESTS"] = False
         cmake.definitions["PXR_BUILD_USDVIEW"] = False

@@ -13,6 +13,7 @@ conan export jemalloc_4.3.1/conanfile.py jemalloc/4.3.1@pierousseau/stable
 conan export libjpeg-turbo_1.5.2/conanfile.py libjpeg-turbo/1.5.2@pierousseau/stable
 conan export llvm_3.5.1/conanfile.py llvm/3.5.1@pierousseau/stable
 conan export nasm_2.13.01/conanfile.py nasm/2.13.01@pierousseau/stable
+conan export materialx_1.36.3/conanfile.py materialx/1.36.3@pierousseau/stable
 conan export OpenColorIO_1.1.1/conanfile.py OpenColorIO/1.1.1@pierousseau/stable
 conan export OpenEXR_2.2.0/conanfile.py OpenEXR/2.2.0@pierousseau/stable
 conan export OpenExrId_1.0-beta.11/conanfile.py OpenExrId/1.0-beta.11@pierousseau/stable

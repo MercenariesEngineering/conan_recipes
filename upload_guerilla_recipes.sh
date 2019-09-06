@@ -16,6 +16,7 @@ conan upload jemalloc/4.3.1@pierousseau/stable -r pierousseau --all --confirm
 conan upload libjpeg-turbo/1.5.2@pierousseau/stable -r pierousseau --all --confirm
 conan upload llvm/3.5.1@pierousseau/stable -r pierousseau --all --confirm
 conan upload nasm/2.13.01@pierousseau/stable -r pierousseau --all --confirm
+conan upload materialx/1.36.3@pierousseau/stable -r pierousseau --all --confirm
 conan upload OpenColorIO/1.1.1@pierousseau/stable -r pierousseau --all --confirm
 conan upload OpenEXR/2.2.0@pierousseau/stable -r pierousseau --all --confirm
 conan upload OpenExrId/1.0-beta.11@pierousseau/stable -r pierousseau --all --confirm
