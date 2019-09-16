@@ -34,6 +34,17 @@ include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
 """)
 
+        # CMake install expects to copy hdf5 pdb file, but it is not where expected. Skip this copy.
+        tools.replace_in_file("hdf5-%s/config/cmake_ext_mod/HDFMacros.cmake" % self.version,
+            """    install (
+      FILES
+          ${targetfilename}
+      DESTINATION
+          ${targetdestination}
+      CONFIGURATIONS RelWithDebInfo
+      COMPONENT ${targetcomponent}
+  )""", "")
+
         cmakelists_file = "hdf5-%s/src/CMakeLists.txt" % self.version
         with open(cmakelists_file, "a") as myfile:
             myfile.write('''
