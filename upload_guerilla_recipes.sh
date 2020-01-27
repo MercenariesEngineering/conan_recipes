@@ -34,5 +34,6 @@ conan upload re2/2016-02-01@pierousseau/stable -r pierousseau --all --confirm
 conan upload re2/2019-06-01@pierousseau/stable -r pierousseau --all --confirm
 conan upload TBB/2019_U6@pierousseau/stable -r pierousseau --all --confirm
 conan upload USD/19.05@pierousseau/stable -r pierousseau --all --confirm
+conan upload USD/20.02@pierousseau/stable -r pierousseau --all --confirm
 conan upload wxwidgets/2.8.12@pierousseau/stable -r pierousseau --all --confirm
 conan upload zlib/1.2.11@pierousseau/stable -r pierousseau --all --confirm

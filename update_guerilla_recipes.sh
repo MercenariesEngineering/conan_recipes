@@ -30,6 +30,7 @@ conan export python_guerillaBinaries_2.6/conanfile.py python/guerillaBinaries_2.
 conan export re2_2016-02-01/conanfile.py re2/2016-02-01@pierousseau/stable
 conan export re2_2019-06-01/conanfile.py re2/2019-06-01@pierousseau/stable
 conan export USD_19.05/conanfile.py USD/19.05@pierousseau/stable
+conan export USD_20.02/conanfile.py USD/20.02@pierousseau/stable
 conan export TBB_2019_U6/conanfile.py TBB/2019_U6@pierousseau/stable
 conan export wxwidgets_2.8.12/conanfile.py wxwidgets/2.8.12@pierousseau/stable
 conan export zlib_1.2.11/conanfile.py zlib/1.2.11@pierousseau/stable
