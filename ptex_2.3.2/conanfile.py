@@ -60,7 +60,7 @@ pkg_checK_modules(Ptex_ZLIB REQUIRED zlib IMPORTED_TARGET)""",
    
     def package(self):
         self.copy("*.h", dst="include/", keep_path=False)
-        self.copy("Ptex.lib", dst="lib", keep_path=False)
+        self.copy("lib/Ptex.lib", dst="lib", keep_path=False)
         self.copy("*.a", dst="lib", keep_path=False)
 
     def package_info(self):
