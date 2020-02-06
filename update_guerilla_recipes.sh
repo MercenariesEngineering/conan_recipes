@@ -3,6 +3,7 @@
 conan export Alembic_1.7.3/conanfile.py Alembic/1.7.3@pierousseau/stable
 conan export blosc_1.11.2/conanfile.py blosc/1.11.2@pierousseau/stable
 conan export embree_3.5.2/conanfile.py embree/3.5.2@pierousseau/stable
+conan export embree_3.8.0/conanfile.py embree/3.8.0@pierousseau/stable
 conan export freetype_2.9.1_with_Harfbuzz/conanfile.py freetype/2.9.1_with_Harfbuzz@pierousseau/stable
 conan export fumefx_guerillaBinaries_4/conanfile.py fumefx/guerillaBinaries_4@pierousseau/stable
 conan export glew_2.1.0/conanfile.py glew/2.1.0@pierousseau/stable

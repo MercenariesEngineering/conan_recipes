@@ -6,6 +6,7 @@
 conan upload Alembic/1.7.3@pierousseau/stable -r pierousseau --all --confirm
 conan upload blosc/1.11.2@pierousseau/stable -r pierousseau --all --confirm
 conan upload embree/3.5.2@pierousseau/stable -r pierousseau --all --confirm
+conan upload embree/3.8.0@pierousseau/stable -r pierousseau --all --confirm
 conan upload freetype/2.9.1_with_Harfbuzz@pierousseau/stable -r pierousseau --all --confirm
 conan upload fumefx/guerillaBinaries_4@pierousseau/stable -r pierousseau --all --confirm
 conan upload glew/2.1.0@pierousseau/stable -r pierousseau --all --confirm
