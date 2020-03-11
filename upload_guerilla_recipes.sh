@@ -16,6 +16,7 @@ conan upload IlmBase/2.2.0@pierousseau/stable -r pierousseau --all --confirm
 conan upload jemalloc/4.3.1@pierousseau/stable -r pierousseau --all --confirm
 conan upload libiconv/1.15@pierousseau/stable -r pierousseau --all --confirm
 conan upload libjpeg-turbo/1.5.2@pierousseau/stable -r pierousseau --all --confirm
+conan upload libpng/1.6.37@pierousseau/stable -r pierousseau --all --confirm
 conan upload libxml2/2.9.9@pierousseau/stable -r pierousseau --all --confirm
 conan upload llvm/3.5.1@pierousseau/stable -r pierousseau --all --confirm
 conan upload nasm/2.13.01@pierousseau/stable -r pierousseau --all --confirm

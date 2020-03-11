@@ -13,6 +13,7 @@ conan export IlmBase_2.2.0/conanfile.py IlmBase/2.2.0@pierousseau/stable
 conan export jemalloc_4.3.1/conanfile.py jemalloc/4.3.1@pierousseau/stable
 conan export libiconv_1.15/conanfile.py libiconv/1.15@pierousseau/stable
 conan export libjpeg-turbo_1.5.2/conanfile.py libjpeg-turbo/1.5.2@pierousseau/stable
+conan export libpng_1.6.37/conanfile.py libpng/1.6.37@pierousseau/stable
 conan export libxml2_2.9.9/conanfile.py libxml2/2.9.9@pierousseau/stable
 conan export llvm_3.5.1/conanfile.py llvm/3.5.1@pierousseau/stable
 conan export nasm_2.13.01/conanfile.py nasm/2.13.01@pierousseau/stable
