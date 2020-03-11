@@ -57,17 +57,23 @@ set(JPEG_LIBRARY ${CONAN_LIB_DIRS_LIBJPEG-TURBO}/%s)
         # Remove -DOPENEXR_DLL
         tools.replace_in_file("oiio-Release-%s/CMakeLists.txt" % self.version, "add_definitions (-DOPENEXR_DLL)", "")
 
+        if (self.settings.compiler == "gcc" and self.settings.compiler.version == 4.1):
+            tools.replace_in_file("oiio-Release-%s/src/libutil/strutil.cpp" % self.version,
+            """apsave = ap;""", """apsave[0] = *ap;""")
+            tools.replace_in_file("oiio-Release-%s/src/libutil/strutil.cpp" % self.version,
+            """ap = apsave;""", """ap[0] = *apsave;""")
+
     def build(self):
         cmake = CMake(self)
-        # cmake.configure(source_dir="%s/oiio-Release-%s" % (self.source_folder, self.version))
-        # cmake.build()
+        cmake.definitions["BUILDSTATIC"] = "ON"
+        cmake.definitions["LINKSTATIC"] = "ON"
+        cmake.definitions["CMAKE_INSTALL_PREFIX"] = self.package_folder
+        cmake.definitions["STOP_ON_WARNING"] = "OFF"
+        if (self.settings.compiler == "gcc" and self.settings.compiler.version == 4.1):
+            cmake.definitions["USE_SIMD"] = 0
 
-        # Explicit way:
-        self.run(('cmake %s/oiio-Release-%s %s -DBUILDSTATIC:BOOLEAN=ON -DLINKSTATIC:BOOLEAN=ON -DCMAKE_INSTALL_PREFIX="%s" -DSTOP_ON_WARNING=OFF') % (self.source_folder, self.version, cmake.command_line, self.package_folder))
-        if self.settings.os == "Windows" :
-            self.run("cmake --build . --target install %s" % cmake.build_config)
-        else:
-            self.run("cmake --build . --target install %s -- -j20" % cmake.build_config)
+        cmake.configure(source_dir="%s/oiio-Release-%s" % (self.source_folder, self.version))
+        cmake.build(target="install")
         
     def package(self):
         pass
