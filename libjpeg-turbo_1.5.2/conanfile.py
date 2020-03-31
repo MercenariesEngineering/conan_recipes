@@ -106,6 +106,7 @@ class LibjpegTurboConan(ConanFile):
         cmake.definitions['WITH_TURBOJPEG'] = self.options.turbojpeg
         cmake.definitions['WITH_JAVA'] = self.options.java
         cmake.definitions['WITH_12BIT'] = self.options.enable12bit
+        cmake.definitions['WITH_CRT_DLL'] = not ("MT" in self.settings.compiler.runtime)
         cmake.configure(source_dir=self._source_subfolder)
         cmake.build()
         cmake.install()
