@@ -33,6 +33,8 @@ class EmbreeConan(ConanFile):
         # Don't pull in GLFW and IMGUI
         cmake.definitions["EMBREE_TUTORIALS"] = False
 
+        cmake.definitions["EMBREE_CURVE_SELF_INTERSECTION_AVOIDANCE_FACTOR"] = "0"
+
         if self.settings.build_type == "Debug":
             cmake.definitions["EMBREE_TBB_ROOT"] = ""
             cmake.definitions["EMBREE_TBB_DEBUG_ROOT"] = self.deps_cpp_info["TBB"].rootpath
