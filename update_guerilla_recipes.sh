@@ -22,6 +22,7 @@ conan export OpenColorIO_1.1.1/conanfile.py OpenColorIO/1.1.1@pierousseau/stable
 conan export OpenEXR_2.2.0/conanfile.py OpenEXR/2.2.0@pierousseau/stable
 conan export OpenExrId_1.0-beta.11/conanfile.py OpenExrId/1.0-beta.11@pierousseau/stable
 conan export OpenExrId_1.0-beta.17/conanfile.py OpenExrId/1.0-beta.17@pierousseau/stable
+conan export OpenExrId_1.0-beta.20/conanfile.py OpenExrId/1.0-beta.20@pierousseau/stable
 conan export OpenFx_1.4/conanfile.py OpenFx/1.4@pierousseau/stable
 conan export OpenImageDenoise_1.0.0/conanfile.py OpenImageDenoise/1.0.0@pierousseau/stable
 conan export OpenImageIO_1.6.18/conanfile.py OpenImageIO/1.6.18@pierousseau/stable

@@ -25,6 +25,7 @@ conan upload OpenColorIO/1.1.1@pierousseau/stable -r pierousseau --all --confirm
 conan upload OpenEXR/2.2.0@pierousseau/stable -r pierousseau --all --confirm
 conan upload OpenExrId/1.0-beta.11@pierousseau/stable -r pierousseau --all --confirm
 conan upload OpenExrId/1.0-beta.17@pierousseau/stable -r pierousseau --all --confirm
+conan upload OpenExrId/1.0-beta.20@pierousseau/stable -r pierousseau --all --confirm
 conan upload OpenFx/1.4@pierousseau/stable -r pierousseau --all --confirm
 conan upload OpenImageDenoise/1.0.0@pierousseau/stable -r pierousseau --all --confirm
 conan upload OpenImageIO/1.6.18@pierousseau/stable -r pierousseau --all --confirm
