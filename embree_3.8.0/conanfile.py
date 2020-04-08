@@ -26,13 +26,26 @@ class EmbreeConan(ConanFile):
 
     def build(self):
         cmake = CMake(self)
-        cmake.definitions["EMBREE_TUTORIALS"] = False
+        cmake.definitions["EMBREE_TUTORIALS"] = False # Don't pull in GLFW and IMGUI
         if ("fPIC" in self.options.fields and self.options.fPIC == True):
             cmake.definitions["CMAKE_POSITION_INDEPENDENT_CODE"] = True
         
-        # Don't pull in GLFW and IMGUI
-        cmake.definitions["EMBREE_TUTORIALS"] = False
-
+        #cmake.definitions["BUILD_TESTING"] = False
+        
+        #cmake.definitions["EMBREE_RAY_MASK"] = True
+        #cmake.definitions["EMBREE_BACKFACE_CULLING"] = True
+        #cmake.definitions["EMBREE_FILTER_FUNCTION"] = True
+        #cmake.definitions["EMBREE_IGNORE_INVALID_RAYS"] = False
+        #cmake.definitions["EMBREE_GEOMETRY_TRIANGLE"] = True
+        #cmake.definitions["EMBREE_GEOMETRY_QUAD"] = True
+        #cmake.definitions["EMBREE_GEOMETRY_CURVE"] = True
+        #cmake.definitions["EMBREE_GEOMETRY_SUBDIVISION"] = True
+        #cmake.definitions["EMBREE_GEOMETRY_USER"] = True
+        #cmake.definitions["EMBREE_GEOMETRY_INSTANCE"] = True
+        #cmake.definitions["EMBREE_GEOMETRY_GRID"] = True
+        #cmake.definitions["EMBREE_GEOMETRY_POINT"] = True
+        #cmake.definitions["EMBREE_RAY_PACKETS"] = True
+        #cmake.definitions["EMBREE_MAX_INSTANCE_LEVEL_COUNT"] = "1"
         cmake.definitions["EMBREE_CURVE_SELF_INTERSECTION_AVOIDANCE_FACTOR"] = "0"
 
         if self.settings.build_type == "Debug":
@@ -45,6 +58,9 @@ class EmbreeConan(ConanFile):
 
         if not self.options.shared:
             cmake.definitions["EMBREE_STATIC_LIB"] = True
+        elif self.settings.os == "Linux":
+            cmake.definitions["EMBREE_IGNORE_CMAKE_CXX_FLAGS"] = False
+            cmake.definitions["CMAKE_CXX_FLAGS"] = "-static-libstdc++ -static-libgcc"
 
         # Prevent compiler stack overflow: https://github.com/embree/embree/issues/157
         if self.settings.compiler == 'Visual Studio' and self.settings.compiler.version == 14 and self.settings.build_type == "Release":
@@ -72,9 +88,7 @@ class EmbreeConan(ConanFile):
             self.copy("*/tasking.lib", dst="lib/", keep_path=False)
         else:
             if self.options.shared:
-                self.copy("libembree3.so", dst="bin/", keep_path=False)
-                self.copy("libembree3.so.3", dst="bin/", keep_path=False)
-                self.copy("libembree3.so.3.8.0", dst="bin/", keep_path=False)
+                self.copy("libembree3.so*", dst="lib/", keep_path=False)
             else:
                 self.copy("libembree3.a", dst="lib/", keep_path=False)
 
