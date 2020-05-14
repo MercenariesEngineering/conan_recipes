@@ -20,6 +20,17 @@ class CpythonConan(ConanFile):
         # We must override OpenSSL's zlib dependency to something compatible with our other dependencies:
         self.requires("zlib/1.2.11") 
 
+        if self.settings.os == "Linux":
+            self.requires("expat/2.2.9")
+            self.requires("lzma/5.2.4@bincrafters/stable")
+            self.requires("libuuid/1.0.3")
+            self.requires("bzip2/1.0.8")
+            self.requires("libffi/3.2.1")
+            self.requires("gdbm/1.18.1@bincrafters/stable")
+            self.requires("sqlite3/3.30.1")
+            self.requires("ncurses/6.1@conan/stable")
+            self.requires("readline/7.0@bincrafters/stable")
+
     def config_options(self):
         """fPIC is linux only."""
         if self.settings.os != "Linux":
@@ -78,6 +89,12 @@ class CpythonConan(ConanFile):
                         "--without-pydebug",
                         "--without-assertions"
                     ]
+
+                # setup.py does not try very hard to find libbuid headers, so we have to hack the include
+                # flags to make sure setup.py will find this header.
+                libuuid = self.deps_cpp_info["libuuid"]
+                atools.include_paths.append(os.path.join(libuuid.rootpath, "include", "uuid"))
+
                 atools.configure(args=args)
                 atools.make()
 
