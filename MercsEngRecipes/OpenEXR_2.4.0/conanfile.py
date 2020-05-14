@@ -17,32 +17,22 @@ class OpenEXRConan(ConanFile):
     default_options = {"shared": False, "fPIC": True}
     generators = "cmake", "cmake_find_package"
     exports_sources = "CMakeLists.txt"
-
     _source_subfolder = "source_subfolder"
 
     def config_options(self):
+        """fPIC is linux only."""
         if self.settings.os != "Linux":
             self.options.remove("fPIC")
 
     def requirements(self):
+        """Define runtime requirements."""
         self.requires("zlib/1.2.11")
 
     def source(self):
+        """Retrieve source code."""
         tools.get("https://github.com/openexr/openexr/archive/v%s.tar.gz" % self.version)
         os.rename("openexr-{}".format(self.version), self._source_subfolder)
-
-    def _configure_cmake(self):
-        cmake = CMake(self)
-        cmake.definitions["PYILMBASE_ENABLE"] = False
-        cmake.definitions["OPENEXR_VIEWERS_ENABLE"] = False
-        cmake.definitions["OPENEXR_BUILD_BOTH_STATIC_SHARED"] = False
-        cmake.definitions["OPENEXR_BUILD_UTILS"] = False
-        cmake.definitions["CMAKE_DEBUG_POSTFIX"] = ""
-        cmake.definitions["BUILD_TESTING"] = False
-        cmake.configure()
-        return cmake
-
-    def _patch_files(self):
+        
         for lib in ("OpenEXR", "IlmBase"):
             if self.settings.os == "Windows":
                 tools.replace_in_file(os.path.join(self._source_subfolder,  lib, "config", "LibraryDefine.cmake"),
@@ -56,31 +46,41 @@ class OpenEXRConan(ConanFile):
                                       "set(baselibname ${CMAKE_SHARED_LIBRARY_PREFIX}${libname}${CMAKE_SHARED_LIBRARY_SUFFIX})",
                                       "set(baselibname ${CMAKE_SHARED_LIBRARY_PREFIX}${libname}_d${CMAKE_SHARED_LIBRARY_SUFFIX})")
 
+    def cmake_definitions(self):
+        """Setup CMake definitions."""
+        definition_dict = {
+            "NAMESPACE_VERSIONING": False,
+            "PYILMBASE_ENABLE": False,
+            "OPENEXR_VIEWERS_ENABLE": False,
+            "OPENEXR_BUILD_BOTH_STATIC_SHARED": False,
+            "OPENEXR_BUILD_UTILS": False,
+            "CMAKE_DEBUG_POSTFIX": "",
+            "BUILD_TESTING": False,
+        }
+
+        return definition_dict
+
     def build(self):
-        self._patch_files()
-        cmake = self._configure_cmake()
+        """Build the elements to package."""
+        cmake = CMake(self)
+        cmake.configure(defs = self.cmake_definitions())
         cmake.build()
 
     def package(self):
-        self.copy("LICENSE.md", src=self._source_subfolder, dst="licenses")
-        cmake = self._configure_cmake()
+        """Assemble the package."""
+        cmake = CMake(self)
+        cmake.configure(defs = self.cmake_definitions())
         cmake.install()
+        self.copy("LICENSE.md", src=self._source_subfolder, dst="licenses")
         tools.rmdir(os.path.join(self.package_folder, "share"))
         tools.rmdir(os.path.join(self.package_folder, "lib", "pkgconfig"))
         tools.rmdir(os.path.join(self.package_folder, "lib", "cmake"))
 
     def package_info(self):
+        """Edit package info."""
+        self.cpp_info.libs = tools.collect_libs(self)
         self.cpp_info.names["cmake_find_package"] = "OpenEXR"
         self.cpp_info.names["cmake_find_package_multi"] = "OpenEXR"
-        parsed_version = self.version.split(".")
-        lib_suffix = "-{}_{}".format(parsed_version[0], parsed_version[1])
-        self.cpp_info.libs = ["IlmImf{}".format(lib_suffix),
-                              "IlmImfUtil{}".format(lib_suffix),
-                              "IlmThread{}".format(lib_suffix),
-                              "Iex{}".format(lib_suffix),
-                              "IexMath{}".format(lib_suffix),
-                              "Imath{}".format(lib_suffix),
-                              "Half{}".format(lib_suffix)]
         
         self.cpp_info.includedirs = [os.path.join("include", "OpenEXR"), "include"]
         if self.options.shared and self.settings.os == "Windows":

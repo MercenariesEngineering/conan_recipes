@@ -10,11 +10,12 @@ class LibSndFile(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False], "fPIC": [True, False]}
     default_options = "shared=False", "fPIC=True"
-    #exports_sources = "CMakeLists.txt"
+    exports_sources = "CMakeLists.txt"
     generators = "cmake"
     _source_subfolder = "source_subfolder"
 
     def config_options(self):
+        """fPIC is linux only."""
         if self.settings.os != "Linux":
             self.options.remove("fPIC")
 
@@ -26,8 +27,7 @@ class LibSndFile(ConanFile):
 
         if self.settings.os == "Windows":
             with tools.chdir(os.path.join(self._source_subfolder, "src")):
-                tools.replace_in_file(
-                    "common.c", 
+                tools.replace_in_file("common.c", 
                     "#if HAVE_UNISTD_H", 
                     '''#undef HAVE_UNISTD_H
 #if HAVE_UNISTD_H''')
@@ -39,25 +39,25 @@ class LibSndFile(ConanFile):
             "BUILD_SHARED_LIBS": self.options.shared,
             "ENABLE_PACKAGE_CONFIG": False,
             "ENABLE_BOW_DOCS": False,
+            "ENABLE_EXTERNAL_LIBS": False,
             "BUILD_PROGRAMS": False,
             "BUILD_EXAMPLES": False,
             "BUILD_TESTING": False,
             "BUILD_REGTEST": False,
         }
 
-        if self.settings.os == "Linux":
-            definition_dict["CMAKE_POSITION_INDEPENDENT_CODE"] = ("fPIC" in self.options.fields and self.options.fPIC == True)
-
         return definition_dict
 
     def build(self):
+        """Build the elements to package."""
         cmake = CMake(self)
-        cmake.configure(defs = self.cmake_definitions(), source_folder = self._source_subfolder)
+        cmake.configure(defs = self.cmake_definitions())
         cmake.build()
 
     def package(self):
+        """Assemble the package."""
         cmake = CMake(self)
-        cmake.configure(defs = self.cmake_definitions(), source_folder = self._source_subfolder)
+        cmake.configure(defs = self.cmake_definitions())
         cmake.install()
 
         if self.settings.os == "Linux" and self.options.shared:
@@ -66,5 +66,6 @@ class LibSndFile(ConanFile):
                 os.symlink("libsndfile.so.1.0.29", "libsndfile.so.1.0")
 
     def package_info(self):
+        """Edit package info."""
         self.cpp_info.libs = tools.collect_libs(self)
         self.env_info.LD_LIBRARY_PATH.append(os.path.join(self.package_folder, "lib"))

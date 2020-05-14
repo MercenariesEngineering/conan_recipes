@@ -11,16 +11,17 @@ class PortAudio(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False], "fPIC": [True, False]}
     default_options = "shared=False", "fPIC=True"
+    exports_sources = "CMakeLists.txt"
     generators = "cmake"
     _source_subfolder = "source_subfolder"
 
     def requirements(self):
         """Define runtime requirements."""
         if self.settings.os == "Linux":
-            self.requires("libalsa/1.1.9" )
-            #self.requires("libalsa/1.2.1.2@tdelame/stable" )
+            self.requires("libalsa/1.1.9")
 
-    def configure(self):
+    def config_options(self):
+        """fPIC is linux only."""
         if self.settings.os != "Linux":
             self.options.remove("fPIC")
 
@@ -49,12 +50,6 @@ class PortAudio(ConanFile):
             definition_dict["ALSA_LIBRARY"] = os.path.join(alsa_info.lib_paths[0], "libasound.so")
             definition_dict["PA_USE_ALSA"] = True
             definition_dict["PA_USE_JACK"] = False
-
-            if self.settings.build_type == "Release":
-                definition_dict["CMAKE_C_FLAGS"] = "-fPIC -m64 -O3"
-            else:
-                definition_dict["CMAKE_C_FLAGS"] = "-fPIC -m64 -Og -g"
-
         elif self.settings.os == "Windows":
             definition_dict["PA_USE_MME"] = True
             definition_dict["PA_USE_WDMKS_DEVICE_INFO"] = False
@@ -67,29 +62,17 @@ class PortAudio(ConanFile):
         return definition_dict
 
     def build(self):
+        """Build the elements to package."""
         cmake = CMake(self)
-        cmake.configure(defs = self.cmake_definitions(), source_folder = self._source_subfolder)
+        cmake.configure(defs = self.cmake_definitions())
         cmake.build()
 
     def package(self):
-        cmake = CMake(self)
-        cmake.configure(defs = self.cmake_definitions(), source_folder = self._source_subfolder)
-        cmake.install()
-
         """Assemble the package."""
-        #self.copy("portaudio.h", src="%s/include"%self._source_subfolder, dst="include" )
-        #if self.settings.os == "Linux":
-        #    libpattern = "*.so*" if self.options.shared else "*.a"
-        #    self.copy("pa_linux_alsa.h", src="%s/include"%self._source_subfolder, dst="include" )
-        #    self.copy(libpattern, dst ="lib", keep_path=False)
-        #elif self.settings.os == "Windows":
-        #    self.copy("pa_win_mme.h", src="%s/include"%self._source_subfolder, dst="include" )
-        #    if self.options.shared:
-        #        self.copy("*.dll", dst="lib", keep_path=False)
-        #    self.copy("*.lib", dst="lib", keep_path=False)
-        #self.copy(pattern="LICENSE.txt", dst="licenses", src=self._source_subfolder)
+        cmake = CMake(self)
+        cmake.configure(defs = self.cmake_definitions())
+        cmake.install()
 
     def package_info(self):
         """Edit package info."""
-        #self.cpp_info.libs = ["portaudio"]
         self.cpp_info.libs = tools.collect_libs(self)

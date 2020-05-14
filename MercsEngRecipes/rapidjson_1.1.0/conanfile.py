@@ -15,19 +15,20 @@ class RapidjsonConan(ConanFile):
     license = "MIT"
     exports = ["LICENSE.md"]
     no_copy_source = True
-    source_subfolder = "source_subfolder"
+    _source_subfolder = "source_subfolder"
 
     def source(self):
+        """Retrieve source code."""
         # the 1.1.0 release on github miss the files we used to include.
-        sha = "dfbe1db9da455552f7a9ad5d2aea17dd9d832ac1"
-        source_url = "https://github.com/Tencent/rapidjson"
-        tools.get("{}/archive/{}.zip".format(source_url, sha))
-        os.rename("{}-{}".format(self.name, sha), self.source_subfolder)
+        commit_sha = "dfbe1db9da455552f7a9ad5d2aea17dd9d832ac1"
+        tools.get("https://github.com/Tencent/rapidjson/archive/%s.zip" % commit_sha)
+        os.rename("rapidjson-%s" % commit_sha, self._source_subfolder)
 
     def package(self):
-        include_folder = os.path.join(self.source_subfolder, "include")
-        self.copy(pattern="license.txt", dst="licenses", src=self.source_subfolder)
-        self.copy(pattern="*", dst="include", src=include_folder)
+        """Assemble the package."""
+        self.copy(pattern="license.txt", dst="licenses", src=self._source_subfolder)
+        self.copy(pattern="*", dst="include", src=os.path.join(self._source_subfolder, "include"))
 
     def package_id(self):
+        """Header only package hash."""
         self.info.header_only()

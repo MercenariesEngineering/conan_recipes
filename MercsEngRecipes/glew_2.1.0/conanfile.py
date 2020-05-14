@@ -18,37 +18,47 @@ class GlewConan(ConanFile):
     _source_subfolder = "_source_subfolder"
 
     #def requirements(self):
+    #    """Define runtime requirements."""
     #    if self.settings.os == 'Linux':
     #        self.requires("mesa-glu/9.0.1@bincrafters/stable")
 
     def configure(self):
+        """This is a C library. We don't care about CPP version."""
         del self.settings.compiler.libcxx
         del self.settings.compiler.cppstd
+        """fPIC is linux only."""
         if self.settings.os != 'Linux':
             self.options.remove("fPIC")
 
     def source(self):
+        """Retrieve source code."""
         release_name = "%s-%s" % (self.name, self.version)
         tools.get("{0}/releases/download/{1}/{1}.tgz".format(self.homepage, release_name), sha256="04de91e7e6763039bc11940095cd9c7f880baba82196a7765f727ac05a993c95")
         os.rename(release_name, self._source_subfolder)
+        
         # Fix build for Visual Studio 16 Release (issue #1087)
         tools.patch(base_path=self._source_subfolder, patch_file="vs16-release-fix.patch")
 
-    def _configure_cmake(self):
-        cmake = CMake(self)
-        cmake.definitions["BUILD_UTILS"] = False
-        cmake.definitions["GLEW_REGAL"] = False
-        cmake.definitions["GLEW_OSMESA"] = False
-        cmake.definitions["CONAN_GLEW_DEFINITIONS"] = ";".join(self._glew_defines)
-        cmake.configure()
-        return cmake
+    def cmake_definitions(self):
+        """Setup CMake definitions."""
+        definition_dict = {
+            "BUILD_UTILS": False,
+            "GLEW_REGAL": False,
+            "GLEW_OSMESA": False,
+            "CONAN_GLEW_DEFINITIONS": ";".join(self._glew_defines),
+        }
+        return definition_dict 
 
     def build(self):
-        cmake = self._configure_cmake()
+        """Build the elements to package."""
+        cmake = CMake(self)
+        cmake.configure(defs = self.cmake_definitions())
         cmake.build()
 
     def package(self):
-        cmake = self._configure_cmake()
+        """Assemble the package."""
+        cmake = CMake(self)
+        cmake.configure(defs = self.cmake_definitions())
         cmake.install()
 
         self.copy("FindGLEW.cmake", ".", ".", keep_path=False)
@@ -99,6 +109,7 @@ class GlewConan(ConanFile):
         return defines
 
     def package_info(self):
+        """Edit package info."""
         self.cpp_info.defines = self._glew_defines
         if self.settings.os == "Windows":
             self.cpp_info.libs = ['glew32']

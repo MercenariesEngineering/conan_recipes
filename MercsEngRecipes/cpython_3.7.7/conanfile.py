@@ -14,16 +14,19 @@ class CpythonConan(ConanFile):
     default_options = "shared=True", "fPIC=True"
 
     def requirements(self):
+        """Define runtime requirements."""
         self.requires("OpenSSL/1.1.1c@conan/stable")
         # Because cpython is both a 'requires' dependency and a 'build_requires' dependency,
         # We must override OpenSSL's zlib dependency to something compatible with our other dependencies:
         self.requires("zlib/1.2.11") 
 
-    def configure(self):
-        if self.settings.os == "Windows":
+    def config_options(self):
+        """fPIC is linux only."""
+        if self.settings.os != "Linux":
             self.options.remove("fPIC")
 
     def source(self):
+        """Retrieve source code."""
         tools.get("https://github.com/python/cpython/archive/v%s.tar.gz" % self.version)
 
         # This automatic linking to python_x_.lib is not helping ; get rid of it
@@ -48,6 +51,7 @@ class CpythonConan(ConanFile):
 #endif /* MS_COREDLL */""", "")
 
     def build(self):
+        """Build the elements to package."""
         with tools.chdir(self.src_subfolder):
             if self.settings.os == "Windows":
                 with tools.chdir("PCBuild"):
@@ -78,6 +82,7 @@ class CpythonConan(ConanFile):
                 atools.make()
 
     def package(self):
+        """Assemble the package."""
         if self.settings.os != "Windows":
             with tools.chdir("cpython-%s" % self.version):
                 atools = AutoToolsBuildEnvironment(self)
@@ -104,7 +109,7 @@ class CpythonConan(ConanFile):
             self.copy(pattern="*.exe", dst="bin", src=src, keep_path=False)
 
     def package_info(self):
-
+        """Edit package info."""
         if self.settings.os != "Windows":
             name = "python%sm" % ".".join(self.version.split(".")[0:2])
             self.cpp_info.includedirs.append("include/%s" % name)

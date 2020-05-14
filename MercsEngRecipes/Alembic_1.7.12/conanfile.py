@@ -6,7 +6,6 @@ class AlembicConan(ConanFile):
     version = "1.7.12"
     license = ""
     url = "http://www.alembic.io/"
-    requires = "hdf5/1.10.1@pierousseau/stable", "OpenEXR/2.4.0@mercseng/stable", "zlib/1.2.11@conan/stable"
     description = "Alembic is an open framework for storing and sharing scene data that includes a C++ library, a file format, and client plugins and applications. http://alembic.io/"
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False], "fPIC": [True, False]}
@@ -15,7 +14,14 @@ class AlembicConan(ConanFile):
     generators = "cmake"
     _source_subfolder = "source_subfolder"
 
+    def requirements(self):
+        """Define runtime requirements."""
+        self.requires("hdf5/1.10.1@pierousseau/stable")
+        self.requires("OpenEXR/2.4.0@mercseng/stable")
+        self.requires("zlib/1.2.11")
+
     def config_options(self):
+        """fPIC is linux only."""
         if self.settings.os != "Linux":
             self.options.remove("fPIC")
 
@@ -48,14 +54,17 @@ class AlembicConan(ConanFile):
         return definition_dict
 
     def build(self):
+        """Build the elements to package."""
         cmake = CMake(self)
         cmake.configure(defs = self.cmake_definitions())
         cmake.build()
 
     def package(self):
+        """Assemble the package."""
         cmake = CMake(self)
         cmake.configure(defs = self.cmake_definitions())
         cmake.install()
 
     def package_info(self):
+        """Edit package info."""
         self.cpp_info.libs = tools.collect_libs(self)

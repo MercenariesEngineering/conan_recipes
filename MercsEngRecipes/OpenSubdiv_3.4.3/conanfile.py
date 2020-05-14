@@ -18,9 +18,10 @@ class opensubdiv(ConanFile):
     def requirements(self):
         """Define runtime requirements."""
         self.requires("TBB/2019_U6@pierousseau/stable")
-        self.requires("zlib/1.2.11@pierousseau/stable")
+        self.requires("zlib/1.2.11")
 
-    def configure(self):
+    def config_options(self):
+        """fPIC is linux only."""
         if self.settings.os != "Linux":
             self.options.remove("fPIC")
 
@@ -59,21 +60,23 @@ class opensubdiv(ConanFile):
             "NO_GLFW_X11": True,
         }
 
-        if self.settings.os == "Linux":
-            definition_dict["CMAKE_POSITION_INDEPENDENT_CODE"] = ("fPIC" in self.options.fields and self.options.fPIC == True)
-            #definition_dict["CMAKE_CXX_FLAGS"] = "-I{}".format(self.deps_cpp_info["GLU" ].include_paths[0])
+        #if self.settings.os == "Linux":
+        #    definition_dict["CMAKE_CXX_FLAGS"] = "-I{}".format(self.deps_cpp_info["GLU" ].include_paths[0])
 
         return definition_dict 
 
     def build(self):
+        """Build the elements to package."""
         cmake = CMake(self)
         cmake.configure(defs = self.cmake_definitions())
         cmake.build()
 
     def package(self):
+        """Assemble the package."""
         cmake = CMake(self)
         cmake.configure(defs = self.cmake_definitions())
         cmake.install()
 
     def package_info(self):
+        """Edit package info."""
         self.cpp_info.libs = tools.collect_libs(self)

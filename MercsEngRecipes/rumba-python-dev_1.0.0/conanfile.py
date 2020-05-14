@@ -10,9 +10,9 @@ class PythonPackages(ConanFile):
         ("pyinstaller", "3.6"),
         ("pytest", "5.3.4"),
         ("pylint", "2.4.4"),
-        ("doxypypy", "0.8.8.6"),
-        #("conan", "1.21.1")
+        ("doxypypy", "0.8.8.6")
     ]
+    
 
 
 

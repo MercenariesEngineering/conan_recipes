@@ -15,7 +15,8 @@ class OpenimageioConan(ConanFile):
     generators = "cmake"
 
     def config_options(self):
-        if self.settings.os == "Windows":
+        """fPIC is linux only."""
+        if self.settings.os != "Linux":
             self.options.remove("fPIC")
 
     def source(self):
@@ -65,6 +66,7 @@ set(JPEG_LIBRARY ${CONAN_LIB_DIRS_LIBJPEG-TURBO}/%s)
             """ap = apsave;""", """ap[0] = *apsave;""")
 
     def build(self):
+        """Build the elements to package."""
         cmake = CMake(self)
         cmake.definitions["BUILDSTATIC"] = "ON"
         cmake.definitions["LINKSTATIC"] = "ON"
@@ -78,8 +80,10 @@ set(JPEG_LIBRARY ${CONAN_LIB_DIRS_LIBJPEG-TURBO}/%s)
         cmake.build(target="install")
         
     def package(self):
+        """Assemble the package."""
         pass
 
     def package_info(self):
+        """Edit package info."""
         self.cpp_info.libs = ["OpenImageIO"]
         self.cpp_info.defines = ["OIIO_STATIC_BUILD"]

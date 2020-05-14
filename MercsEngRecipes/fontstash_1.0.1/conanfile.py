@@ -16,7 +16,9 @@ class fontstash(ConanFile):
         self.copy("*.txt", dst="licenses")
         
     def package_info(self):
+        """Edit package info."""
         self.cpp_info.includedirs = ["include"]
 
     def package_id(self):
+        """Header only package hash."""
         self.info.header_only()
