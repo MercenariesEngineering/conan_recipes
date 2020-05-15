@@ -9,7 +9,7 @@ conan export GSL_2.1.0/conanfile.py GSL/2.1.0@mercseng/stable
 conan export libsndfile_1.0.29/conanfile.py libsndfile/1.0.29@mercseng/stable
 conan export OpenColorIO_1.1.1/conanfile.py OpenColorIO/1.1.1@mercseng/stable
 conan export OpenEXR_2.4.0/conanfile.py OpenEXR/2.4.0@mercseng/stable
-conan export OpenImageIO_1.6.18/conanfile.py OpenImageIO/1.6.18@mercseng/stable
+conan export OpenImageIO_2.1.15.0/conanfile.py OpenImageIO/2.1.15.0@mercseng/stable
 conan export OpenSubdiv_3.4.3/conanfile.py OpenSubdiv/3.4.3@mercseng/stable
 conan export PortAudio_2018-12-24/conanfile.py PortAudio/2018-12-24@mercseng/stable
 conan export rapidjson_1.1.0/conanfile.py rapidjson/1.1.0@mercseng/stable
