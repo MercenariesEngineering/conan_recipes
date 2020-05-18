@@ -15,6 +15,13 @@ class OpenColorIOConan(ConanFile):
     generators = "cmake"
     _source_subfolder = "source_subfolder"
 
+    def requirements(self):
+        """Define runtime requirements."""
+        self.requires("expat/2.2.9")
+        self.requires("OpenEXR/2.4.0@mercseng/stable")
+        #self.requires("tinyxml2/8.0.0")
+        #self.requires("yaml-cpp/0.6.3")
+
     def config_options(self):
         """fPIC is linux only."""
         if self.settings.os != "Linux":
@@ -27,6 +34,9 @@ class OpenColorIOConan(ConanFile):
         tools.get("https://github.com/AcademySoftwareFoundation/OpenColorIO/archive/%s.zip" % commit_sha)
         os.rename("OpenColorIO-%s" % commit_sha, self._source_subfolder)
         
+        # Write static lib to /lib folder, not/lib/static
+        tools.replace_in_file("%s/src/core/CMakeLists.txt" % self._source_subfolder, """${CMAKE_INSTALL_EXEC_PREFIX}/lib/static""", """${CMAKE_INSTALL_EXEC_PREFIX}/lib""")
+
         os.rename(os.path.join(self._source_subfolder, "CMakeLists.txt"), os.path.join(self._source_subfolder, "CMakeLists_original.txt"))
         shutil.copy("CMakeLists.txt", os.path.join(self._source_subfolder, "CMakeLists.txt"))
 
@@ -42,6 +52,7 @@ class OpenColorIOConan(ConanFile):
             "OCIO_BUILD_STATIC": not self.options.shared,
             "OCIO_BUILD_TESTS": False,
             "OCIO_BUILD_TRUELIGHT": False,
+            "OCIO_INSTALL_EXT_PACKAGES": "MISSING",
         }
 
         if self.settings.os == "Linux":
@@ -66,3 +77,5 @@ class OpenColorIOConan(ConanFile):
         self.cpp_info.libs = tools.collect_libs(self)
         if (not self.options.shared):
             self.cpp_info.defines = ["OpenColorIO_STATIC"]
+        if self.settings.os != "Linux":
+            self.env_info.LD_LIBRARY_PATH.append(os.path.join(self.package_folder, "lib"))

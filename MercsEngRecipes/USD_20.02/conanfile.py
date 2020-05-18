@@ -23,8 +23,9 @@ class USDConan(ConanFile):
         self.requires("boost/1.64.0@conan/stable")
         self.requires("hdf5/1.10.1@pierousseau/stable")
         self.requires("materialx/1.36.3@pierousseau/stable")
-        self.requires("OpenImageIO/1.6.18@mercseng/stable")
         self.requires("OpenColorIO/1.1.1@mercseng/stable")
+        self.requires("OpenImageIO/2.1.15@mercseng/stable")
+        self.requires("OpenSubdiv/3.4.3@mercseng/stable")
         self.requires("ptex/2.3.2@pierousseau/stable")
         self.requires("TBB/2019_U6@pierousseau/stable")
         self.requires("zlib/1.2.11")
@@ -85,18 +86,18 @@ set(CMAKE_CXX_STANDARD_LIBRARIES "-static-libgcc -static-libstdc++ ${CMAKE_CXX_S
             "PXR_BUILD_DRACO_PLUGIN": False,
             "PXR_BUILD_EMBREE_PLUGIN": False,
             "PXR_BUILD_HOUDINI_PLUGIN": False,
-            "PXR_BUILD_IMAGING":False,
+            "PXR_BUILD_IMAGING":True,
             "PXR_BUILD_KATANA_PLUGIN": False,
             "PXR_BUILD_MATERIALX_PLUGIN":True,
             "PXR_BUILD_OPENCOLORIO_PLUGIN": True,
             "PXR_BUILD_OPENIMAGEIO_PLUGIN": True,
             "PXR_BUILD_PRMAN_PLUGIN": False,
             "PXR_BUILD_TESTS": False,
-            "PXR_BUILD_USD_IMAGING": False,
+            "PXR_BUILD_USD_IMAGING": True,
             "PXR_BUILD_USDVIEW": False,
             "PXR_ENABLE_GL_SUPPORT": False,
             "PXR_ENABLE_HDF5_SUPPORT":True,
-            "PXR_ENABLE_OPENVDB_SUPPORT": True,
+            "PXR_ENABLE_OPENVDB_SUPPORT": False,
             "PXR_ENABLE_OSL_SUPPORT":False,
             "PXR_ENABLE_PTEX_SUPPORT": True,
             "PXR_ENABLE_PYTHON_SUPPORT": False,
