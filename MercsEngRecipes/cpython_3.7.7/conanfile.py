@@ -141,6 +141,7 @@ class CpythonConan(ConanFile):
         else:
             debug_suffix = "_d" if self.settings.build_type == "Debug" else ""
             self.cpp_info.libs = ["python%s%s%s" % (self.version[0], self.version[2], debug_suffix)]
+            self.cpp_info.defines.append("HAVE_SNPRINTF")
 
         self.env_info.PATH.append(os.path.join(self.package_folder, "bin"))
         self.env_info.PYTHON_ROOT = self.package_folder

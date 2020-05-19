@@ -20,7 +20,7 @@ class USDConan(ConanFile):
     def requirements(self):
         """Define runtime requirements."""
         self.requires("Alembic/1.7.12@mercseng/stable")
-        self.requires("boost/1.64.0@conan/stable")
+        self.requires("boost/1.70.0")
         self.requires("hdf5/1.10.1@pierousseau/stable")
         self.requires("materialx/1.36.3@pierousseau/stable")
         self.requires("OpenColorIO/1.1.1@mercseng/stable")
@@ -70,7 +70,7 @@ set(CMAKE_CXX_STANDARD_LIBRARIES "-static-libgcc -static-libstdc++ ${CMAKE_CXX_S
 
         # Add a wrapper CMakeLists.txt file which initializes conan before executing the real CMakeLists.txt
         os.rename(os.path.join(self._source_subfolder, "CMakeLists.txt"), os.path.join(self._source_subfolder, "CMakeLists_original.txt"))
-        shutil.copy("CMakeLists.txt", os.path.join(self._source_subfolder, "CMakeLists.txt"))
+        shutil.copy("CMakeLists.txt", self._source_subfolder)
 
     def _configure_cmake(self):
         """Configure CMake."""
@@ -104,6 +104,15 @@ set(CMAKE_CXX_STANDARD_LIBRARIES "-static-libgcc -static-libstdc++ ${CMAKE_CXX_S
             "TBB_USE_DEBUG_BUILD": self.settings.build_type == "Debug",
             "HDF5_USE_STATIC_LIBRARIES": not self.options["hdf5"].shared
         }
+
+        # Boost default find package is not great... give it a hand.
+        #boost_libs = ['atomic', 'chrono', 'container', 'context', 'contract', 'coroutine', 'date_time', 'exception', 'fiber', 'filesystem', 'graph', 'graph_parallel', 'iostreams', 'locale', 'log', 'math', 'mpi', 'program_options', 'python', 'random', 'regex', 'serialization', 'stacktrace', 'system', 'test', 'thread', 'timer', 'type_erasure', 'wave']
+        boost_libs = ['program_options']
+        for searched_lib in boost_libs:
+            for built_lib in self.deps_cpp_info["boost"].libs:
+                if built_lib.find(searched_lib) != -1:
+                    definition_dict["Boost_%s_FOUND" % searched_lib.upper()] = True
+                    definition_dict["Boost_%s_LIBRARY" % searched_lib.upper()] = built_lib
 
         cmake.configure(defs = definition_dict, source_folder = self._source_subfolder)
         return cmake
