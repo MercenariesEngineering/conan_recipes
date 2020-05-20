@@ -4,6 +4,7 @@ conan export Alembic_1.7.12/conanfile.py Alembic/1.7.12@mercseng/stable
 conan export cpython_3.7.7/conanfile.py cpython/3.7.7@mercseng/stable
 conan export embree_3.9.0/conanfile.py embree/3.9.0@mercseng/stable
 conan export fontstash_1.0.1/conanfile.py fontstash/1.0.1@mercseng/stable
+conan export FBX_2020.0.1/conanfile.py FBX/2020.0.1@mercseng/stable
 conan export glew_2.1.0/conanfile.py glew/2.1.0@mercseng/stable
 conan export GSL_2.1.0/conanfile.py GSL/2.1.0@mercseng/stable
 conan export libsndfile_1.0.29/conanfile.py libsndfile/1.0.29@mercseng/stable
