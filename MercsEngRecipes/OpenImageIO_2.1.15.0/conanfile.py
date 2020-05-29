@@ -25,7 +25,7 @@ class OpenimageioConan(ConanFile):
         self.requires("libpng/1.6.37@bincrafters/stable")
         self.requires("libtiff/4.0.9@bincrafters/stable")
         #self.requires("OpenColorIO/1.1.1@mercseng/stable")
-        self.requires("OpenEXR/2.4.0@mercseng/stable")
+        self.requires("OpenEXR/2.5.1@mercseng/stable")
         #self.requires("ptex/2.3.2@pierousseau/stable")
         self.requires("TBB/2019_U6@pierousseau/stable")
         self.requires("zlib/1.2.11")

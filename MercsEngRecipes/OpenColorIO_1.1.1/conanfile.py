@@ -18,7 +18,7 @@ class OpenColorIOConan(ConanFile):
     def requirements(self):
         """Define runtime requirements."""
         self.requires("expat/2.2.9")
-        self.requires("OpenEXR/2.4.0@mercseng/stable")
+        self.requires("OpenEXR/2.5.1@mercseng/stable")
         #self.requires("tinyxml2/8.0.0")
         #self.requires("yaml-cpp/0.6.3")
 
