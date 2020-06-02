@@ -49,7 +49,6 @@ class OpenEXRConan(ConanFile):
     def cmake_definitions(self):
         """Setup CMake definitions."""
         definition_dict = {
-            "NAMESPACE_VERSIONING": False,
             "PYILMBASE_ENABLE": False,
             "OPENEXR_VIEWERS_ENABLE": False,
             "OPENEXR_BUILD_BOTH_STATIC_SHARED": False,
@@ -72,15 +71,10 @@ class OpenEXRConan(ConanFile):
         cmake.configure(defs = self.cmake_definitions())
         cmake.install()
         self.copy("LICENSE.md", src=self._source_subfolder, dst="licenses")
-        tools.rmdir(os.path.join(self.package_folder, "share"))
-        tools.rmdir(os.path.join(self.package_folder, "lib", "pkgconfig"))
-        tools.rmdir(os.path.join(self.package_folder, "lib", "cmake"))
 
     def package_info(self):
         """Edit package info."""
         self.cpp_info.libs = tools.collect_libs(self)
-        self.cpp_info.names["cmake_find_package"] = "OpenEXR"
-        self.cpp_info.names["cmake_find_package_multi"] = "OpenEXR"
         
         self.cpp_info.includedirs = [os.path.join("include", "OpenEXR"), "include"]
         if self.options.shared and self.settings.os == "Windows":

@@ -71,16 +71,44 @@ class EmbreeConan(ConanFile):
 
     def package(self):
         """Assemble the package."""
-        cmake = CMake(self)
-        cmake.configure(defs = self.cmake_definitions())
-        cmake.install()
-        # extra includes !
+        self.copy("*.h", src="%s/include/embree3" %self._source_subfolder, dst="include/embree3/")
         self.copy("*.h", src="%s/common" %self._source_subfolder, dst="common")
         self.copy("*.h", src="%s/kernels"%self._source_subfolder, dst="kernels")
 
+        if self.settings.os == "Windows":
+            if self.options.shared:
+                self.copy("*/embree3.dll", dst="bin/", keep_path=False)
+
+            self.copy("*/algorithms.lib", dst="lib/", keep_path=False)
+            self.copy("*/embree_avx.lib", dst="lib/", keep_path=False)
+            self.copy("*/embree_avx2.lib", dst="lib/", keep_path=False)
+            self.copy("*/embree_sse42.lib", dst="lib/", keep_path=False)
+            self.copy("*/embree3.lib", dst="lib/", keep_path=False)
+            self.copy("*/lexers.lib", dst="lib/", keep_path=False)
+            self.copy("*/math.lib", dst="lib/", keep_path=False)
+            self.copy("*/simd.lib", dst="lib/", keep_path=False)
+            self.copy("*/sys.lib", dst="lib/", keep_path=False)
+            self.copy("*/tasking.lib", dst="lib/", keep_path=False)
+        else:
+            if self.options.shared:
+                self.copy("lib/libembree3.so*", dst="lib/", keep_path=False)
+            else:
+                self.copy("lib/libembree3.a", dst="lib/", keep_path=False)
+
+            self.copy("lib/libembree_avx.a", dst="lib/", keep_path=False)
+            self.copy("lib/libembree_avx2.a", dst="lib/", keep_path=False)
+            self.copy("lib/libembree_sse42.a", dst="lib/", keep_path=False)
+            self.copy("lib/liblexers.a", dst="lib/", keep_path=False)
+            self.copy("lib/libmath.a", dst="lib/", keep_path=False)
+            self.copy("lib/libsimd.a", dst="lib/", keep_path=False)
+            self.copy("lib/libsys.a", dst="lib/", keep_path=False)
+            self.copy("lib/libtasking.a", dst="lib/", keep_path=False)
+
     def package_info(self):
         """Edit package info."""
-        self.env_info.LD_LIBRARY_PATH.append(os.path.join(self.package_folder, "lib"))
-        self.env_info.PATH.append( os.path.join( self.package_folder, "bin" ) )
+        if self.settings.os == "Windows":
+            self.env_info.PATH.append( os.path.join( self.package_folder, "bin" ) )
+        else:
+            self.env_info.LD_LIBRARY_PATH.append(os.path.join(self.package_folder, "lib"))
         self.cpp_info.libs = tools.collect_libs(self)
         self.cpp_info.defines.append("TASKING_TBB")
