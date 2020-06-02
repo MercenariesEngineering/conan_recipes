@@ -16,7 +16,7 @@ class AlembicConan(ConanFile):
 
     def requirements(self):
         """Define runtime requirements."""
-        self.requires("hdf5/1.10.1@pierousseau/stable")
+        self.requires("hdf5/1.10.6@mercseng/stable")
         self.requires("OpenEXR/2.5.1@mercseng/stable")
         self.requires("zlib/1.2.11")
 

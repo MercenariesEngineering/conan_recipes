@@ -17,10 +17,10 @@ class OpenimageioConan(ConanFile):
 
     def requirements(self):
         """Define runtime requirements."""
-        self.requires("boost/1.64.0@conan/stable")
+        self.requires("boost/1.70.0")
         self.requires("bzip2/1.0.8")
         self.requires("freetype/2.9.1_with_Harfbuzz@pierousseau/stable")
-        #self.requires("hdf5/1.10.1@pierousseau/stable")
+        #self.requires("hdf5/1.10.6@mercseng/stable")
         self.requires("libjpeg-turbo/1.5.2@pierousseau/stable")
         self.requires("libpng/1.6.37@bincrafters/stable")
         self.requires("libtiff/4.0.9@bincrafters/stable")

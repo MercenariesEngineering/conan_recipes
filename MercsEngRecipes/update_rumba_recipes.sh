@@ -7,6 +7,7 @@
 #conan export FBX_2020.0.1/conanfile.py FBX/2020.0.1@mercseng/stable
 #conan export glew_2.1.0/conanfile.py glew/2.1.0@mercseng/stable
 #conan export GSL_2.1.0/conanfile.py GSL/2.1.0@mercseng/stable
+#conan export hdf5_1.10.6/conanfile.py hdf5/1.10.6@mercseng/stable
 #conan export libsndfile_1.0.29/conanfile.py libsndfile/1.0.29@mercseng/stable
 #conan export OpenColorIO_1.1.1/conanfile.py OpenColorIO/1.1.1@mercseng/stable
 #conan export OpenEXR_2.5.1/conanfile.py OpenEXR/2.5.1@mercseng/stable
