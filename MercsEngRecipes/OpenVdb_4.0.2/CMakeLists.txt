@@ -3,11 +3,11 @@ cmake_minimum_required(VERSION 2.8.12)
 project(cmake_wrapper)
 
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-conan_basic_setup(TARGETS)
+conan_basic_setup()
 
-FIND_PACKAGE ( Blosc REQUIRED )
+find_package ( Blosc REQUIRED )
 if (NOT BLOSC_blosc_LIBRARY)
 	set (BLOSC_blosc_LIBRARY ${BLOSC_LIBRARY})
-endif()
+endif ()
 
 include(CMakeLists_original.txt)

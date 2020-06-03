@@ -5,11 +5,6 @@ project(cmake_wrapper)
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup(TARGETS)
 
-FIND_PACKAGE ( Blosc REQUIRED )
-if (NOT BLOSC_blosc_LIBRARY)
-    set (BLOSC_blosc_LIBRARY ${BLOSC_LIBRARY})
-endif()
-
 function(add_cloned_imported_target dst src)
     add_library(${dst} INTERFACE IMPORTED)
     foreach(name INTERFACE_LINK_LIBRARIES INTERFACE_INCLUDE_DIRECTORIES INTERFACE_COMPILE_DEFINITIONS INTERFACE_COMPILE_OPTIONS)
@@ -22,7 +17,15 @@ if (NOT TARGET Blosc::blosc)
     add_cloned_imported_target(Blosc::blosc CONAN_PKG::blosc)
 endif ()
 
-# We don't want to use the FindPackage file provided by Jemalloc, because it dosen't define a Jemalloc::jemalloc target.
+# Forward this definition to code, otherwise OPENEXR_DLL will get defined
+if (OPENVDB_OPENEXR_STATICLIB)
+  add_definitions(-DOPENVDB_OPENEXR_STATICLIB)
+endif ()
+
+# We also want the dependencies defines:
+conan_global_flags()
+
+# We don't want to use the FindPackage file provided by Jemalloc, because it doesn't define a Jemalloc::jemalloc target.
 list (REMOVE_ITEM CMAKE_MODULE_PATH "${CONAN_JEMALLOC_ROOT}")
 list (REMOVE_ITEM CMAKE_MODULE_PATH "${CONAN_JEMALLOC_ROOT}/")
 

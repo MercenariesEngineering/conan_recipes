@@ -57,10 +57,13 @@ class OpenVdbConan(ConanFile):
         """Setup CMake definitions."""
         definition_dict = {
             "OPENVDB_BUILD_CORE": True,
+            "OPENVDB_CORE_SHARED": self.options.shared,
+            "OPENVDB_CORE_STATIC": not self.options.shared,
+            "OPENVDB_BUILD_BINARIES": False,
             "OPENVDB_BUILD_DOCS": False,
             "OPENVDB_BUILD_UNITTESTS": False,
             "OPENVDB_BUILD_PYTHON_MODULE": False,
-            "OPENVDB_BUILD_HOUDINI_SOPS": False,
+            "OPENVDB_BUILD_HOUDINI_PLUGIN": False,
             "OPENVDB_ENABLE_3_ABI_COMPATIBLE": True,
             "OPENVDB_USE_DEPRECATED_ABI": True,
             "OPENVDB_DISABLE_BOOST_IMPLICIT_LINKING": False,
@@ -71,6 +74,7 @@ class OpenVdbConan(ConanFile):
             "USE_EXR": True,
             "ILMBASE_USE_STATIC_LIBS": not self.options["OpenEXR"].shared,
             "OPENEXR_USE_STATIC_LIBS": not self.options["OpenEXR"].shared,
+            "OPENVDB_OPENEXR_STATICLIB": not self.options["OpenEXR"].shared,
             "ILMBASE_ROOT": self.deps_cpp_info["OpenEXR"].rootpath,
             "OPENEXR_ROOT": self.deps_cpp_info["OpenEXR"].rootpath,
             "BOOST_ROOT": self.deps_cpp_info["boost"].rootpath,
@@ -87,7 +91,7 @@ class OpenVdbConan(ConanFile):
         """Build the elements to package."""
         cmake = CMake(self)
         cmake.configure(defs = self.cmake_definitions(), source_folder = self._source_subfolder)
-        cmake.build(target = "openvdb_shared" if self.options.shared else "openvdb_static")
+        cmake.build()
 
     def package(self):
         """Assemble the package."""
@@ -108,5 +112,6 @@ class OpenVdbConan(ConanFile):
 
         if not self.options.shared:
             self.cpp_info.defines.append ("OPENVDB_STATICLIB")
+            self.cpp_info.defines.append ("OPENVDB_USE_STATIC_LIBS")
         if not self.options["OpenEXR"].shared:
             self.cpp_info.defines.append ("OPENVDB_OPENEXR_STATICLIB")
