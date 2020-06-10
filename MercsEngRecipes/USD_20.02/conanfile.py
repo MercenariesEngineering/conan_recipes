@@ -22,7 +22,7 @@ class USDConan(ConanFile):
         self.requires("Alembic/1.7.12@mercseng/stable")
         self.requires("boost/1.70.0")
         self.requires("hdf5/1.10.6@mercseng/stable")
-        self.requires("materialx/1.36.3@pierousseau/stable")
+        self.requires("materialx/1.37.1@mercseng/stable")
         self.requires("OpenColorIO/1.1.1@mercseng/stable")
         self.requires("OpenImageIO/2.1.15@mercseng/stable")
         self.requires("OpenSubdiv/3.4.3@mercseng/stable")

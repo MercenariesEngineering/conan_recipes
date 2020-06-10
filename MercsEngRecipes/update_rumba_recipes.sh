@@ -9,6 +9,7 @@
 #conan export GSL_2.1.0/conanfile.py GSL/2.1.0@mercseng/stable
 #conan export hdf5_1.10.6/conanfile.py hdf5/1.10.6@mercseng/stable
 #conan export libsndfile_1.0.29/conanfile.py libsndfile/1.0.29@mercseng/stable
+#conan export materialx_1.37.1/conanfile.py materialx/1.37.1@mercseng/stable
 #conan export OpenColorIO_1.1.1/conanfile.py OpenColorIO/1.1.1@mercseng/stable
 #conan export OpenEXR_2.5.1/conanfile.py OpenEXR/2.5.1@mercseng/stable
 #conan export OpenExrId_1.0-beta.22/conanfile.py OpenExrId/1.0-beta.22@mercseng/stable
