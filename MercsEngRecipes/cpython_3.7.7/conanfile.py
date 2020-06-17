@@ -26,6 +26,7 @@ class CpythonConan(ConanFile):
             self.requires("libuuid/1.0.3")
             self.requires("bzip2/1.0.8")
             self.requires("libffi/3.2.1")
+            self.requires("libiconv/1.15@pierousseau/stable")
             self.requires("gdbm/1.18.1@bincrafters/stable")
             self.requires("sqlite3/3.30.1")
             self.requires("ncurses/6.1@conan/stable")
@@ -66,11 +67,15 @@ class CpythonConan(ConanFile):
         with tools.chdir(self.src_subfolder):
             if self.settings.os == "Windows":
                 with tools.chdir("PCBuild"):
-                    self.run("get_externals.bat")
-                    # Don't build UWP targets, they are useless and require a specific SDK.
-                    build_targets=["pyexpat", "pylauncher", "pyshellext", "python", "python3dll", "pythoncore", "pythonw", "pywlauncher", "select", "sqlite3", "unicodedata", "venvlauncher", "venvwlauncher", "winsound"]
-                    msbuild = MSBuild(self)
-                    msbuild.build("pcbuild.sln", targets=build_targets)
+                    with tools.vcvars(self):
+                        build_type = self.settings.build_type
+                        arch = "x64" if self.settings.arch == "x86_64" else "Win32"
+                        self.run("build.bat -c {build_type} -p {arch}".format(build_type=build_type, arch=arch))
+                        out_folder = {"x86_64": "amd64", "x86": "win32"}.get(str(self.settings.arch))
+                        with tools.chdir(out_folder):
+                            python_exe = "python_d.exe" if self.settings.build_type == "Debug" else "python.exe"
+                            self.run(python_exe + " -m ensurepip")
+                            self.run(python_exe + " -m pip install wheel")
             else:
                 atools = AutoToolsBuildEnvironment(self)
                 args = [
@@ -86,7 +91,7 @@ class CpythonConan(ConanFile):
                         "--enable-big-digits=30", # by default on 64bits platform, but I want to be sure
                         # manage build
                         "--enable-shared" if self.options.shared else "--disable-shared",
-                        "--without-pydebug",
+                        "--with-pydebug" if self.settings.build_type == "Debug" else "--without-pydebug",
                         "--without-assertions"
                     ]
 
@@ -97,6 +102,7 @@ class CpythonConan(ConanFile):
 
                 atools.configure(args=args)
                 atools.make()
+                self.run("python -m pip install wheel")
 
     def package(self):
         """Assemble the package."""
@@ -118,17 +124,20 @@ class CpythonConan(ConanFile):
                 os.symlink("python3.7", "python")
         else:
             out_folder = {"x86_64": "amd64", "x86": "win32"}.get(str(self.settings.arch))
-            src = os.path.join("cpython-%s" % self.version, "PCBuild", out_folder)
-            self.copy(pattern="*.dll", dst="bin", src=src, keep_path=False)
-            self.copy(pattern="*.lib", dst="lib", src=src, keep_path=False)
-            self.copy(pattern="*.h", dst="include", src=os.path.join(self.src_subfolder, "Include"), keep_path=True)
-            self.copy(pattern="*.h", dst="include", src=os.path.join("cpython-%s" % self.version, "PC"), keep_path=True)
-            self.copy(pattern="*.exe", dst="bin", src=src, keep_path=False)
+            self.copy(pattern="*",                    src=os.path.join("cpython-%s" % self.version, "PCBuild", out_folder), keep_path=False)
+            self.copy(pattern="*.lib", dst="libs",    src=os.path.join("cpython-%s" % self.version, "PCBuild", out_folder), keep_path=False)
+            self.copy(pattern="*.h",   dst="include", src=os.path.join("cpython-%s" % self.version, "Include"), keep_path=True)
+            self.copy(pattern="*.h",   dst="include", src=os.path.join("cpython-%s" % self.version, "PC"), keep_path=True)
+            self.copy(pattern="*",     dst="Lib",     src=os.path.join("cpython-%s" % self.version, "Lib"), keep_path=True)
+            self.copy(pattern="*.pyd", dst="DLLs",    src=os.path.join("cpython-%s" % self.version, "PCBuild", out_folder), keep_path=False)
+            self.copy(pattern="*",     dst="Scripts", src=os.path.join("cpython-%s" % self.version, "Scripts"), keep_path=True)
 
     def package_info(self):
         """Edit package info."""
         if self.settings.os != "Windows":
-            name = "python%sm" % ".".join(self.version.split(".")[0:2])
+            version_suffix = ".".join(self.version.split(".")[0:2])
+            debug_suffix = "d" if self.settings.build_type == "Debug" else ""
+            name = "python%s%sm" % (version_suffix, debug_suffix)
             self.cpp_info.includedirs.append("include/%s" % name)
             self.cpp_info.libs.append(name)
             self.env_info.LD_LIBRARY_PATH.append(os.path.join(self.package_folder, "lib"))
@@ -138,13 +147,16 @@ class CpythonConan(ConanFile):
                 self.cpp_info.sharedlinkflags = self.cpp_info.exelinkflags
             elif self.settings.os == "Linux":
                 self.cpp_info.libs.extend(["pthread", "dl", "util"])
+            self.env_info.PATH.append(os.path.join(self.package_folder, "bin"))
+            self.env_info.PYTHON_ROOT = self.package_folder
         else:
+            self.cpp_info.libdirs=[os.path.join(self.package_folder, "libs")]
             debug_suffix = "_d" if self.settings.build_type == "Debug" else ""
             self.cpp_info.libs = ["python%s%s%s" % (self.version[0], self.version[2], debug_suffix)]
             self.cpp_info.defines.append("HAVE_SNPRINTF")
-
-        self.env_info.PATH.append(os.path.join(self.package_folder, "bin"))
-        self.env_info.PYTHON_ROOT = self.package_folder
+            self.env_info.PATH.append(self.package_folder)
+            self.env_info.PATH.append(os.path.join(self.package_folder, "Scripts"))
+            self.env_info.PYTHONHOME = self.package_folder
 
     @property
     def src_subfolder(self):

@@ -5,9 +5,8 @@ class PythonPackages(ConanFile):
     description = "List of python packages used by Rumba."
     name = "rumba-python"
     version = "1.0.0"
-    settings = "os"
+    settings = "os", "compiler", "build_type", "arch"
     packages = [
-        ("Pyside2", "5.12"),
         ("numpy", "1.17.5"),
         ("psutil", "5.6.7"),
         ("pylint", "2.4.4"),
@@ -17,6 +16,11 @@ class PythonPackages(ConanFile):
         ("sphinx-markdown-tables", "0.0.10"),
         ("pytest", "5.3.4")
     ]
+
+    def config_options(self):
+        if self.settings.os == "Windows":
+            self.settings.remove("build_type")
+            self.settings.remove("compiler")
 
     def build_requirements(self):
         self.build_requires("cpython/3.7.7@mercseng/stable")

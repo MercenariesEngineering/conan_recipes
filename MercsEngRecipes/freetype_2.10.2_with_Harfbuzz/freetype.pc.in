@@ -1,0 +1,12 @@
+prefix=@DEST_DIR@
+exec_prefix=${prefix}
+libdir=${prefix}/lib
+includedir=${prefix}/include
+
+Name: FreeType 2
+URL: http://freetype.org
+Description: A free, high-quality, and portable font engine.
+Version: @PROJECT_VERSION@
+
+Libs: -L${libdir} @PC_FREETYPE_LIBRARY@ @PC_PNG_LIBRARY@ @PC_BZIP2_LIBRARY@ @PC_ZLIB_LIBRARY@ @PC_SYSTEM_LIBRARIES@ @PRIVATE_LIBS@
+Cflags: -I${includedir}/freetype2
