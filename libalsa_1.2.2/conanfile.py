@@ -12,7 +12,7 @@ class LibalsaConan(ConanFile):
     description = "Library of ALSA: The Advanced Linux Sound Architecture, that provides audio " \
                   "and MIDI functionality to the Linux operating system"
     options = {"shared": [True, False], "fPIC": [True, False], "disable_python": [True, False]}
-    default_options = {'shared': False, 'fPIC': True, 'disable_python': False}
+    default_options = {'shared': True, 'fPIC': True, 'disable_python': False}
     settings = "os", "compiler", "build_type", "arch"
     _autotools = None
 

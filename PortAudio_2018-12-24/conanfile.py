@@ -10,20 +10,25 @@ class PortAudio(ConanFile):
     version = "2018-12-24"
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False], "fPIC": [True, False]}
-    default_options = "shared=False", "fPIC=True"
+    default_options = {"shared": False, "fPIC": True}
     exports_sources = "CMakeLists.txt"
     generators = "cmake"
     _source_subfolder = "source_subfolder"
 
-    def requirements(self):
+    def build_requirements(self):
         """Define runtime requirements."""
         if self.settings.os == "Linux":
-            self.requires("libalsa/1.2.2@mercseng/version-0")
+            # Build requirements because we need it to build but we do not want to use it on dev 
+            # machines or include it in packages.
+            self.build_requires("libalsa/1.2.2@mercseng/version-0")
 
     def config_options(self):
         """fPIC is linux only."""
         if self.settings.os != "Linux":
             self.options.remove("fPIC")
+        else:
+            self.options.shared = True
+            self.options["libalsa"].shared = True
 
     def source(self):
         """Retrieve source code."""
@@ -47,7 +52,7 @@ class PortAudio(ConanFile):
         if self.settings.os == "Linux":
             alsa_info = self.deps_cpp_info["libalsa"]
             definition_dict["ALSA_INCLUDE_DIR"] = alsa_info.include_paths[0]
-            definition_dict["ALSA_LIBRARY"] = os.path.join(alsa_info.lib_paths[0], "libasound.{}".format("so" if self.options["libalsa"].shared else "a"))
+            definition_dict["ALSA_LIBRARY"] = os.path.join(alsa_info.lib_paths[0], "libasound.{}".format("so" if self.options.shared else "a"))
             definition_dict["PA_USE_ALSA"] = True
             definition_dict["PA_USE_JACK"] = False
         elif self.settings.os == "Windows":
@@ -58,7 +63,6 @@ class PortAudio(ConanFile):
             definition_dict["PA_USE_WDMKS"] = False
             definition_dict["PA_USE_ASIO"] = False
             definition_dict["PA_USE_DS"] = False
-
         return definition_dict
 
     def build(self):
