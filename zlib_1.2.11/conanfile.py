@@ -53,8 +53,7 @@ class ZlibConan(ConanFile):
             configure_file = os.path.join(self._source_subfolder, "configure")
             st = os.stat(configure_file)
             os.chmod(configure_file, st.st_mode | stat.S_IEXEC)
-        if self.options.minizip:
-            tools.patch(patch_file="minizip.patch", base_path=self._source_subfolder)
+        tools.patch(patch_file="minizip.patch", base_path=self._source_subfolder)
 
     def build(self):
         self._build_zlib()

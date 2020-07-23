@@ -9,7 +9,7 @@ class Ptex(ConanFile):
     url = "https://github.com/wdas/ptex"
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False], "fPIC": [True, False]}
-    requires = "zlib/1.2.11@conan/stable"
+    requires = "zlib/1.2.11@mercseng/version-0"
     default_options = "shared=False", "fPIC=True"
     generators = "cmake"
 
@@ -38,7 +38,7 @@ pkg_checK_modules(Ptex_ZLIB REQUIRED zlib IMPORTED_TARGET)""",
             "")
         tools.replace_in_file("ptex-%s/src/ptex/CMakeLists.txt" % self.version,
             """PkgConfig::Ptex_ZLIB""",
-            """${ZLIB_LIBRARIES}""")
+            """${ZLIB_LIBRARIES}""")    
         tools.replace_in_file("ptex-%s/src/utils/CMakeLists.txt" % self.version,
             """PkgConfig::Ptex_ZLIB""",
             """${ZLIB_LIBRARIES}""")

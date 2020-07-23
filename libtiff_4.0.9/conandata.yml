@@ -1,0 +1,4 @@
+sources:
+  4.0.9:
+    sha256: e1af5558a71cef8e6baa8d41b875769b0fb549260595db579a932472dae64f66
+    url: http://download.osgeo.org/libtiff/tiff-4.0.9.zip

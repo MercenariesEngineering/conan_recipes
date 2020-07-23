@@ -1,43 +1,35 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 import os
 from conans import ConanFile, tools, CMake
+from conans.errors import ConanException
 
 
 class LibpngConan(ConanFile):
     name = "libpng"
-    version = "1.6.37"
     description = "libpng is the official PNG file format reference library."
-    url = "http://github.com/bincrafters/conan-libpng"
-    author = "Bincrafters <bincrafters@gmail.com>"
+    url = "https://github.com/conan-io/conan-center-index"
     homepage = "http://www.libpng.org"
     license = "libpng-2.0"
-    exports = ["LICENSE.md"]
     exports_sources = ["CMakeLists.txt", "patches/*"]
     generators = "cmake"
     settings = "os", "arch", "compiler", "build_type"
-    options = {"shared": [True, False], "fPIC": [True, False], "api_prefix": "ANY", "hardware_optimizations": [True, False]}
-    default_options = {'shared': False, 'fPIC': True, "api_prefix": None, 'hardware_optimizations': True}
+    options = {"shared": [True, False], "fPIC": [True, False], "api_prefix": "ANY"}
+    default_options = {'shared': False, 'fPIC': True, "api_prefix": None}
 
     _source_subfolder = "source_subfolder"
 
     def requirements(self):
-        self.requires.add("zlib/1.2.11@conan/stable")
+        self.requires("zlib/1.2.11@mercseng/version-0")
 
     def config_options(self):
         if self.settings.os == "Windows":
-            self.options.remove("fPIC")
+            del self.options.fPIC
 
     def configure(self):
         del self.settings.compiler.libcxx
+        del self.settings.compiler.cppstd
 
     def source(self):
-        base_url = "https://sourceforge.net/projects/libpng/files/libpng16/"
-        # Don't use .xz, CIs uses conan/python2, which does not support xz
-        tools.get(
-            "%s/%s/libpng-%s.tar.gz" % (base_url, self.version, self.version),
-            sha256="daeb2620d829575513e35fecc83f0d3791a620b9b93d800b763542ece9390fb4")
+        tools.get(**self.conan_data["sources"][self.version])
         os.rename("libpng-" + self.version, self._source_subfolder)
 
     def _patch(self):
@@ -46,7 +38,7 @@ class LibpngConan(ConanFile):
                               "find_library(M_LIBRARY m)",
                               "set(M_LIBRARY m)")
 
-        if self.settings.os == "Windows":
+        if tools.os_info.is_windows:
             if self.settings.compiler == "Visual Studio":
                 tools.replace_in_file(os.path.join(self._source_subfolder, "CMakeLists.txt"),
                                      'OUTPUT_NAME "${PNG_LIB_NAME}_static',
@@ -73,10 +65,7 @@ class LibpngConan(ConanFile):
             cmake.definitions["ZLIB_LIBRARY"] = self.deps_cpp_info["zlib"].libs[0]
             cmake.definitions["ZLIB_INCLUDE_DIR"] = self.deps_cpp_info["zlib"].include_paths[0]
         if self.options.api_prefix:
-            cmake.definitions["PNG_PREFIX"] = self.options.api_prefix  
-        if not self.options.hardware_optimizations:
-            cmake.definitions["PNG_HARDWARE_OPTIMIZATIONS"] = "OFF"
-
+            cmake.definitions["PNG_PREFIX"] = self.options.api_prefix
         cmake.configure()
         return cmake
 
@@ -89,9 +78,14 @@ class LibpngConan(ConanFile):
         self.copy("LICENSE", src=self._source_subfolder, dst="licenses", ignore_case=True, keep_path=False)
         cmake = self._configure_cmake()
         cmake.install()
-        tools.rmdir(os.path.join(self.package_folder, 'share', 'man'))
+        tools.rmdir(os.path.join(self.package_folder, 'share'))
+        tools.rmdir(os.path.join(self.package_folder, 'lib', 'libpng'))
+        tools.rmdir(os.path.join(self.package_folder, 'lib', 'pkgconfig'))
 
     def package_info(self):
+        self.cpp_info.names["cmake_find_package"] = "PNG"
+        self.cpp_info.names["cmake_find_package_multi"] = "PNG"
+
         if self.settings.os == "Windows":
             if self.settings.compiler == "gcc":
                 self.cpp_info.libs = ["png"]
@@ -99,8 +93,8 @@ class LibpngConan(ConanFile):
                 self.cpp_info.libs = ['libpng16']
         else:
             self.cpp_info.libs = ["png16"]
-            if self.settings.os == "Linux":
-                self.cpp_info.libs.append("m")
+            if str(self.settings.os) in ["Linux", "Android"]:
+                self.cpp_info.system_libs.append("m")
         # use 'd' suffix everywhere except mingw
         if self.settings.build_type == "Debug" and not (self.settings.os == "Windows" and self.settings.compiler == "gcc"):
             self.cpp_info.libs[0] += "d"

@@ -1,0 +1,4 @@
+sources:
+  2.5.0:
+    sha256: 97504db65640570f32d3fdf701c25a340c8643037c3b69aec469c10c93dc8504
+    url: https://github.com/pybind/pybind11/archive/v2.5.0.tar.gz

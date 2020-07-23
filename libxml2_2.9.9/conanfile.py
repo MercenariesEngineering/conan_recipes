@@ -21,22 +21,22 @@ class Libxml2Conan(ConanFile):
                "icu": [True, False]}
     default_options = {'shared': False,
                        'fPIC': True,
-                       "iconv": True,
+                       "iconv": False,
                        "zlib": True,
-                       "lzma": False,
-                       "icu": False}
+                       "lzma": True,
+                       "icu": True}
     exports = ["LICENSE.md"]
     _source_subfolder = "source_subfolder"
 
     def requirements(self):
         if self.options.zlib:
-            self.requires("zlib/1.2.11@pierousseau/stable")
+            self.requires("zlib/1.2.11@mercseng/version-0")
         if self.options.lzma:
-            self.requires("xz_utils/5.2.4")
+            self.requires("xz_utils/5.2.4@mercseng/version-0")
         if self.options.iconv:
             self.requires("libiconv/1.15@pierousseau/stable")
         if self.options.icu:
-            self.requires("icu/63.1@bincrafters/stable")
+            self.requires("icu/64.2@mercseng/version-0")
 
     @property
     def _is_msvc(self):
