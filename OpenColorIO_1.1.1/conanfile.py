@@ -76,5 +76,8 @@ class OpenColorIOConan(ConanFile):
         self.cpp_info.libs = tools.collect_libs(self)
         if (not self.options.shared):
             self.cpp_info.defines = ["OpenColorIO_STATIC"]
-        if self.settings.os != "Linux":
-            self.env_info.LD_LIBRARY_PATH.append(os.path.join(self.package_folder, "lib"))
+        if self.options.shared:
+            if self.settings.os == "Windows":
+                self.env_info.PATH.append(os.path.join( self.package_folder, "bin"))
+            else:
+                self.env_info.LD_LIBRARY_PATH.append(os.path.join(self.package_folder, "lib"))

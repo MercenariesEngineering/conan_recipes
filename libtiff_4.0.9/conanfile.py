@@ -56,7 +56,7 @@ class LibtiffConan(ConanFile):
         if self.options.zlib:
             self.requires("zlib/1.2.11@mercseng/version-0")
         if self.options.lzma:
-            self.requires("xz_utils/5.2.4@mercseng/version-0")
+            self.requires("lzma/5.2.4@mercseng/version-0")
         if self.options.jpeg:
             self.requires("libjpeg-turbo/1.5.2@mercseng/version-0")
         if self.options.jbig:
@@ -126,3 +126,8 @@ class LibtiffConan(ConanFile):
         self.cpp_info.names["cmake_find_package"] = "TIFF"
         self.cpp_info.names["cmake_find_package_multi"] = "TIFF"
         self.cpp_info.names["pkg_config"] = "libtiff-4"
+        if self.options.shared:
+            if self.settings.os == "Windows":
+                self.env_info.PATH.append(os.path.join( self.package_folder, "bin"))
+            else:
+                self.env_info.LD_LIBRARY_PATH.append(os.path.join(self.package_folder, "lib"))

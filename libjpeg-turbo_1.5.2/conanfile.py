@@ -30,7 +30,7 @@ class LibjpegTurboConan(ConanFile):
                "turbojpeg": [True, False],
                "java": [True, False],
                "enable12bit": [True, False]}
-    default_options = {'shared': False, 'fPIC': True, 'SIMD': True, 'arithmetic_encoder': True, 'arithmetic_decoder': True, 'libjpeg7_compatibility': True, 'libjpeg8_compatibility': True, 'mem_src_dst': True, 'turbojpeg': True, 'java': False, 'enable12bit': False}
+    default_options = {'shared': True, 'fPIC': True, 'SIMD': True, 'arithmetic_encoder': True, 'arithmetic_decoder': True, 'libjpeg7_compatibility': True, 'libjpeg8_compatibility': True, 'mem_src_dst': True, 'turbojpeg': True, 'java': False, 'enable12bit': False}
     _source_subfolder = "source_subfolder"
 
     def configure(self):
@@ -144,3 +144,8 @@ class LibjpegTurboConan(ConanFile):
                 self.cpp_info.libs = ['jpeg-static', 'turbojpeg-static']
         else:
             self.cpp_info.libs = ['jpeg', 'turbojpeg']
+        if self.options.shared:
+            if self.settings.os == "Windows":
+                self.env_info.PATH.append(os.path.join( self.package_folder, "bin"))
+            else:
+                self.env_info.LD_LIBRARY_PATH.append(os.path.join(self.package_folder, "lib"))            

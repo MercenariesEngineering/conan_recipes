@@ -95,6 +95,7 @@ class OpenSSLConan(ConanFile):
     default_options = {key: False for key in options.keys()}
     default_options["fPIC"] = True
     default_options["openssldir"] = None
+    default_options["shared"] = True
     version = "1.1.1g"
     _env_build = None
     _source_subfolder = "sources"
@@ -607,3 +608,8 @@ class OpenSSLConan(ConanFile):
             self.cpp_info.libs.extend(["crypt32", "msi", "ws2_32", "advapi32", "user32", "gdi32"])
         elif self.settings.os == "Linux":
             self.cpp_info.libs.extend(["dl", "pthread"])
+        if self.options.shared:
+            if self.settings.os == "Windows":
+                self.env_info.PATH.append(os.path.join( self.package_folder, "bin"))
+            else:
+                self.env_info.LD_LIBRARY_PATH.append(os.path.join(self.package_folder, "lib"))

@@ -60,3 +60,8 @@ class glu(ConanFile):
     def package_id(self):
         if self.settings.os == "Windows":
             self.info.header_only()
+        if self.options.shared:
+            if self.settings.os == "Windows":
+                self.env_info.PATH.append(os.path.join( self.package_folder, "bin"))
+            else:
+                self.env_info.LD_LIBRARY_PATH.append(os.path.join(self.package_folder, "lib"))

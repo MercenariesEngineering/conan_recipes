@@ -16,7 +16,7 @@ class LibuuidConan(ConanFile):
     topics = ("conan", "libuuid", "uuid", "unique-id", "unique-identifier")
     settings = "os", "arch", "compiler", "build_type"
     options = {"shared": [True, False], "fPIC": [True, False]}
-    default_options = {"shared": False, "fPIC": True}
+    default_options = {"shared": True, "fPIC": True}
     _source_subfolder = "source_subfolder"
     _autotools = None
 
@@ -64,3 +64,8 @@ class LibuuidConan(ConanFile):
     def package_info(self):
         self.cpp_info.libs = tools.collect_libs(self)
         self.cpp_info.includedirs.append(os.path.join("include", "uuid"))
+        if self.options.shared:
+            if self.settings.os == "Windows":
+                self.env_info.PATH.append(os.path.join( self.package_folder, "bin"))
+            else:
+                self.env_info.LD_LIBRARY_PATH.append(os.path.join(self.package_folder, "lib"))

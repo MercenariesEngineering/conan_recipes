@@ -17,7 +17,7 @@ class LZMAConan(ConanFile):
     exports = ["LICENSE.md"]
     settings = "os", "arch", "compiler", "build_type"
     options = {"shared": [True, False], "fPIC": [True, False]}
-    default_options = {'shared': False, 'fPIC': True}
+    default_options = {'shared': True, 'fPIC': True}
     description = "LZMA library is part of XZ Utils"
     _source_subfolder = 'sources'
 
@@ -160,5 +160,8 @@ class LZMAConan(ConanFile):
         if not self.options.shared:
             self.cpp_info.defines.append('LZMA_API_STATIC')
         self.cpp_info.libs = tools.collect_libs(self)
-        
-        
+        if self.options.shared:
+            if self.settings.os == "Windows":
+                self.env_info.PATH.append(os.path.join( self.package_folder, "bin"))
+            else:
+                self.env_info.LD_LIBRARY_PATH.append(os.path.join(self.package_folder, "lib"))

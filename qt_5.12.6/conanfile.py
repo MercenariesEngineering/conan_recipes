@@ -789,7 +789,7 @@ class QtConan(ConanFile):
         "sysroot": None,
         "config": None,
         "multiconfiguration": False,
-    }, **{module: not module in ["qtdoc"] for module in _submodules if module != 'qtbase'}
+    }, **{module: not module in ["qtdoc", "qtwebengine"] for module in _submodules if module != 'qtbase'}
     )
     short_paths = True
 
@@ -923,15 +923,15 @@ class QtConan(ConanFile):
         if self.options.with_libalsa:
             self.requires("libalsa/1.2.2@mercseng/version-0")
 
-        if self.options.qtwebengine:
-            self.requires("gperf/3.1@mercseng/version-0")
-
 
         if self.options.with_glib:
             self.requires("glib/2.58.3@bincrafters/stable")
 
         if self.options.with_doubleconversion and not self.options.multiconfiguration:
             self.requires("double-conversion/3.1.5@mercseng/version-0")
+
+        # if self.options.qtwebengine:
+        #     self.requires("gperf/3.1@mercseng/version-0")
 
         # if self.options.with_fontconfig:
         #     self.requires("fontconfig/2.13.91@conan/stable")
@@ -1339,3 +1339,10 @@ QMAKE_CXX               = %s""" % (self.env["CC"], self.env["CXX"]))
     def package_info(self):
         self.env_info.PATH.append(os.path.join(self.package_folder, "bin"))
         self.env_info.CMAKE_PREFIX_PATH.append(self.package_folder)
+        self.env_info.QT_PLUGIN_PATH = os.path.join(self.package_folder, "plugins")
+        if self.options.shared:
+            if self.settings.os == "Windows":
+                self.env_info.PATH.append(os.path.join( self.package_folder, "bin"))
+            else:
+                self.env_info.LD_LIBRARY_PATH.append(os.path.join(self.package_folder, "lib"))
+

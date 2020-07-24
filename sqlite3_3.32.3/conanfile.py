@@ -123,3 +123,9 @@ class ConanSqlite3(ConanFile):
 
         self.cpp_info.names["cmake_find_package"] = "SQLite3"
         self.cpp_info.names["cmake_find_package_multi"] = "SQLite3"
+        if self.options.shared:
+            if self.settings.os == "Windows":
+                if not self.options.build_executable:
+                    self.env_info.PATH.append(os.path.join( self.package_folder, "bin"))
+            else:
+                self.env_info.LD_LIBRARY_PATH.append(os.path.join(self.package_folder, "lib"))

@@ -72,8 +72,11 @@ class tbb(ConanFile):
         self.copy( "*", src = "package/include", dst = "include", symlinks = True )
 
     def package_info(self):
-        self.env_info.LD_LIBRARY_PATH.append(os.path.join(self.package_folder, "lib"))
-        self.env_info.PATH.append( os.path.join( self.package_folder, "bin" ) )
+        if self.options.shared:
+            if self.settings.os == "Windows":
+                self.env_info.PATH.append(os.path.join( self.package_folder, "bin"))
+            else:
+                self.env_info.LD_LIBRARY_PATH.append(os.path.join(self.package_folder, "lib"))
         self.cpp_info.libs = tools.collect_libs(self)
 
         if self.settings.build_type == "Debug":

@@ -12,7 +12,7 @@ class Bzip2Conan(ConanFile):
     topics = ("conan", "bzip2", "data-compressor", "file-compression")
     settings = "os", "compiler", "arch", "build_type"
     options = {"shared": [True, False], "fPIC": [True, False], "build_executable": [True, False]}
-    default_options = {"shared": False, "fPIC": True, "build_executable": True}
+    default_options = {"shared": True, "fPIC": True, "build_executable": True}
     exports_sources = "CMakeLists.txt"
     generators = "cmake"
 
@@ -56,3 +56,8 @@ class Bzip2Conan(ConanFile):
         self.cpp_info.names["cmake_find_package"] = "BZip2"
         self.cpp_info.names["cmake_find_package_multi"] = "BZip2"
         self.cpp_info.libs = tools.collect_libs(self)
+        if self.options.shared:
+            if self.settings.os == "Windows":
+                self.env_info.PATH.append(os.path.join( self.package_folder, "bin"))
+            else:
+                self.env_info.LD_LIBRARY_PATH.append(os.path.join(self.package_folder, "lib"))

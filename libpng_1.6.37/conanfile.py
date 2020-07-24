@@ -13,7 +13,7 @@ class LibpngConan(ConanFile):
     generators = "cmake"
     settings = "os", "arch", "compiler", "build_type"
     options = {"shared": [True, False], "fPIC": [True, False], "api_prefix": "ANY"}
-    default_options = {'shared': False, 'fPIC': True, "api_prefix": None}
+    default_options = {'shared': True, 'fPIC': True, "api_prefix": None}
 
     _source_subfolder = "source_subfolder"
 
@@ -98,3 +98,9 @@ class LibpngConan(ConanFile):
         # use 'd' suffix everywhere except mingw
         if self.settings.build_type == "Debug" and not (self.settings.os == "Windows" and self.settings.compiler == "gcc"):
             self.cpp_info.libs[0] += "d"
+
+        if self.options.shared:
+            if self.settings.os == "Windows":
+                self.env_info.PATH.append(os.path.join( self.package_folder, "bin"))
+            else:
+                self.env_info.LD_LIBRARY_PATH.append(os.path.join(self.package_folder, "lib"))

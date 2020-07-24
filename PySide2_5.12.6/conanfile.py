@@ -10,7 +10,7 @@ class PySide2(ConanFile):
     url = "https://doc.qt.io/qtforpython"
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False], "fPIC": [True, False]}
-    default_options = "shared=False", "fPIC=True"
+    default_options = "shared=True", "fPIC=True"
     _source_subfolder = "source_subfolder"
 
     def build_requirements(self):

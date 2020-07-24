@@ -11,7 +11,7 @@ class ExpatConan(ConanFile):
     license = "MIT"
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False], "fPIC": [True, False]}
-    default_options = {"shared": False, "fPIC": True}
+    default_options = {"shared": True, "fPIC": True}
     generators = "cmake"
     exports_sources = ["CMakeLists.txt"]
 
@@ -72,3 +72,8 @@ class ExpatConan(ConanFile):
         self.cpp_info.libs = tools.collect_libs(self)
         if not self.options.shared:
             self.cpp_info.defines = ["XML_STATIC"]
+        if self.options.shared:
+            if self.settings.os == "Windows":
+                self.env_info.PATH.append(os.path.join( self.package_folder, "bin"))
+            else:
+                self.env_info.LD_LIBRARY_PATH.append(os.path.join(self.package_folder, "lib"))

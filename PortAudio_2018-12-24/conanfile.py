@@ -10,7 +10,7 @@ class PortAudio(ConanFile):
     version = "2018-12-24"
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False], "fPIC": [True, False]}
-    default_options = {"shared": False, "fPIC": True}
+    default_options = {"shared": True, "fPIC": True}
     exports_sources = "CMakeLists.txt"
     generators = "cmake"
     _source_subfolder = "source_subfolder"
@@ -80,3 +80,8 @@ class PortAudio(ConanFile):
     def package_info(self):
         """Edit package info."""
         self.cpp_info.libs = tools.collect_libs(self)
+        if self.options.shared:
+            if self.settings.os == "Windows":
+                self.env_info.PATH.append(os.path.join( self.package_folder, "bin"))
+            else:
+                self.env_info.LD_LIBRARY_PATH.append(os.path.join(self.package_folder, "lib"))

@@ -150,7 +150,7 @@ class BoostConan(ConanFile):
             if self.options.bzip2:
                 self.requires("bzip2/1.0.8@mercseng/version-0")
             if self.options.lzma:
-                self.requires("xz_utils/5.2.4@mercseng/version-0")
+                self.requires("lzma/5.2.4@mercseng/version-0")
             if self.options.zstd:
                 self.requires("zstd/1.4.5@mercseng/version-0")
         if self.options.i18n_backend == 'icu':
@@ -560,7 +560,7 @@ class BoostConan(ConanFile):
         if self._zip_bzip2_requires_needed:
             add_defines(self.options.zlib, "zlib")
             add_defines(self.options.bzip2, "bzip2")
-            add_defines(self.options.lzma, "xz_utils")
+            add_defines(self.options.lzma, "lzma")
             add_defines(self.options.zstd, "zstd")
 
         if self._is_msvc and self.settings.compiler.runtime:
@@ -734,7 +734,7 @@ class BoostConan(ConanFile):
             if self.options.bzip2:
                 contents += create_library_config("bzip2", "bzip2")
             if self.options.lzma:
-                contents += create_library_config("xz_utils", "lzma")
+                contents += create_library_config("lzma", "lzma")
             if self.options.zstd:
                 contents += create_library_config("zstd", "zstd")
 
@@ -950,3 +950,8 @@ class BoostConan(ConanFile):
         self.cpp_info.bindirs.append("lib")
         self.cpp_info.names["cmake_find_package"] = "Boost"
         self.cpp_info.names["cmake_find_package_multi"] = "Boost"
+        if self.options.shared:
+            if self.settings.os == "Windows":
+                self.env_info.PATH.append(os.path.join( self.package_folder, "bin"))
+            else:
+                self.env_info.LD_LIBRARY_PATH.append(os.path.join(self.package_folder, "lib"))

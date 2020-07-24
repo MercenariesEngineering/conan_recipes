@@ -36,7 +36,7 @@ class FreetypeConan(ConanFile):
         "with_icu": [True, False]
     }
     default_options = {
-        'shared': False,
+        'shared': True,
         'fPIC': True,
         'with_png': True,
         'with_zlib': True,
@@ -224,11 +224,11 @@ conan_staticlibs="{staticlibs}"
     def package_info(self):
         self.cpp_info.libs = tools.collect_libs(self)
         if self.settings.os == "Linux":
-            
-            if self.options.shared == False:
+            if self.options.shared:
+                self.env_info.LD_LIBRARY_PATH.append(os.path.join(self.package_folder, "lib"))
+            else:
                 self.cpp_info.libs = ["freetype", "harfbuzz"]
             self.cpp_info.system_libs.append("m")
-            self.env_info.LD_LIBRARY_PATH.append(os.path.join(self.package_folder, "lib"))
         if self.settings.compiler == 'Visual Studio' and not self.options.shared:
             self.cpp_info.system_libs.extend(["dwrite", "rpcrt4", "usp10"])
         self.cpp_info.includedirs.append(os.path.join("include", "freetype2"))

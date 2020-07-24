@@ -15,7 +15,7 @@ class LiunwindConan(ConanFile):
     settings = "os", "arch", "compiler", "build_type"
     options = {"shared": [True, False], "fPIC": [True, False], "coredump": [True, False], "ptrace": [True, False], "setjmp": [True, False]}
     default_options = {"shared": True, "fPIC": True, "coredump": True, "ptrace": True, "setjmp": True}
-    requires = "xz_utils/5.2.4@mercseng/version-0"
+    requires = "lzma/5.2.4@mercseng/version-0"
     _autotools = None
 
     @property
@@ -62,3 +62,8 @@ class LiunwindConan(ConanFile):
         self.cpp_info.libs = tools.collect_libs(self)
         if self.settings.os == "Linux":
             self.cpp_info.libs.append("pthread")
+        if self.options.shared:
+            if self.settings.os == "Windows":
+                self.env_info.PATH.append(os.path.join( self.package_folder, "bin"))
+            else:
+                self.env_info.LD_LIBRARY_PATH.append(os.path.join(self.package_folder, "lib"))

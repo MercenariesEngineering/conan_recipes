@@ -21,7 +21,7 @@ class PCREConan(ConanFile):
         "build_pcre2_32": [True, False],
         "support_jit": [True, False]
     }
-    default_options = {'shared': False, 'fPIC': True, 'with_bzip2': True, 'build_pcre2_8': True,
+    default_options = {'shared': True, 'fPIC': True, 'with_bzip2': True, 'build_pcre2_8': True,
                        'build_pcre2_16': True, 'build_pcre2_32': True, 'support_jit': True}
     _source_subfolder = "source_subfolder"
     _build_subfolder = "build_subfolder"
@@ -88,3 +88,9 @@ class PCREConan(ConanFile):
             self.cpp_info.libs.append(library_name("pcre2-32"))
         if not self.options.shared:
             self.cpp_info.defines.append("PCRE2_STATIC")
+        if self.options.shared:
+            if self.settings.os == "Windows":
+                self.env_info.PATH.append(os.path.join( self.package_folder, "bin"))
+            else:
+                self.env_info.LD_LIBRARY_PATH.append(os.path.join(self.package_folder, "lib"))
+

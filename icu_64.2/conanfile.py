@@ -25,7 +25,7 @@ class ICUBase(ConanFile):
                "with_unit_tests": [True, False],
                "silent": [True, False],
                "with_dyload": [True, False]}
-    default_options = {"shared": False,
+    default_options = {"shared": True,
                        "fPIC": True,
                        "data_packaging": "archive",
                        "with_unit_tests": False,
@@ -236,3 +236,9 @@ class ICUBase(ConanFile):
 
         if self.settings.os == 'Windows':
             self.cpp_info.system_libs.append('advapi32')
+
+        if self.options.shared:
+            if self.settings.os == "Windows":
+                self.env_info.PATH.append(os.path.join( self.package_folder, "bin"))
+            else:
+                self.env_info.LD_LIBRARY_PATH.append(os.path.join(self.package_folder, "lib"))
