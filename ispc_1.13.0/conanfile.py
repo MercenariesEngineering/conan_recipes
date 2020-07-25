@@ -1,4 +1,5 @@
 import os
+import shutil
 from conans import ConanFile, tools
 
 class ISPC(ConanFile):
