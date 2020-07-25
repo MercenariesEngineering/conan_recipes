@@ -35,9 +35,6 @@ class LibjpegTurboConan(ConanFile):
 
     def configure(self):
         del self.settings.compiler.libcxx
-
-        if self.settings.os == "Windows":
-            self.requires.add("nasm/2.13.01@pierousseau/stable", private=True)
         if self.settings.compiler == "Visual Studio":
             self.options.remove("fPIC")
 

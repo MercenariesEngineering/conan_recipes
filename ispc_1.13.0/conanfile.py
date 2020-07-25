@@ -7,22 +7,32 @@ class ISPC(ConanFile):
     url = "https://ispc.github.io/"
     license = "BSD-3"
     version = "1.13.0"
-    settings = "os"
+    settings = "os", "arch"
     name = "ispc"
 
     def source(self):
-        """Retrieve source code."""
-        directory = "ispc-v{}-windows".format(self.version) if self.settings.os == "Windows" \
-            else "ispc-v{}-linux".format(self.version)
-        archive_name = "{}.{}".format(directory, "zip" if self.settings.os == "Windows" else "tar.gz")
-        
-        tools.get("https://github.com/ispc/ispc/releases/download/v{}/{}".format(self.version, archive_name))
-        os.rename(directory, self.name)
+        """Retrieve binaries."""
+        #https://github.com/ispc/ispc/releases/download/v1.13.0/ispc-v1.13.0-linux.tar.gz
+        #https://github.com/ispc/ispc/releases/download/v1.13.0/ispc-v1.13.0-windows.zip
+        if self.settings.os == "Linux":
+            file="ispc-v1.13.0-linux.tar.gz"
+            folder="ispc-v1.13.0-linux"
+            tools.get("https://github.com/ispc/ispc/releases/download/v%s/%s" % (self.version, file))
+            shutil.move(folder, "ispc")
+        else:
+            file="ispc-v1.13.0-windows.zip"
+            folder="ispc-v1.13.0-windows"
+            tools.get("https://github.com/ispc/ispc/releases/download/v%s/%s" % (self.version, file), destination="ispc")
+
+    def build(self):
+        pass
 
     def package(self):
         """Assemble the package."""
-        self.copy(pattern="LICENSE.txt", dst="licenses", src=self.name)
-        self.copy("ispc{}".format(".exe" if self.settings.os == "Windows" else ""), src=os.path.join(self.name, "bin"), dst="bin")
+        if self.settings.os == "Linux":
+            self.copy("ispc/bin/ispc", dst="bin", keep_path=False)
+        else:
+            self.copy("ispc/bin/ispc.exe", dst="bin", keep_path=False)
 
     def package_info(self):
         """Edit package info."""

@@ -11,7 +11,7 @@ class USDConan(ConanFile):
     license = "Modified Apache 2.0 License"
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False], "fPIC": [True, False], "debug_symbols": [True, False]}
-    default_options = "shared=True", "fPIC=True", "debug_symbols=False", "*:shared=False", "tbb:shared=True", "*:fPIC=True"
+    default_options = "shared=True", "fPIC=True", "debug_symbols=False", "*:shared=False", "tbb:shared=True", "*:fPIC=True", "boost:i18n_backend=icu", "boost:zstd=True", "boost:lzma=True"
     exports_sources = "CMakeLists.txt"
     generators = "cmake"
     short_paths = True
@@ -33,14 +33,6 @@ class USDConan(ConanFile):
         self.requires("tbb/2020.02@mercseng/version-0")
         self.requires("zlib/1.2.11@mercseng/version-0")
         self.requires("ptex/2.3.2@mercseng/version-0")
-
-
-    def configure(self):
-        # let boost use dependences we already built for other packages
-        self.options["boost"].i18n_backend = "icu"
-        self.options["boost"].zstd = True
-        self.options["boost"].lzma = True
-
 
     def config_options(self):
         """fPIC is linux only."""
@@ -119,7 +111,6 @@ set(CMAKE_CXX_STANDARD_LIBRARIES "-static-libgcc -static-libstdc++ ${CMAKE_CXX_S
             "PXR_ENABLE_OSL_SUPPORT":False,
             "PXR_ENABLE_PTEX_SUPPORT": True,
             "PXR_ENABLE_PYTHON_SUPPORT": False,
-            "TBB_USE_DEBUG_BUILD": self.settings.build_type == "Debug",
             "HDF5_USE_STATIC_LIBRARIES": not self.options["hdf5"].shared
         }
 

@@ -12,11 +12,12 @@ class PySide2(ConanFile):
     options = {"shared": [True, False], "fPIC": [True, False]}
     default_options = "shared=True", "fPIC=True"
     _source_subfolder = "source_subfolder"
+    short_paths = True
 
     def build_requirements(self):
         """Define buid toolset."""
         if tools.os_info.is_windows and self.settings.compiler == "Visual Studio":
-            self.build_requires("jom_installer/1.1.2@bincrafters/stable")
+            self.build_requires("jom_installer/1.1.2@mercseng/version-0")
         self.build_requires("cpython/3.7.7@mercseng/version-0")
 
     def requirements(self):
@@ -28,7 +29,7 @@ class PySide2(ConanFile):
         # On Linux, this dependence is much more difficult to obtain. Be sure to have it ready
         # on your system when you build this recipe
         if self.settings.os == "Windows":
-            self.requires("libclang/7.0@mercseng/stable")
+            self.requires("libclang/7.0@mercseng/version-0")
 
     def config_options(self):
         """fPIC is linux only."""
