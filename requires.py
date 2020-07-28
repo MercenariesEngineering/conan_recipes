@@ -13,7 +13,7 @@ ROOT_DIRECTORY=os.path.dirname(os.path.abspath(__file__))
 def shared_packages():
     res = ["cpython", "embree", "freetype", "PortAudio", "PySide2", "qt", "tbb", "USD"]
     if tools.os_info.is_linux:
-        res.append("libalsa")
+        res += ["libalsa", "libunwind"]
     return res
 
 class DependenceBuilder(ConanFile):
