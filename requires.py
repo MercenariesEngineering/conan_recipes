@@ -11,15 +11,14 @@ ROOT_DIRECTORY=os.path.dirname(os.path.abspath(__file__))
 # dependence, qt loading its dependences programmatically, ...) or because the static version
 # does not work/suit our needs.
 def shared_packages():
-    result = ["zlib", "zstd", "bzip2", "lzma", "icu", "tbb", "libpng", "libjpeg-turbo", "freetype",
-        "OpenSSL", "embree", "expat", "libuuid", "pcre2", "cpython", "libalsa", "PortAudio",
-        "double-conversion", "qt", "PySide2", "USD"]
+    res = ["cpython", "embree", "freetype", "PortAudio", "PySide2", "qt", "tbb", "USD"]
     if tools.os_info.is_linux:
-        result += ["libunwind"]
-    return result
+        res.append("libalsa")
+    return res
 
 class DependenceBuilder(ConanFile):
     settings = "os", "compiler", "build_type"
+    default_options = "*:shared=False"
 
     def req(self, text):
         if not EXPORT_HACK:
@@ -43,6 +42,7 @@ class DependenceBuilder(ConanFile):
         # with dependences
         if self.settings.os == "Linux":
             self.req("catch2/3.0.0@mercseng/version-0")
+        self.req("libiconv/1.15@mercseng/version-0")
         self.req("zlib/1.2.11@mercseng/version-0")
         self.req("zstd/1.4.5@mercseng/version-0")
         self.req("bzip2/1.0.8@mercseng/version-0")
@@ -96,6 +96,8 @@ class DependenceBuilder(ConanFile):
         for name in shared_packages():
             self.options[name].shared = True
 
-        self.options["boost"].i18n_backend = "icu"
+        if self.settings.os == "Linux":
+            self.options["qt"].with_fontconfig = True
+            self.options["boost"].i18n_backend = "icu"
         self.options["boost"].zstd = True
         self.options["boost"].lzma = True
