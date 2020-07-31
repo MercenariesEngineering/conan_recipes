@@ -33,6 +33,8 @@ class USDConan(ConanFile):
         self.requires("tbb/2020.02@mercseng/v0")
         self.requires("zlib/1.2.11@mercseng/v0")
         self.requires("ptex/2.3.2@mercseng/v0")
+        self.requires("glu/9.0.1@mercseng/v0")
+        self.requires("glew/2.1.0@mercseng/v0")
 
     def config_options(self):
         """fPIC is linux only."""
@@ -105,7 +107,7 @@ set(CMAKE_CXX_STANDARD_LIBRARIES "-static-libgcc -static-libstdc++ ${CMAKE_CXX_S
             "PXR_BUILD_TESTS": False,
             "PXR_BUILD_USD_IMAGING": True,
             "PXR_BUILD_USDVIEW": False,
-            "PXR_ENABLE_GL_SUPPORT": False,
+            "PXR_ENABLE_GL_SUPPORT": True,
             "PXR_ENABLE_HDF5_SUPPORT":True,
             "PXR_ENABLE_OPENVDB_SUPPORT": False,
             "PXR_ENABLE_OSL_SUPPORT":False,
