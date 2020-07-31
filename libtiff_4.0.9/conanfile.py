@@ -54,17 +54,17 @@ class LibtiffConan(ConanFile):
 
     def requirements(self):
         if self.options.zlib:
-            self.requires("zlib/1.2.11@mercseng/version-0")
+            self.requires("zlib/1.2.11@mercseng/v0")
         if self.options.lzma:
-            self.requires("lzma/5.2.4@mercseng/version-0")
+            self.requires("lzma/5.2.4@mercseng/v0")
         if self.options.jpeg:
-            self.requires("libjpeg-turbo/1.5.2@mercseng/version-0")
+            self.requires("libjpeg-turbo/1.5.2@mercseng/v0")
         if self.options.jbig:
-            self.requires("jbig/20160605@mercseng/version-0")
+            self.requires("jbig/20160605@mercseng/v0")
         if self.options.get_safe("zstd"):
-            self.requires("zstd/1.4.5@mercseng/version-0")
+            self.requires("zstd/1.4.5@mercseng/v0")
         if self.options.get_safe("webp"):
-            self.requires("libwebp/1.1.0@mercseng/version-0")
+            self.requires("libwebp/1.1.0@mercseng/v0")
 
     def source(self):
         tools.get(**self.conan_data["sources"][self.version])

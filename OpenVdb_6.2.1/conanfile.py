@@ -17,14 +17,14 @@ class OpenVdbConan(ConanFile):
 
     def requirements(self):
         """Define runtime requirements."""
-        self.requires("blosc/1.11.2@mercseng/version-0")
-        self.requires("boost/1.73.0@mercseng/version-0")
-        self.requires("glew/2.1.0@mercseng/version-0")
-        self.requires("glfw/3.3@mercseng/version-0")
-        self.requires("jemalloc/4.3.1@mercseng/version-0")
-        self.requires("OpenEXR/2.5.1@mercseng/version-0")
-        self.requires("tbb/2020.02@mercseng/version-0")
-        self.requires("zlib/1.2.11@mercseng/version-0")
+        self.requires("blosc/1.11.2@mercseng/v0")
+        self.requires("boost/1.73.0@mercseng/v0")
+        self.requires("glew/2.1.0@mercseng/v0")
+        self.requires("glfw/3.3@mercseng/v0")
+        self.requires("jemalloc/4.3.1@mercseng/v0")
+        self.requires("OpenEXR/2.5.1@mercseng/v0")
+        self.requires("tbb/2020.02@mercseng/v0")
+        self.requires("zlib/1.2.11@mercseng/v0")
 
     def config_options(self):
         """fPIC is linux only."""

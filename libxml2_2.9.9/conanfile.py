@@ -30,13 +30,13 @@ class Libxml2Conan(ConanFile):
 
     def requirements(self):
         if self.options.zlib:
-            self.requires("zlib/1.2.11@mercseng/version-0")
+            self.requires("zlib/1.2.11@mercseng/v0")
         if self.options.lzma:
-            self.requires("lzma/5.2.4@mercseng/version-0")
+            self.requires("lzma/5.2.4@mercseng/v0")
         if self.options.iconv:
-            self.requires("libiconv/1.15@mercseng/version-0")
+            self.requires("libiconv/1.15@mercseng/v0")
         if self.options.icu:
-            self.requires("icu/64.2@mercseng/version-0")
+            self.requires("icu/64.2@mercseng/v0")
 
     @property
     def _is_msvc(self):

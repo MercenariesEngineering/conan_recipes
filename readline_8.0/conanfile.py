@@ -37,7 +37,7 @@ class ReadLineConan(ConanFile):
         if self.options.with_library == "termcap":
             self.requires("termcap/1.3.1")
         elif self.options.with_library == "curses":
-            self.requires("ncurses/6.2@mercseng/version-0")
+            self.requires("ncurses/6.2@mercseng/v0")
 
     def configure(self):
         if self.options.shared:

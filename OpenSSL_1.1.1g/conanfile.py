@@ -186,7 +186,7 @@ class OpenSSLConan(ConanFile):
 
     def requirements(self):
         if not self.options.no_zlib:
-            self.requires("zlib/1.2.11@mercseng/version-0")
+            self.requires("zlib/1.2.11@mercseng/v0")
 
     @property
     def _target_prefix(self):

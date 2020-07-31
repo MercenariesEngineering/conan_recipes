@@ -17,7 +17,7 @@ class GlewConan(ConanFile):
     _source_subfolder = "_source_subfolder"
 
     def requirements(self):
-        self.requires("glu/9.0.1@mercseng/version-0")
+        self.requires("glu/9.0.1@mercseng/v0")
 
     def configure(self):
         del self.settings.compiler.libcxx

@@ -127,14 +127,14 @@ class LibcurlConan(ConanFile):
             elif self.settings.os == "Windows" and self.options.with_winssl:
                 pass
             else:
-                self.requires("OpenSSL/1.1.1g@mercseng/version-0")
+                self.requires("OpenSSL/1.1.1g@mercseng/v0")
         if self.options.with_libssh2:
             if self.settings.compiler != "Visual Studio":
                 self.requires("libssh2/1.9.0")
         if self.options.with_nghttp2:
             self.requires("libnghttp2/1.40.0")
 
-        self.requires("zlib/1.2.11@mercseng/version-0")
+        self.requires("zlib/1.2.11@mercseng/v0")
 
     def source(self):
         tools.get(**self.conan_data["sources"][self.version])

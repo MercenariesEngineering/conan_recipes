@@ -54,7 +54,7 @@ class NCursesConan(ConanFile):
 
     def requirements(self):
         if self.options.with_pcre2:
-            self.requires("pcre2/10.33@mercseng/version-0")
+            self.requires("pcre2/10.33@mercseng/v0")
 
     def build_requirements(self):
         if self.settings.compiler == "Visual Studio":

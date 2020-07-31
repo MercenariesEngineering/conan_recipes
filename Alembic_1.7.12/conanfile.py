@@ -16,9 +16,9 @@ class AlembicConan(ConanFile):
 
     def requirements(self):
         """Define runtime requirements."""
-        self.requires("hdf5/1.10.6@mercseng/version-0")
-        self.requires("OpenEXR/2.5.1@mercseng/version-0")
-        self.requires("zlib/1.2.11@mercseng/version-0")
+        self.requires("hdf5/1.10.6@mercseng/v0")
+        self.requires("OpenEXR/2.5.1@mercseng/v0")
+        self.requires("zlib/1.2.11@mercseng/v0")
 
     def config_options(self):
         """fPIC is linux only."""

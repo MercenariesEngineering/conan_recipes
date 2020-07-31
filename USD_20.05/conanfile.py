@@ -23,16 +23,16 @@ class USDConan(ConanFile):
         # NOTE: python support is still not great in this version. Wait until the migration 
         # python 2 -> 3 is complete before building USD with python support.
 
-        self.requires("Alembic/1.7.12@mercseng/version-0")
-        self.requires("boost/1.73.0@mercseng/version-0")
-        self.requires("hdf5/1.10.6@mercseng/version-0")
-        self.requires("materialx/1.37.1@mercseng/version-0")
-        self.requires("OpenColorIO/1.1.1@mercseng/version-0")
-        self.requires("OpenImageIO/2.1.15.0@mercseng/version-0")
-        self.requires("OpenSubdiv/3.4.3@mercseng/version-0")
-        self.requires("tbb/2020.02@mercseng/version-0")
-        self.requires("zlib/1.2.11@mercseng/version-0")
-        self.requires("ptex/2.3.2@mercseng/version-0")
+        self.requires("Alembic/1.7.12@mercseng/v0")
+        self.requires("boost/1.73.0@mercseng/v0")
+        self.requires("hdf5/1.10.6@mercseng/v0")
+        self.requires("materialx/1.37.1@mercseng/v0")
+        self.requires("OpenColorIO/1.1.1@mercseng/v0")
+        self.requires("OpenImageIO/2.1.15.0@mercseng/v0")
+        self.requires("OpenSubdiv/3.4.3@mercseng/v0")
+        self.requires("tbb/2020.02@mercseng/v0")
+        self.requires("zlib/1.2.11@mercseng/v0")
+        self.requires("ptex/2.3.2@mercseng/v0")
 
     def config_options(self):
         """fPIC is linux only."""

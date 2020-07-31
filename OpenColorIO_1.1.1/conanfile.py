@@ -17,8 +17,8 @@ class OpenColorIOConan(ConanFile):
 
     def requirements(self):
         """Define runtime requirements."""
-        self.requires("expat/2.2.9@mercseng/version-0")
-        self.requires("OpenEXR/2.5.1@mercseng/version-0")
+        self.requires("expat/2.2.9@mercseng/v0")
+        self.requires("OpenEXR/2.5.1@mercseng/v0")
 
     def config_options(self):
         """fPIC is linux only."""

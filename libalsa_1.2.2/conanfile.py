@@ -28,7 +28,7 @@ class LibalsaConan(ConanFile):
 
     def requirements(self):
         if not self.options.disable_python:
-            self.requires("cpython/3.7.7@mercseng/version-0")
+            self.requires("cpython/3.7.7@mercseng/v0")
 
     def source(self):
         tools.get(**self.conan_data["sources"][self.version])

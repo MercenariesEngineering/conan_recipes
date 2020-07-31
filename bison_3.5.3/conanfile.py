@@ -32,7 +32,7 @@ class BisonConan(ConanFile):
         os.rename(extracted_dir, self._source_subfolder)
 
     def requirements(self):
-        self.requires("m4/1.4.18@mercseng/version-0")
+        self.requires("m4/1.4.18@mercseng/v0")
 
     def build_requirements(self):
         if tools.os_info.is_windows and not tools.get_env("CONAN_BASH_PATH") and \

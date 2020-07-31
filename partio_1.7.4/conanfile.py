@@ -16,7 +16,7 @@ class partioConan(ConanFile):
 
     def requirements(self):
         """Define runtime requirements."""
-        self.requires("zlib/1.2.11@mercseng/version-0")
+        self.requires("zlib/1.2.11@mercseng/v0")
 
     def source(self):
         """Retrieve source code."""

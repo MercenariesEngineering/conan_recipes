@@ -14,7 +14,7 @@ class MaterialXConan(ConanFile):
 
     def requirements(self):
         if self.settings.os == "Linux":
-            self.requires("glu/9.0.1@mercseng/version-0")
+            self.requires("glu/9.0.1@mercseng/v0")
 
     def configure(self):
         if self.settings.os == "Windows":

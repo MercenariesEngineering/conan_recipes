@@ -9,7 +9,7 @@ class Ptex(ConanFile):
     url = "https://github.com/wdas/ptex"
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False], "fPIC": [True, False]}
-    requires = "zlib/1.2.11@mercseng/version-0"
+    requires = "zlib/1.2.11@mercseng/v0"
     default_options = "shared=False", "fPIC=True"
     generators = "cmake"
 

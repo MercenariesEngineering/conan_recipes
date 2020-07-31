@@ -105,19 +105,19 @@ class wxWidgetsConan(ConanFile):
 
     def requirements(self):
         if self.options.png == 'libpng':
-            self.requires.add('libpng/1.6.37@bmercseng/version-0')
+            self.requires.add('libpng/1.6.37@bmercseng/v0')
         if self.options.jpeg == 'libjpeg':
-            self.requires.add('libjpeg/9c@mercseng/version-0')
+            self.requires.add('libjpeg/9c@mercseng/v0')
         elif self.options.jpeg == 'libjpeg-turbo':
-            self.requires.add('libjpeg-turbo/1.5.2@mercseng/version-0')
+            self.requires.add('libjpeg-turbo/1.5.2@mercseng/v0')
         elif self.options.jpeg == 'mozjpeg':
-            self.requires.add('mozjpeg/3.3.1@mercseng/version-0')
+            self.requires.add('mozjpeg/3.3.1@mercseng/v0')
         if self.options.tiff == 'libtiff':
-            self.requires.add('libtiff/4.0.9@mercseng/version-0')
+            self.requires.add('libtiff/4.0.9@mercseng/v0')
         if self.options.zlib == 'zlib':
-            self.requires.add('zlib/1.2.11@mercseng/version-0')
+            self.requires.add('zlib/1.2.11@mercseng/v0')
         if self.options.expat == 'expat':
-            self.requires.add('expat/2.2.9@mercseng/version-0')
+            self.requires.add('expat/2.2.9@mercseng/v0')
 
     def source(self):
         # https://github.com/wxWidgets/wxWidgets/releases/download/v2.8.12/wxWidgets-2.8.12.tar.gz

@@ -15,7 +15,7 @@ class LiunwindConan(ConanFile):
     settings = "os", "arch", "compiler", "build_type"
     options = {"shared": [True, False], "fPIC": [True, False], "coredump": [True, False], "ptrace": [True, False], "setjmp": [True, False]}
     default_options = {"shared": True, "fPIC": True, "coredump": True, "ptrace": True, "setjmp": True}
-    requires = "lzma/5.2.4@mercseng/version-0"
+    requires = "lzma/5.2.4@mercseng/v0"
     _autotools = None
 
     @property

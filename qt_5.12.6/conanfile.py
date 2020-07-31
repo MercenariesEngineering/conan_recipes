@@ -815,12 +815,12 @@ class QtConan(ConanFile):
 
     def build_requirements(self):
         if tools.os_info.is_windows and self.settings.compiler == "Visual Studio":
-            self.build_requires("jom_installer/1.1.2@mercseng/version-0")
+            self.build_requires("jom_installer/1.1.2@mercseng/v0")
         if self.settings.os == 'Linux':
             if not tools.which('pkg-config'):
                 self.build_requires('pkg-config_installer/0.29.2@bincrafters/stable')
             if self.options.with_libalsa:
-                self.build_requires("libalsa/1.2.2@mercseng/version-0")
+                self.build_requires("libalsa/1.2.2@mercseng/v0")
 
     def config_options(self):
         if self.settings.os != "Linux":
@@ -898,42 +898,42 @@ class QtConan(ConanFile):
             self.options["libalsa"].shared = True
 
     def requirements(self):
-        self.requires("zlib/1.2.11@mercseng/version-0")
+        self.requires("zlib/1.2.11@mercseng/v0")
 
         if self.options.openssl:
-            self.requires("OpenSSL/1.1.1g@mercseng/version-0")
+            self.requires("OpenSSL/1.1.1g@mercseng/v0")
 
         if self.options.with_pcre2:
-            self.requires("pcre2/10.33@mercseng/version-0")
+            self.requires("pcre2/10.33@mercseng/v0")
 
         if self.options.with_freetype and not self.options.multiconfiguration:
-            self.requires("freetype/2.10.2_with_Harfbuzz@mercseng/version-0")
+            self.requires("freetype/2.10.2_with_Harfbuzz@mercseng/v0")
 
         if self.options.with_icu:
-            self.requires("icu/64.2@mercseng/version-0")
+            self.requires("icu/64.2@mercseng/v0")
 
         if self.options.with_libjpeg and not self.options.multiconfiguration:
-            self.requires("libjpeg-turbo/1.5.2@mercseng/version-0")
+            self.requires("libjpeg-turbo/1.5.2@mercseng/v0")
 
         if self.options.with_libpng and not self.options.multiconfiguration:
-            self.requires("libpng/1.6.37@mercseng/version-0")
+            self.requires("libpng/1.6.37@mercseng/v0")
 
         if self.options.with_sqlite3 and not self.options.multiconfiguration:
-            self.requires("sqlite3/3.32.3@mercseng/version-0")
+            self.requires("sqlite3/3.32.3@mercseng/v0")
             self.options["sqlite3"].enable_column_metadata = True
 
         if self.options.with_libalsa:
-            self.requires("libalsa/1.2.2@mercseng/version-0")
+            self.requires("libalsa/1.2.2@mercseng/v0")
 
 
         if self.options.with_glib:
             self.requires("glib/2.58.3@bincrafters/stable")
 
         if self.options.with_doubleconversion and not self.options.multiconfiguration:
-            self.requires("double-conversion/3.1.5@mercseng/version-0")
+            self.requires("double-conversion/3.1.5@mercseng/v0")
 
         # if self.options.qtwebengine:
-        #     self.requires("gperf/3.1@mercseng/version-0")
+        #     self.requires("gperf/3.1@mercseng/v0")
 
         # if self.options.with_fontconfig:
         #     self.requires("fontconfig/2.13.91@conan/stable")

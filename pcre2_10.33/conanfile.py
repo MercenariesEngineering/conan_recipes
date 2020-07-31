@@ -25,7 +25,7 @@ class PCREConan(ConanFile):
                        'build_pcre2_16': True, 'build_pcre2_32': True, 'support_jit': True}
     _source_subfolder = "source_subfolder"
     _build_subfolder = "build_subfolder"
-    requires = "zlib/1.2.11@mercseng/version-0"
+    requires = "zlib/1.2.11@mercseng/v0"
 
     def source(self):
         tools.get(**self.conan_data["sources"][self.version])
@@ -42,7 +42,7 @@ class PCREConan(ConanFile):
 
     def requirements(self):
         if self.options.with_bzip2:
-            self.requires.add("bzip2/1.0.8@mercseng/version-0")
+            self.requires.add("bzip2/1.0.8@mercseng/v0")
 
     def _configure_cmake(self):
         cmake = CMake(self)

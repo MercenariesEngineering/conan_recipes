@@ -18,7 +18,7 @@ class FBX(ConanFile):
             raise RuntimeError("Only Visual Studio is supported on Windows.")
 
     def requirements(self):
-        self.requires("libxml2/2.9.9@mercseng/version-0")
+        self.requires("libxml2/2.9.9@mercseng/v0")
 
     @property
     def _filename(self):

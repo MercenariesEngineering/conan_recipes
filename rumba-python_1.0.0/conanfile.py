@@ -23,7 +23,7 @@ class PythonPackages(ConanFile):
             self.settings.remove("compiler")
 
     def build_requirements(self):
-        self.build_requires("cpython/3.7.7@mercseng/version-0")
+        self.build_requires("cpython/3.7.7@mercseng/v0")
 
     def build(self):
         """Build the elements to package."""

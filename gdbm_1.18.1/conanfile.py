@@ -54,8 +54,8 @@ class GdbmConan(ConanFile):
             # TODO - Add readline package when available
 
     def build_requirements(self):
-        self.build_requires("flex/2.6.4@mercseng/version-0")
-        self.build_requires("bison/3.5.3@mercseng/version-0")
+        self.build_requires("flex/2.6.4@mercseng/v0")
+        self.build_requires("bison/3.5.3@mercseng/v0")
 
     def source(self):
         tools.get(**self.conan_data["sources"][self.version])

@@ -15,21 +15,21 @@ class CpythonConan(ConanFile):
 
     def requirements(self):
         """Define runtime requirements."""
-        self.requires("OpenSSL/1.1.1g@mercseng/version-0")
+        self.requires("OpenSSL/1.1.1g@mercseng/v0")
         # Because cpython is both a 'requires' dependency and a 'build_requires' dependency,
         # We must override OpenSSL's zlib dependency to something compatible with our other dependencies:
-        self.requires("zlib/1.2.11@mercseng/version-0") 
+        self.requires("zlib/1.2.11@mercseng/v0") 
 
         if self.settings.os == "Linux":
-            self.requires("expat/2.2.9@mercseng/version-0")
-            self.requires("lzma/5.2.4@mercseng/version-0")
-            self.requires("libuuid/1.0.3@mercseng/version-0")
-            self.requires("bzip2/1.0.8@mercseng/version-0")
-            self.requires("libffi/3.3@mercseng/version-0")
-            self.requires("gdbm/1.18.1@mercseng/version-0")
-            self.requires("sqlite3/3.32.3@mercseng/version-0")
-            self.requires("ncurses/6.2@mercseng/version-0")
-            self.requires("readline/8.0@mercseng/version-0")  
+            self.requires("expat/2.2.9@mercseng/v0")
+            self.requires("lzma/5.2.4@mercseng/v0")
+            self.requires("libuuid/1.0.3@mercseng/v0")
+            self.requires("bzip2/1.0.8@mercseng/v0")
+            self.requires("libffi/3.3@mercseng/v0")
+            self.requires("gdbm/1.18.1@mercseng/v0")
+            self.requires("sqlite3/3.32.3@mercseng/v0")
+            self.requires("ncurses/6.2@mercseng/v0")
+            self.requires("readline/8.0@mercseng/v0")  
     
     def config_options(self):
         """fPIC is linux only."""

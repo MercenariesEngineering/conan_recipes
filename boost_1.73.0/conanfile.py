@@ -141,20 +141,20 @@ class BoostConan(ConanFile):
                     raise ConanInvalidConfiguration("Boost '%s' library requires multi threading" % lib)
 
     def build_requirements(self):
-        self.build_requires("b2/4.2.0@mercseng/version-0")
+        self.build_requires("b2/4.2.0@mercseng/v0")
 
     def requirements(self):
         if self._zip_bzip2_requires_needed:
             if self.options.zlib:
-                self.requires("zlib/1.2.11@mercseng/version-0")
+                self.requires("zlib/1.2.11@mercseng/v0")
             if self.options.bzip2:
-                self.requires("bzip2/1.0.8@mercseng/version-0")
+                self.requires("bzip2/1.0.8@mercseng/v0")
             if self.options.lzma:
-                self.requires("lzma/5.2.4@mercseng/version-0")
+                self.requires("lzma/5.2.4@mercseng/v0")
             if self.options.zstd:
-                self.requires("zstd/1.4.5@mercseng/version-0")
+                self.requires("zstd/1.4.5@mercseng/v0")
         if self.options.i18n_backend == 'icu':
-            self.requires("icu/64.2@mercseng/version-0")
+            self.requires("icu/64.2@mercseng/v0")
 
     def package_id(self):
         if self.options.header_only:

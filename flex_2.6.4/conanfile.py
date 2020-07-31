@@ -15,7 +15,7 @@ class FlexConan(ConanFile):
     options = {"shared": [True, False], "fPIC": [True, False]}
     default_options = {"shared": False, "fPIC": True}
 
-    requires = ("m4/1.4.18@mercseng/version-0",)
+    requires = ("m4/1.4.18@mercseng/v0",)
 
     _autotools = None
 

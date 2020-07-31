@@ -17,10 +17,10 @@ class opensubdiv(ConanFile):
     
     def requirements(self):
         """Define runtime requirements."""
-        self.requires("tbb/2020.02@mercseng/version-0")
-        self.requires("zlib/1.2.11@mercseng/version-0")
+        self.requires("tbb/2020.02@mercseng/v0")
+        self.requires("zlib/1.2.11@mercseng/v0")
         if self.settings.os == "Linux":
-            self.requires("glu/9.0.1@mercseng/version-0")
+            self.requires("glu/9.0.1@mercseng/v0")
 
 
     def config_options(self):

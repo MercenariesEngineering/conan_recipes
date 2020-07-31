@@ -17,15 +17,15 @@ class OpenimageioConan(ConanFile):
 
     def requirements(self):
         """Define runtime requirements."""
-        self.requires("boost/1.73.0@mercseng/version-0")
-        self.requires("bzip2/1.0.8@mercseng/version-0")
-        self.requires("freetype/2.10.2_with_Harfbuzz@mercseng/version-0")
-        self.requires("libjpeg-turbo/1.5.2@mercseng/version-0")
-        self.requires("libpng/1.6.37@mercseng/version-0")
-        self.requires("libtiff/4.0.9@mercseng/version-0")
-        self.requires("OpenEXR/2.5.1@mercseng/version-0")
-        self.requires("tbb/2020.02@mercseng/version-0")
-        self.requires("zlib/1.2.11@mercseng/version-0")
+        self.requires("boost/1.73.0@mercseng/v0")
+        self.requires("bzip2/1.0.8@mercseng/v0")
+        self.requires("freetype/2.10.2_with_Harfbuzz@mercseng/v0")
+        self.requires("libjpeg-turbo/1.5.2@mercseng/v0")
+        self.requires("libpng/1.6.37@mercseng/v0")
+        self.requires("libtiff/4.0.9@mercseng/v0")
+        self.requires("OpenEXR/2.5.1@mercseng/v0")
+        self.requires("tbb/2020.02@mercseng/v0")
+        self.requires("zlib/1.2.11@mercseng/v0")
 
     def config_options(self):
         """fPIC is linux only."""

@@ -47,11 +47,11 @@ class FreetypeConan(ConanFile):
 
     def requirements(self):
         if self.options.with_png:
-            self.requires.add("libpng/1.6.37@mercseng/version-0")
+            self.requires.add("libpng/1.6.37@mercseng/v0")
         if self.options.with_zlib:
-            self.requires("zlib/1.2.11@mercseng/version-0")
+            self.requires("zlib/1.2.11@mercseng/v0")
         if self.options.with_bzip2:
-            self.requires("bzip2/1.0.8@mercseng/version-0")
+            self.requires("bzip2/1.0.8@mercseng/v0")
 
     def config_options(self):
         if self.settings.os == "Windows":

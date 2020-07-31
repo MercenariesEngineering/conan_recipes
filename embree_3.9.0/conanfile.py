@@ -9,7 +9,7 @@ class EmbreeConan(ConanFile):
     description = "High Performance Ray Tracing Kernels"
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False], "fPIC": [True, False]}
-    requires = "tbb/2020.02@mercseng/version-0"
+    requires = "tbb/2020.02@mercseng/v0"
     default_options = "shared=True", "fPIC=True", "TBB:shared=True"
     exports_sources = "CMakeLists.txt"
     generators = "cmake"

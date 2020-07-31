@@ -17,7 +17,7 @@ class OpenImageDenoiseConan(ConanFile):
 
     def requirements(self):
         """Define runtime requirements."""
-        self.requires("tbb/2020.02@mercseng/version-0")
+        self.requires("tbb/2020.02@mercseng/v0")
 
     def configure(self):
         """fPIC is linux only."""
