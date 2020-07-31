@@ -1,0 +1,27 @@
+From 226bcd43b52c5a304be83f939fd63f0935b41f25 Mon Sep 17 00:00:00 2001
+From: Zoltan Gilian <zoltan.gilian@gmail.com>
+Date: Fri, 3 Feb 2017 21:22:41 +0100
+Subject: [PATCH] fix shared lib install
+
+---
+ blosc/CMakeLists.txt | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/blosc/CMakeLists.txt b/blosc/CMakeLists.txt
+index af93a5e..2d200e3 100644
+--- a/blosc/CMakeLists.txt
++++ b/blosc/CMakeLists.txt
+@@ -211,7 +211,9 @@ endif(BUILD_STATIC)
+ # install
+ if(BLOSC_INSTALL)
+     install(FILES blosc.h blosc-export.h DESTINATION include COMPONENT DEV)
+-    install(TARGETS blosc_shared DESTINATION ${lib_dir} COMPONENT LIB)
++    if(BUILD_SHARED)
++        install(TARGETS blosc_shared DESTINATION lib RUNTIME DESTINATION bin COMPONENT LIB)
++    endif(BUILD_SHARED)
+     if(BUILD_STATIC)
+         install(TARGETS blosc_static DESTINATION ${lib_dir} COMPONENT DEV)
+     endif(BUILD_STATIC)
+-- 
+2.8.2
+
