@@ -20,9 +20,11 @@ class OpenimageioConan(ConanFile):
         self.requires("boost/1.73.0@mercseng/v0")
         self.requires("bzip2/1.0.8@mercseng/v0")
         self.requires("freetype/2.10.2_with_Harfbuzz@mercseng/v0")
+        self.requires("jbig/20160605@mercseng/v0")
         self.requires("libjpeg-turbo/1.5.2@mercseng/v0")
         self.requires("libpng/1.6.37@mercseng/v0")
         self.requires("libtiff/4.0.9@mercseng/v0")
+        self.requires("lzma/5.2.4@mercseng/v0")
         self.requires("OpenEXR/2.5.1@mercseng/v0")
         self.requires("tbb/2020.02@mercseng/v0")
         self.requires("zlib/1.2.11@mercseng/v0")
@@ -78,7 +80,7 @@ class OpenimageioConan(ConanFile):
             "USE_JPEGTurbo": True,
 
             "JPEGTurbo_ROOT": self.deps_cpp_info["libjpeg-turbo"].rootpath,
-            "JPEG_LIBRARY" : "turbojpeg-static.lib" if self.settings.os == "Windows" else "libturbojpeg.a",
+            "JPEG_NAMES": "turbojpeg-static.lib" if self.settings.os == "Windows" else "libturbojpeg.a",
             "BOOST_ROOT": self.deps_cpp_info["boost"].rootpath,
             "BOOST_LIBRARYDIR": "%s/lib" % self.deps_cpp_info["boost"].rootpath,
             "Boost_FILESYSTEM_LIBRARY": "boost_filesystem" if self.settings.os == "Windows" else "libboost_filesystem",

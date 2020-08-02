@@ -51,6 +51,8 @@ class OpenColorIOConan(ConanFile):
             "OCIO_BUILD_TESTS": False,
             "OCIO_BUILD_TRUELIGHT": False,
             "OCIO_INSTALL_EXT_PACKAGES": "MISSING",
+            "TINYXML_OBJECT_LIB_EMBEDDED": True,
+            "YAML_CPP_OBJECT_LIB_EMBEDDED": True,
         }
 
         if self.settings.os == "Linux":
@@ -66,10 +68,9 @@ class OpenColorIOConan(ConanFile):
 
     def package(self):
         """Assemble the package."""
-        self.copy("*.h", src="%s/export/OpenColorIO/" % self._source_subfolder, dst="include/OpenColorIO/")
-        self.copy("*.h", src="export/", dst="include/OpenColorIO/")
-        self.copy("*.a", dst="lib", keep_path=False)
-        self.copy("*.lib", dst="lib", keep_path=False)
+        cmake = CMake(self)
+        cmake.configure(defs = self.cmake_definitions(), source_folder = self._source_subfolder)
+        cmake.install()
 
     def package_info(self):
         """Edit package info."""

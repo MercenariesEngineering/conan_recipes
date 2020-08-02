@@ -66,10 +66,6 @@ class LibtiffConan(ConanFile):
         if self.options.get_safe("webp"):
             self.requires("libwebp/1.1.0@mercseng/v0")
 
-    def source(self):
-        tools.get(**self.conan_data["sources"][self.version])
-        os.rename("tiff-" + self.version, self._source_subfolder)
-
     def _patch_sources(self):
         if self.options.shared and self.settings.compiler == "Visual Studio":
             # https://github.com/Microsoft/vcpkg/blob/master/ports/tiff/fix-cxx-shared-libs.patch
@@ -87,7 +83,13 @@ class LibtiffConan(ConanFile):
         tools.replace_in_file(cmakefile,
                               "add_subdirectory(tools)\nadd_subdirectory(test)\nadd_subdirectory(contrib)\nadd_subdirectory(build)\n"
                               "add_subdirectory(man)\nadd_subdirectory(html)", "")
+        tools.replace_in_file(cmakefile, "if(LIBLZMA_LIBRARIES)", "if(LIBLZMA_LIBRARY AND NOT LIBLZMA_LIBRARIES)\n  set(LIBLZMA_LIBRARIES ${LIBLZMA_LIBRARY})\nendif()\nif(LIBLZMA_LIBRARIES)")
         tools.replace_in_file(cmakefile, "LIBLZMA_LIBRARIES", "LibLZMA_LIBRARIES")
+
+    def source(self):
+        tools.get(**self.conan_data["sources"][self.version])
+        os.rename("tiff-" + self.version, self._source_subfolder)
+        self._patch_sources()
 
     def _configure_cmake(self):
         if not self._cmake:
@@ -102,8 +104,8 @@ class LibtiffConan(ConanFile):
             self._cmake.configure(build_folder=self._build_subfolder)
         return self._cmake
 
+
     def build(self):
-        self._patch_sources()
         cmake = self._configure_cmake()
         cmake.build()
 
