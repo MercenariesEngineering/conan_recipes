@@ -151,6 +151,7 @@ set(CMAKE_CXX_STANDARD_LIBRARIES "-static-libgcc -static-libstdc++ ${CMAKE_CXX_S
             self.cpp_info.defines.append("PXR_STATIC=1")
         if self.options.shared:
             if self.settings.os == "Windows":
-                self.env_info.PATH.append(os.path.join( self.package_folder, "bin"))
+                self.env_info.PATH.append(os.path.join( self.package_folder, "bin"))    # executables
+                self.env_info.PATH.append(os.path.join( self.package_folder, "lib"))    # DLLs
             else:
                 self.env_info.LD_LIBRARY_PATH.append(os.path.join(self.package_folder, "lib"))
