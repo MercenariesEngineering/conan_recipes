@@ -1337,14 +1337,11 @@ QMAKE_CXX               = %s""" % (self.env["CC"], self.env["CXX"]))
         self.info.options.cross_compile = None
         del self.info.options.sysroot
 
-
     def package_info(self):
+        """Edit package info."""
+        self.cpp_info.libs = tools.collect_libs(self)
         self.env_info.PATH.append(os.path.join(self.package_folder, "bin"))
         self.env_info.CMAKE_PREFIX_PATH.append(self.package_folder)
         self.env_info.QT_PLUGIN_PATH = os.path.join(self.package_folder, "plugins")
-        if self.options.shared:
-            if self.settings.os == "Windows":
-                self.env_info.PATH.append(os.path.join( self.package_folder, "bin"))
-            else:
-                self.env_info.LD_LIBRARY_PATH.append(os.path.join(self.package_folder, "lib"))
-
+        if self.options.shared and self.settings.os == "Linux":
+            self.env_info.LD_LIBRARY_PATH.append(os.path.join(self.package_folder, "lib"))
