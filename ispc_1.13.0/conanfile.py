@@ -3,7 +3,7 @@ import shutil
 from conans import ConanFile, tools
 
 class ISPC(ConanFile):
-    description = "Intel® Implicit SPMD Program Compiler"
+    description = "Intel Implicit SPMD Program Compiler"
     url = "https://ispc.github.io/"
     license = "BSD-3"
     version = "1.13.0"
