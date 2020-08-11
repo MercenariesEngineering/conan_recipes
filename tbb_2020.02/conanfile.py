@@ -70,6 +70,13 @@ class tbb(ConanFile):
         self.copy( "*", src = "package/bin"    , dst = "bin" )
         self.copy( "*", src = "package/lib"    , dst = "lib", symlinks = True )
         self.copy( "*", src = "package/include", dst = "include", symlinks = True )
+        if self.settings.os == "Linux":
+            # There is a dlopen call on libtbbmalloc.so.2 in tbb but this symlink is not built
+            # by cmake. The symlink is added to prevent the library loader to use the system one
+            # if it exists or to fail if it doesn't.
+            os.symlink(
+                os.path.join(self.package_folder, "lib", "libtbbmalloc.so"),
+                os.path.join(self.package_folder, "lib", "libtbbmalloc.so.2"))
 
     def package_info(self):
         if self.options.shared:
