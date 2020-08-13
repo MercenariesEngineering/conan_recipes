@@ -71,6 +71,14 @@ ENDIF()
 """set(CMAKE_CXX_FLAGS "${_PXR_CXX_FLAGS} ${CMAKE_CXX_FLAGS}")
 set(CMAKE_CXX_STANDARD_LIBRARIES "-static-libgcc -static-libstdc++ ${CMAKE_CXX_STANDARD_LIBRARIES}")
 """)
+
+            # see https://github.com/PixarAnimationStudios/USD/issues/1291
+            tools.replace_in_file(
+                os.path.join(self._source_subfolder, "pxr", "base", "arch", "defines.h"),
+                "#if defined(ARCH_OS_LINUX) && defined(ARCH_COMPILER_GCC)",
+                "#if defined(ARCH_OS_LINUX) && (defined(ARCH_COMPILER_GCC) || defined(USD_FORCE_GNU_STL_EXTENSIONS))"
+            )
+
         # Fix FindMaterialX
         tools.replace_in_file("%s/cmake/modules/FindMaterialX.cmake" % self._source_subfolder, """documents/Libraries""", """libraries/stdlib""")
 
