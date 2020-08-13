@@ -1,5 +1,5 @@
 from conans import ConanFile, CMake, tools
-import os
+import os, shutil
 
 class MaterialXConan(ConanFile):
     name = "materialx"
@@ -11,6 +11,7 @@ class MaterialXConan(ConanFile):
     options = {"shared": [True, False], "fPIC": [True, False]}
     default_options = "shared=False", "fPIC=True"
     generators = "cmake"
+    exports_sources = "CMakeLists.txt"
 
     def requirements(self):
         if self.settings.os == "Linux":
@@ -26,6 +27,10 @@ class MaterialXConan(ConanFile):
         tools.download("https://github.com/materialx/MaterialX/archive/%s" % filename, filename)
         tools.untargz(filename)
         os.unlink(filename)
+
+        # Add a wrapper CMakeLists.txt file which initializes conan before executing the real CMakeLists.txt
+        os.rename(os.path.join("MaterialX-%s" % self.version, "CMakeLists.txt"), os.path.join("MaterialX-%s" % self.version, "CMakeLists_original.txt"))
+        shutil.copy("CMakeLists.txt", "MaterialX-%s" % self.version)
 
     def build(self):
         cmake = CMake(self)
