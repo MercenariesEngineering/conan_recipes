@@ -1291,8 +1291,11 @@ QMAKE_CXX               = %s""" % (self.env["CC"], self.env["CXX"]))
                      'QMAKE_LINK="' + value + '"',
                      'QMAKE_LINK_SHLIB="' + value + '"']
 
-        if tools.os_info.is_linux and self.settings.compiler == "clang":
-            args += ['QMAKE_CXXFLAGS+="-ftemplate-depth=1024"']
+        if tools.os_info.is_linux:
+            if self.settings.compiler == "clang":
+                args.append('QMAKE_CXXFLAGS+="-ftemplate-depth=1024"')
+            args.append('QMAKE_CXXFLAGS+="-fPIC"')
+            
         
         if self.settings.os != "Windows":
             args += ["-no-d3d12"]
@@ -1340,6 +1343,8 @@ QMAKE_CXX               = %s""" % (self.env["CC"], self.env["CXX"]))
     def package_info(self):
         """Edit package info."""
         self.cpp_info.libs = tools.collect_libs(self)
+        self.cpp_info.includedirs = [os.path.join("include", name) for name in next(os.walk(os.path.join(self.package_folder, "include")))[1]]
+        self.cpp_info.includedirs.append("include")
         self.env_info.PATH.append(os.path.join(self.package_folder, "bin"))
         self.env_info.CMAKE_PREFIX_PATH.append(self.package_folder)
         self.env_info.QT_PLUGIN_PATH = os.path.join(self.package_folder, "plugins")
