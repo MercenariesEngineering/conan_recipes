@@ -1,4 +1,4 @@
-import os, sys
+import os, sys, glob
 from distutils.dir_util import copy_tree
 from conans import ConanFile, tools
 
@@ -46,6 +46,14 @@ class PySide2(ConanFile):
         """Retrieve source code."""        
         tools.get("https://download.qt.io/official_releases/QtForPython/pyside2/PySide2-%s-src/pyside-setup-everywhere-src-%s.zip" % (self.version, self.version))
         os.rename("pyside-setup-everywhere-src-%s" % self.version, self._source_subfolder)
+
+        # https://bugreports.qt.io/browse/PYSIDE-1259
+        if self.settings.os == "Linux":
+            tools.replace_in_file(
+                os.path.join(self._source_subfolder, "sources", "shiboken2", "ApiExtractor", "clangparser", "compilersupport.cpp"),
+                "QVersionNumber lastVersionNumber(1, 0, 0);",
+                "QVersionNumber lastVersionNumber(0, 0, 0);"
+            )
 
     def build(self):
         """Build the elements to package."""        
