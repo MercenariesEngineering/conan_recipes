@@ -30,7 +30,7 @@ class USDConan(ConanFile):
         self.requires("OpenColorIO/1.1.1@mercseng/v0")
         self.requires("OpenImageIO/2.1.15.0@mercseng/v0")
         self.requires("OpenSubdiv/3.4.3@mercseng/v0")
-        self.requires("tbb/2020.02@mercseng/v0")
+        self.requires("tbb/2020.02@mercseng/v1")
         self.requires("zlib/1.2.11@mercseng/v0")
         self.requires("ptex/2.3.2@mercseng/v0")
         self.requires("glu/9.0.1@mercseng/v0")
@@ -64,14 +64,7 @@ ENDIF()
         # Alembic plugin needs to link against OpenExr Math library.
         tools.replace_in_file("%s/pxr/usd/plugin/usdAbc/CMakeLists.txt" % self._source_subfolder, """${OPENEXR_Half_LIBRARY}""", "${OPENEXR_Half_LIBRARY} ${OPENEXR_Imath_LIBRARY}")
 
-        # Linux: Add flags -static-libgcc -static-libstdc++
         if self.settings.os == "Linux":
-            tools.replace_in_file("%s/CMakeLists.txt" % self._source_subfolder,
-            """set(CMAKE_CXX_FLAGS "${_PXR_CXX_FLAGS} ${CMAKE_CXX_FLAGS}")""", 
-"""set(CMAKE_CXX_FLAGS "${_PXR_CXX_FLAGS} ${CMAKE_CXX_FLAGS}")
-set(CMAKE_CXX_STANDARD_LIBRARIES "-static-libgcc -static-libstdc++ ${CMAKE_CXX_STANDARD_LIBRARIES}")
-""")
-
             # see https://github.com/PixarAnimationStudios/USD/issues/1291
             tools.replace_in_file(
                 os.path.join(self._source_subfolder, "pxr", "base", "arch", "defines.h"),

@@ -23,7 +23,7 @@ class OpenVdbConan(ConanFile):
         self.requires("glfw/3.3@mercseng/v0")
         self.requires("jemalloc/4.3.1@mercseng/v0")
         self.requires("OpenEXR/2.5.1@mercseng/v0")
-        self.requires("tbb/2020.02@mercseng/v0")
+        self.requires("tbb/2020.02@mercseng/v1")
         self.requires("zlib/1.2.11@mercseng/v0")
 
     def config_options(self):

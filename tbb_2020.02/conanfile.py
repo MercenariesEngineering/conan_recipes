@@ -34,11 +34,6 @@ class tbb(ConanFile):
             """tbbmalloc_static""",
             """tbbmalloc""")
 
-        tools.replace_in_file("%s/CMakeLists.txt" % self.name,
-            """  add_definitions (-DUSE_PTHREAD)""",
-            """  add_definitions (-DUSE_PTHREAD)
-    set(CMAKE_CXX_STANDARD_LIBRARIES "-static-libgcc -static-libstdc++ ${CMAKE_CXX_STANDARD_LIBRARIES}")""")
-
     def build(self):
         # TBBMALLOC PROXY is not included into this package because:
         # - it prevent crashes when it is linked to, since it should be

@@ -9,7 +9,7 @@ class EmbreeConan(ConanFile):
     description = "High Performance Ray Tracing Kernels"
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False], "fPIC": [True, False]}
-    requires = "tbb/2020.02@mercseng/v0"
+    requires = "tbb/2020.02@mercseng/v1"
     default_options = "shared=True", "fPIC=True", "TBB:shared=True"
     exports_sources = "CMakeLists.txt"
     generators = "cmake"
@@ -53,9 +53,6 @@ class EmbreeConan(ConanFile):
             "EMBREE_CURVE_SELF_INTERSECTION_AVOIDANCE_FACTOR": "0",
             "EMBREE_TBB_DEBUG_POSTFIX" : ""
         }
-
-        if self.settings.os == "Linux" and self.options.shared:
-            definition_dict["CMAKE_CXX_FLAGS"] = "-static-libstdc++ -static-libgcc"
 
         # Prevent compiler stack overflow: https://github.com/embree/embree/issues/157
         if self.settings.compiler == 'Visual Studio' and self.settings.compiler.version == 14 and self.settings.build_type == "Release":

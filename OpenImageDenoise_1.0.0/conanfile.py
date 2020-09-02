@@ -17,7 +17,7 @@ class OpenImageDenoiseConan(ConanFile):
 
     def requirements(self):
         """Define runtime requirements."""
-        self.requires("tbb/2020.02@mercseng/v0")
+        self.requires("tbb/2020.02@mercseng/v1")
 
     def configure(self):
         """fPIC is linux only."""
@@ -34,19 +34,6 @@ class OpenImageDenoiseConan(ConanFile):
         set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fopenmp-simd")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp-simd")""",
             """""")
-
-        if self.settings.os == "Linux":
-            # force static linking of libstdc++/libgcc
-            tools.replace_in_file("%s/CMakeLists.txt" % self._source_subfolder,
-                """target_link_libraries(${PROJECT_NAME}
-  PRIVATE
-    common mkldnn
-)""",
-                """target_link_libraries(${PROJECT_NAME}
-  PRIVATE
-    "-static-libstdc++ -static-libgcc"
-    common mkldnn
-)""")
 
         # Add a wrapper CMakeLists.txt file which initializes conan before executing the real CMakeLists.txt
         os.rename(os.path.join(self._source_subfolder, "CMakeLists.txt"), os.path.join(self._source_subfolder, "CMakeLists_original.txt"))

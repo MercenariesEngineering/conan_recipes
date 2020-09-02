@@ -26,7 +26,7 @@ class OpenimageioConan(ConanFile):
         self.requires("libtiff/4.0.9@mercseng/v0")
         self.requires("lzma/5.2.4@mercseng/v0")
         self.requires("OpenEXR/2.5.1@mercseng/v0")
-        self.requires("tbb/2020.02@mercseng/v0")
+        self.requires("tbb/2020.02@mercseng/v1")
         self.requires("zlib/1.2.11@mercseng/v0")
 
     def config_options(self):
