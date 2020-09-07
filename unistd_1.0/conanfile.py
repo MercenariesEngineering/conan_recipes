@@ -18,4 +18,5 @@ class UnistdConan(ConanFile):
             self.copy(pattern="unistd.h", dst="include")
 
     def package_info(self):
-        self.cpp_info.libs = tools.collect_libs(self)
+        if self.settings.os == "Windows":
+            self.cpp_info.includedirs = [os.path.join(self.package_folder, "include")]
