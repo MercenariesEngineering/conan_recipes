@@ -26,11 +26,6 @@ class PySide2(ConanFile):
         self.requires("OpenSSL/1.1.1g@mercseng/v0")
         self.requires("libxml2/2.9.9@mercseng/v0")
 
-        # On Linux, this dependence is much more difficult to obtain. Be sure to have it ready
-        # on your system when you build this recipe
-        if self.settings.os == "Windows":
-            self.requires("libclang/7.0@mercseng/v0")
-
     def config_options(self):
         """fPIC is linux only."""
         if self.settings.os != "Linux":
@@ -55,6 +50,18 @@ class PySide2(ConanFile):
                 "QVersionNumber lastVersionNumber(0, 0, 0);"
             )
 
+        if self.settings.os == "Windows" and not "LLVM_INSTALL_DIR" in os.environ:
+            if self.settings.compiler.version == 14:
+                clang_file = "libclang-release_70-based-windows-vs2015_64.7z"
+            elif self.settings.compiler.version == 15:
+                clang_file = "libclang-release_80-based-windows-vs2017_64.7z"
+            else:
+                clang_file = "libclang-release_100-based-windows-vs2019_64.7z"
+            tools.download("http://download.qt.io/development_releases/prebuilt/libclang/%s" % clang_file, "clang.7z")
+            # Conan won't natively handle 7z files. Cmake is actually the easiest unzipping tool at hand.
+            self.run("cmake -E tar xf clang.7z")
+            os.unlink("clang.7z")
+
     def build(self):
         """Build the elements to package."""        
         qmake = "qmake"
@@ -72,8 +79,11 @@ class PySide2(ConanFile):
             if not "PATH" in environment:
                 environment["PATH"] = []
             environment["PATH"].insert(0, self.deps_cpp_info["qt"].bin_paths[0])
-            environment["PATH"].insert(0, self.deps_cpp_info["libclang"].bin_paths[0])
-        
+            if not "LLVM_INSTALL_DIR" in os.environ:
+                clang_path = os.path.join(self.source_folder, "libclang")
+                environment["PATH"].insert(0, (os.path.join(clang_path, "bin")))
+                environment["LLVM_INSTALL_DIR"] = clang_path
+
         arguments = [
             "--qmake=\"%s\"" % os.path.join(self.deps_cpp_info["qt"].rootpath, "bin", qmake),
             #"--skip-modules=QtNetwork,QtOpenGLFunctions,QtQuick,QtQuickWidgets,QtQml",
