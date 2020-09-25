@@ -37,6 +37,7 @@ class MaterialXConan(ConanFile):
         cmake.definitions["MATERIALX_BUILD_PYTHON"] = False
         cmake.definitions["MATERIALX_BUILD_VIEWER"] = False
         cmake.definitions["MATERIALX_BUILD_DOCS"] = False
+        cmake.definitions["MATERIALX_BUILD_TESTS"] = False
         cmake.definitions["MATERIALX_PYTHON_LTO"] = False
         cmake.definitions["MATERIALX_INSTALL_PYTHON"] = False
         

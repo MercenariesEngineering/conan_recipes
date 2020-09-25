@@ -62,6 +62,9 @@ class OpenColorIOConan(ConanFile):
 
     def build(self):
         """Build the elements to package."""
+        ext_dir = os.path.join(self.build_folder, 'ext')
+        os.mkdir(ext_dir)
+
         cmake = CMake(self)
         cmake.configure(defs = self.cmake_definitions(), source_folder = self._source_subfolder)
         cmake.build()
