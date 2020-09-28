@@ -1,6 +1,7 @@
 import os
 import shutil
 from conans import ConanFile, CMake, tools
+from conans.tools import Version
 
 class USDConan(ConanFile):
     name = "USD"
@@ -71,6 +72,10 @@ ENDIF()
                 "#if defined(ARCH_OS_LINUX) && defined(ARCH_COMPILER_GCC)",
                 "#if defined(ARCH_OS_LINUX) && (defined(ARCH_COMPILER_GCC) || defined(USD_FORCE_GNU_STL_EXTENSIONS))"
             )
+            # Older GCC won't support this c++14 std::less with no argument.
+            if (self.settings.compiler == "gcc" and Version(str(self.settings.compiler.version)) < 8.0):
+                tools.replace_in_file("%s/pxr/base/vt/dictionary.h" % self._source_subfolder,
+                """typedef std::map<std::string, VtValue, std::less<>> _Map;""", """typedef std::map<std::string, VtValue> _Map;""")
 
         # Fix FindMaterialX
         tools.replace_in_file("%s/cmake/modules/FindMaterialX.cmake" % self._source_subfolder, """documents/Libraries""", """libraries/stdlib""")
