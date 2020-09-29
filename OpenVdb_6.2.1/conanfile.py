@@ -15,12 +15,12 @@ class OpenVdbConan(ConanFile):
     generators = "cmake"
     _source_subfolder = "source_subfolder"
 
+    recipe_version="v0"
+
     def requirements(self):
         """Define runtime requirements."""
         self.requires("blosc/1.11.2@mercseng/v0")
         self.requires("boost/1.73.0@mercseng/v0")
-        self.requires("glew/2.1.0@mercseng/v0")
-        self.requires("glfw/3.3@mercseng/v0")
         self.requires("jemalloc/4.3.1@mercseng/v0")
         self.requires("OpenEXR/2.5.1@mercseng/v0")
         self.requires("tbb/2020.02@mercseng/v1")
@@ -64,6 +64,7 @@ class OpenVdbConan(ConanFile):
             "OPENVDB_BUILD_UNITTESTS": False,
             "OPENVDB_BUILD_PYTHON_MODULE": False,
             "OPENVDB_BUILD_HOUDINI_PLUGIN": False,
+            "OPENVDB_BUILD_VDB_VIEW": False,
             "OPENVDB_ENABLE_3_ABI_COMPATIBLE": True,
             "OPENVDB_USE_DEPRECATED_ABI": True,
             "OPENVDB_DISABLE_BOOST_IMPLICIT_LINKING": False,
