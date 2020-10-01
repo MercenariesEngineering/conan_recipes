@@ -30,7 +30,7 @@ class AlembicConan(ConanFile):
         tools.get("https://github.com/alembic/alembic/archive/%s.tar.gz" % self.version)
         os.rename("alembic-%s" % self.version, self._source_subfolder)
 
-        tools.replace_in_file("%s/CMakeLists.txt" % self._source_subfolder, """-Wno-unused-parameter""", """-Wno-unused-parameter -Wno-unused-function""")
+        tools.replace_in_file("%s/CMakeLists.txt" % self._source_subfolder, """-Wno-unused-parameter""", """-Wno-unused-parameter -Wno-unused-function -Wno-implicit-fallthrough -Wno-deprecated-copy""")
 
     def cmake_definitions(self):
         """Setup CMake definitions."""

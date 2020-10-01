@@ -16,6 +16,7 @@ class USDConan(ConanFile):
     exports_sources = "CMakeLists.txt"
     generators = "cmake"
     short_paths = True
+    recipe_version = "3"
     _source_subfolder = "source_subfolder"
 
     def requirements(self):
@@ -24,7 +25,7 @@ class USDConan(ConanFile):
         # NOTE: python support is still not great in this version. Wait until the migration 
         # python 2 -> 3 is complete before building USD with python support.
 
-        self.requires("Alembic/1.7.12@mercseng/v0")
+        self.requires("Alembic/1.7.12@mercseng/v1")
         self.requires("boost/1.73.0@mercseng/v0")
         self.requires("hdf5/1.10.6@mercseng/v0")
         self.requires("materialx/1.37.1@mercseng/v0")
@@ -64,6 +65,11 @@ ENDIF()
         tools.replace_in_file("%s/cmake/defaults/msvcdefaults.cmake" % self._source_subfolder, """_add_define("OPENEXR_DLL")""", "")
         # Alembic plugin needs to link against OpenExr Math library.
         tools.replace_in_file("%s/pxr/usd/plugin/usdAbc/CMakeLists.txt" % self._source_subfolder, """${OPENEXR_Half_LIBRARY}""", "${OPENEXR_Half_LIBRARY} ${OPENEXR_Imath_LIBRARY}")
+        # Help Usd use our TBB package in debug
+        tools.replace_in_file(
+            os.path.join(self._source_subfolder, "cmake", "modules", "FindTBB.cmake"),
+            """find_library(TBB_${_comp}_LIBRARY_DEBUG ${_comp}_debug""",
+            """find_library(TBB_${_comp}_LIBRARY_DEBUG ${_comp}""")
 
         if self.settings.os == "Linux":
             # see https://github.com/PixarAnimationStudios/USD/issues/1291
@@ -72,10 +78,22 @@ ENDIF()
                 "#if defined(ARCH_OS_LINUX) && defined(ARCH_COMPILER_GCC)",
                 "#if defined(ARCH_OS_LINUX) && (defined(ARCH_COMPILER_GCC) || defined(USD_FORCE_GNU_STL_EXTENSIONS))"
             )
+
             # Older GCC won't support this c++14 std::less with no argument.
             if (self.settings.compiler == "gcc" and Version(str(self.settings.compiler.version)) < 8.0):
                 tools.replace_in_file("%s/pxr/base/vt/dictionary.h" % self._source_subfolder,
                 """typedef std::map<std::string, VtValue, std::less<>> _Map;""", """typedef std::map<std::string, VtValue> _Map;""")
+        
+        # Hack to use Rumba's render buffers in Hydra without copy/duplication
+        tools.replace_in_file(
+            os.path.join(self._source_subfolder, "pxr", "imaging", "hgiGL", "texture.h"),
+            """~HgiGLTexture() override;""",
+            """~HgiGLTexture() override;
+
+    /// The three following lines are added to use Rumba textures in Hydra
+    HgiGLTexture( const HgiTextureDesc& desc, uint32_t texture_id ) : HgiTexture( desc ), _textureId{ texture_id } {}
+    void setDescriptor( const HgiTextureDesc& desc ) { _descriptor = desc; }
+    void setTextureId( uint32_t id ) { _textureId = id; }""")
 
         # Fix FindMaterialX
         tools.replace_in_file("%s/cmake/modules/FindMaterialX.cmake" % self._source_subfolder, """documents/Libraries""", """libraries/stdlib""")
