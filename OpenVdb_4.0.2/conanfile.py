@@ -52,8 +52,6 @@ include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
 set(BOOST_ROOT ${CONAN_BOOST_ROOT})
 set(BOOST_LIBRARYDIR ${CONAN_BOOST_ROOT}/lib)
-set(GLEW_LOCATION ${CONAN_GLEW_ROOT})
-set(GLFW_LOCATION ${CONAN_GLFW_ROOT})
 set(TBB_LOCATION ${CONAN_TBB_ROOT})
 set(ILMBASE_LOCATION ${CONAN_OPENEXR_ROOT})
 set(OPENEXR_LOCATION ${CONAN_OPENEXR_ROOT})
@@ -74,6 +72,21 @@ set(OPENVDB_BUILD_VDB_VIEW OFF)
             "COMPILE_FLAGS \"-DOPENVDB_USE_BLOSC ${OPENVDB_USE_GLFW_FLAG} -DGL_GLEXT_PROTOTYPES=1 $<$<CXX_COMPILER_ID:MSVC>:/bigobj>\"")
 
         # Disable VdbViewer
+        tools.replace_in_file("openvdb-%s/openvdb/CMakeLists.txt" % self.version,
+            """IF ( USE_GLFW3 )""",
+            """IF (OPENVDB_BUILD_VDB_VIEW AND NOT WIN32)
+IF ( USE_GLFW3 )""")
+        tools.replace_in_file("openvdb-%s/openvdb/CMakeLists.txt" % self.version,
+            """SET ( GLFW_INCLUDE_DIRECTORY  ${GLFW_INCLUDE_DIR} CACHE STRING "GLFW include directory")
+ENDIF ()""",
+            """SET ( GLFW_INCLUDE_DIRECTORY  ${GLFW_INCLUDE_DIR} CACHE STRING "GLFW include directory")
+ENDIF ()
+ENDIF ()""")
+        tools.replace_in_file("openvdb-%s/openvdb/CMakeLists.txt" % self.version,
+            """FIND_PACKAGE ( GLEW REQUIRED )""",
+            """IF (OPENVDB_BUILD_VDB_VIEW)
+FIND_PACKAGE ( GLEW REQUIRED )
+ENDIF()""")
         tools.replace_in_file("openvdb-%s/openvdb/CMakeLists.txt" % self.version,
             "IF (NOT WIN32)",
             "IF (OPENVDB_BUILD_VDB_VIEW AND NOT WIN32)")
