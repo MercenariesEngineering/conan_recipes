@@ -16,8 +16,9 @@ class USDConan(ConanFile):
     exports_sources = "CMakeLists.txt"
     generators = "cmake"
     short_paths = True
-    recipe_version = "3"
     _source_subfolder = "source_subfolder"
+
+    recipe_version="v4"
 
     def requirements(self):
         """Define runtime requirements."""
@@ -63,8 +64,12 @@ ENDIF()
         tools.replace_in_file("%s/cmake/defaults/msvcdefaults.cmake" % self._source_subfolder, """_add_define("BOOST_ALL_DYN_LINK")""", "")
         # Nope, openEXR is not necessarily built as a dll. If it actually is, it will be added back by OpenEXR recipe anyway.
         tools.replace_in_file("%s/cmake/defaults/msvcdefaults.cmake" % self._source_subfolder, """_add_define("OPENEXR_DLL")""", "")
-        # Alembic plugin needs to link against OpenExr Math library.
-        tools.replace_in_file("%s/pxr/usd/plugin/usdAbc/CMakeLists.txt" % self._source_subfolder, """${OPENEXR_Half_LIBRARY}""", "${OPENEXR_Half_LIBRARY} ${OPENEXR_Imath_LIBRARY}")
+        # Alembic plugin needs to link against OpenExr libraries.
+        tools.replace_in_file("%s/cmake/modules/FindOpenEXR.cmake" % self._source_subfolder, "IlmThread", "IlmThread IlmImfUtil IexMath")
+        tools.replace_in_file("%s/pxr/usd/plugin/usdAbc/CMakeLists.txt" % self._source_subfolder, 
+            """${OPENEXR_Iex_LIBRARY}
+        ${OPENEXR_Half_LIBRARY}""", 
+        "${OPENEXR_Half_LIBRARY} ${OPENEXR_Imath_LIBRARY} ${OPENEXR_Iex_LIBRARY} ${OPENEXR_IexMath_LIBRARY}")
         # Help Usd use our TBB package in debug
         tools.replace_in_file(
             os.path.join(self._source_subfolder, "cmake", "modules", "FindTBB.cmake"),

@@ -57,6 +57,7 @@
 #conan upload OpenImageIO/2.1.15.0@mercseng/v0                                   -r mercseng --all --confirm
 #conan upload OpenSSL/1.1.1g@mercseng/v0                                         -r mercseng --all --confirm
 #conan upload OpenSubdiv/3.4.3@mercseng/v0                                       -r mercseng --all --confirm
+#conan upload OpenVdb/4.0.2@mercseng/v0                                          -r mercseng --all --confirm
 #conan upload OpenVdb/6.2.1@mercseng/v0                                          -r mercseng --all --confirm
 #conan upload partio/1.7.4@mercseng/v0                                           -r mercseng --all --confirm
 #conan upload pcre2/10.33@mercseng/v0                                            -r mercseng --all --confirm
@@ -75,7 +76,7 @@
 #conan upload sqlite3/3.32.3@mercseng/v0                                         -r mercseng --all --confirm
 #conan upload tbb/2020.02@mercseng/v1                                            -r mercseng --all --confirm
 #conan upload unistd/1.0@mercseng/v0                                             -r mercseng --all --confirm
-#conan upload USD/20.05@mercseng/v3                                              -r mercseng --all --confirm
+#conan upload USD/20.05@mercseng/v4                                              -r mercseng --all --confirm
 #conan upload winflexbison/2.5.22@mercseng/v0                                    -r mercseng --all --confirm
 #conan upload wxwidgets/2.8.12@mercseng/v0                                       -r mercseng --all --confirm
 #conan upload zlib/1.2.11@mercseng/v0                                            -r mercseng --all --confirm
