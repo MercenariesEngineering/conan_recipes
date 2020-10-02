@@ -57,6 +57,7 @@
 #conan upload OpenImageIO/2.1.15.0@mercseng/v0                                   -r mercseng --all --confirm
 #conan upload OpenSSL/1.1.1g@mercseng/v0                                         -r mercseng --all --confirm
 #conan upload OpenSubdiv/3.4.3@mercseng/v0                                       -r mercseng --all --confirm
+#conan upload OpenVdb/4.0.2@mercseng/v0                                          -r mercseng --all --confirm
 #conan upload OpenVdb/6.2.1@mercseng/v0                                          -r mercseng --all --confirm
 #conan upload partio/1.7.4@mercseng/v0                                           -r mercseng --all --confirm
 #conan upload pcre2/10.33@mercseng/v0                                            -r mercseng --all --confirm
