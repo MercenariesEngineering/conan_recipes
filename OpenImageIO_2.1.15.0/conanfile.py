@@ -29,6 +29,7 @@ class OpenimageioConan(ConanFile):
         self.requires("OpenEXR/2.5.1@mercseng/v0")
         self.requires("tbb/2020.02@mercseng/v2")
         self.requires("zlib/1.2.11@mercseng/v0")
+        self.requires("FFmpeg/4.3.1@mercseng/v0")
 
     def config_options(self):
         """fPIC is linux only."""
@@ -76,7 +77,7 @@ class OpenimageioConan(ConanFile):
             "USE_Qt5": False,
             "USE_Libsquish": False,
             "USE_OpenJpeg": False,
-            "USE_FFmpeg": False,
+            "USE_FFmpeg": True,
             "USE_GIF": False,
             "USE_JPEGTurbo": True,
 
