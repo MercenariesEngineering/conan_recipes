@@ -60,3 +60,11 @@ make install
             """.format(tools.unix_path(self._source_subfolder), self.configure_options, tools.unix_path(self.package_folder)))
             f.close()
             self.run("bash.exe build.sh")
+
+    def package_info(self):
+        """Edit package info."""
+        self.cpp_info.libs = tools.collect_libs(self)
+        if self.settings.os == "Windows":
+            self.env_info.PATH.append(os.path.join( self.package_folder, "bin"))
+        else:
+            self.env_info.LD_LIBRARY_PATH.append(os.path.join(self.package_folder, "lib"))
