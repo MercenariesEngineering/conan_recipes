@@ -81,6 +81,7 @@ class OpenimageioConan(ConanFile):
             "USE_GIF": False,
             "USE_JPEGTurbo": True,
 
+            "FFmpeg_ROOT": "%s/bin" % self.deps_cpp_info["FFmpeg"].rootpath,
             "JPEGTurbo_ROOT": self.deps_cpp_info["libjpeg-turbo"].rootpath,
             "JPEG_NAMES": "turbojpeg-static.lib" if self.settings.os == "Windows" else "libturbojpeg.a",
             "BOOST_ROOT": self.deps_cpp_info["boost"].rootpath,
