@@ -106,6 +106,7 @@ CheckRecipe sqlite3/3.32.3@mercseng/v0
 CheckRecipe tbb/2020.02@mercseng/v1
 CheckRecipe unistd/1.0@mercseng/v0
 CheckRecipe USD/20.05@mercseng/v4
+CheckRecipe USD/20.11@mercseng/v0
 CheckRecipe winflexbison/2.5.22@mercseng/v0
 CheckRecipe wxwidgets/2.8.12@mercseng/v0
 CheckRecipe zlib/1.2.11@mercseng/v0

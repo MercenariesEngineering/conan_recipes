@@ -76,6 +76,7 @@
 #conan export  tbb_2020.02/conanfile.py                         tbb/2020.02@mercseng/v1
 #conan export  unistd_1.0/conanfile.py                         unistd/1.0@mercseng/v0
 #conan export  USD_20.05/conanfile.py                           USD/20.05@mercseng/v4
+#conan export  USD_20.11/conanfile.py                           USD/20.11@mercseng/v0
 #conan export  winflexbison_2.5.22/conanfile.py                 winflexbison/2.5.22@mercseng/v0
 #conan export  wxwidgets_2.8.12/conanfile.py                    wxwidgets/2.8.12@mercseng/v0
 #conan export  zlib_1.2.11/conanfile.py                         zlib/1.2.11@mercseng/v0
