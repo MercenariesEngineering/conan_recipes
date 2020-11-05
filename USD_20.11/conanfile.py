@@ -11,12 +11,12 @@ class USDConan(ConanFile):
     description = "Universal scene description"
     license = "Modified Apache 2.0 License"
     settings = "os", "compiler", "build_type", "arch"
-    options = {"shared": [True, False], "fPIC": [True, False], "debug_symbols": [True, False]}
-    default_options = "shared=True", "fPIC=True", "debug_symbols=False", "*:shared=False", "tbb:shared=True", "*:fPIC=True", "boost:i18n_backend=icu", "boost:zstd=True", "boost:lzma=True"
+    options = {"shared": [True, False], "fPIC": [True, False], "debug_symbols": [True, False], "use_imaging": [True, False]}
+    default_options = "shared=True", "fPIC=True", "debug_symbols=False", "debug_symbols=True", "*:shared=False", "tbb:shared=True", "*:fPIC=True", "boost:i18n_backend=icu", "boost:zstd=True", "boost:lzma=True"
     exports_sources = "CMakeLists.txt"
     generators = "cmake"
     short_paths = True
-    recipe_version = "0"
+    recipe_version = "1"
     _source_subfolder = "source_subfolder"
 
     def requirements(self):
@@ -29,12 +29,13 @@ class USDConan(ConanFile):
         self.requires("boost/1.73.0@mercseng/v0")
         self.requires("hdf5/1.10.6@mercseng/v0")
         self.requires("materialx/1.37.1@mercseng/v0")
-        self.requires("OpenColorIO/1.1.1@mercseng/v0")
-        self.requires("OpenImageIO/2.1.15.0@mercseng/v0")
+        if self.options.use_imaging:
+            self.requires("OpenColorIO/1.1.1@mercseng/v0")
+            self.requires("OpenImageIO/2.1.15.0@mercseng/v0")
+            self.requires("ptex/2.3.2@mercseng/v0")
         self.requires("OpenSubdiv/3.4.3@mercseng/v0")
         self.requires("tbb/2020.02@mercseng/v1")
         self.requires("zlib/1.2.11@mercseng/v0")
-        self.requires("ptex/2.3.2@mercseng/v0")
         self.requires("glu/9.0.1@mercseng/v0")
         self.requires("glew/2.1.0@mercseng/v0")
 
@@ -128,14 +129,14 @@ ENDIF()
             "PXR_BUILD_DRACO_PLUGIN": False,
             "PXR_BUILD_EMBREE_PLUGIN": False,
             "PXR_BUILD_HOUDINI_PLUGIN": False,
-            "PXR_BUILD_IMAGING":True,
+            "PXR_BUILD_IMAGING": self.options.use_imaging,
             "PXR_BUILD_KATANA_PLUGIN": False,
             "PXR_BUILD_MATERIALX_PLUGIN":True,
-            "PXR_BUILD_OPENCOLORIO_PLUGIN": True,
-            "PXR_BUILD_OPENIMAGEIO_PLUGIN": True,
+            "PXR_BUILD_OPENCOLORIO_PLUGIN": self.options.use_imaging,
+            "PXR_BUILD_OPENIMAGEIO_PLUGIN": self.options.use_imaging,
             "PXR_BUILD_PRMAN_PLUGIN": False,
             "PXR_BUILD_TESTS": False,
-            "PXR_BUILD_USD_IMAGING": True,
+            "PXR_BUILD_USD_IMAGING": self.options.use_imaging,
             "PXR_BUILD_USDVIEW": False,
             "PXR_ENABLE_GL_SUPPORT": True,
             "PXR_ENABLE_HDF5_SUPPORT":True,
