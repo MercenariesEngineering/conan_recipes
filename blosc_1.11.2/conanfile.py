@@ -18,18 +18,21 @@ class BloscConan(ConanFile):
     version = "1.11.2"
     license = "BSD"
     url = "https://github.com/zogi/conan-blosc.git"
-    requires = "zlib/1.2.11@conan/stable"
     generators = "cmake"
     settings = "os", "arch", "compiler", "build_type"
     options = { "shared": [True, False], "fPIC": [True, False] }
     default_options = "shared=False", "fPIC=True"
     exports = ["FindBlosc.cmake", "fix-shared-lib-install.patch"]
     
+    def requirements(self):
+        """Define runtime requirements."""
+        self.requires("zlib/1.2.11@mercseng/v0")
+
     def config_options(self):
         if self.settings.os == "Windows":
             self.options.remove("fPIC")
 
-    def config(self):
+    def configure(self):
         if self.options.shared and ("fPIC" in self.options.fields):
             self.options.fPIC = True
 

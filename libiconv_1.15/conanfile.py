@@ -133,4 +133,6 @@ class LibiconvConan(ConanFile):
             self.cpp_info.libs = ['iconv.dll.lib']
         else:
             self.cpp_info.libs = ['iconv']
-        self.env_info.path.append(os.path.join(self.package_folder, "bin"))
+        self.env_info.PATH.append(os.path.join(self.package_folder, "bin"))
+        if self.options.shared and self.settings.os == "Linux":
+            self.env_info.LD_LIBRARY_PATH.append(os.path.join(self.package_folder, "lib"))        

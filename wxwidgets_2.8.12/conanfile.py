@@ -67,6 +67,8 @@ class wxWidgetsConan(ConanFile):
     }
     _source_subfolder = "source_subfolder"
 
+    recipe_version="v0"
+
     def config_options(self):
         if self.settings.os == 'Windows':
             del self.options.fPIC
@@ -104,20 +106,21 @@ class wxWidgetsConan(ConanFile):
                     installer.install(package)
 
     def requirements(self):
+        self.requires("freetype/2.10.2_with_Harfbuzz@mercseng/v0")
         if self.options.png == 'libpng':
-            self.requires.add('libpng/1.6.37@bincrafters/stable')
+            self.requires('libpng/1.6.37@mercseng/v0')
         if self.options.jpeg == 'libjpeg':
-            self.requires.add('libjpeg/9c@bincrafters/stable')
+            self.requires('libjpeg/9c@mercseng/v0')
         elif self.options.jpeg == 'libjpeg-turbo':
-            self.requires.add('libjpeg-turbo/1.5.2@pierousseau/stable')
+            self.requires('libjpeg-turbo/1.5.2@mercseng/v0')
         elif self.options.jpeg == 'mozjpeg':
-            self.requires.add('mozjpeg/3.3.1@bincrafters/stable')
+            self.requires('mozjpeg/3.3.1@mercseng/v0')
         if self.options.tiff == 'libtiff':
-            self.requires.add('libtiff/4.0.9@bincrafters/stable')
+            self.requires('libtiff/4.0.9@mercseng/v0')
         if self.options.zlib == 'zlib':
-            self.requires.add('zlib/1.2.11@conan/stable')
+            self.requires('zlib/1.2.11@mercseng/v0')
         if self.options.expat == 'expat':
-            self.requires.add('Expat/2.2.6@pix4d/stable')
+            self.requires('expat/2.2.9@mercseng/v0')
 
     def source(self):
         # https://github.com/wxWidgets/wxWidgets/releases/download/v2.8.12/wxWidgets-2.8.12.tar.gz
@@ -141,7 +144,14 @@ class wxWidgetsConan(ConanFile):
 
     def add_libraries_from_pc(self, library):
         pkg_config = tools.PkgConfig(library)
-        libs = [lib[2:] for lib in pkg_config.libs_only_l]  # cut -l prefix
+        
+        libs = []
+        # cut -l prefix
+        for lib in pkg_config.libs_only_l:
+          l = lib[2:]
+          if l != "freetype" or not self.options["freetype"].shared:
+            libs.append(l)
+
         lib_paths = [lib[2:] for lib in pkg_config.libs_only_L]  # cut -L prefix
         self.cpp_info.libs.extend(libs)
         self.cpp_info.libdirs.extend(lib_paths)

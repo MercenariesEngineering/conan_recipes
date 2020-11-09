@@ -17,7 +17,7 @@ class ZlibConan(ConanFile):
                    "(Also Free, Not to Mention Unencumbered by Patents)")
     settings = "os", "arch", "compiler", "build_type"
     options = {"shared": [True, False], "fPIC": [True, False], "minizip": [True, False]}
-    default_options = {'shared': False, 'fPIC': True, 'minizip': False}
+    default_options = {'shared': True, 'fPIC': True, 'minizip': False}
     topics = ("conan", "zlib", "compression", "zip")
     exports = ["LICENSE"]
     exports_sources = ["CMakeLists.txt", "CMakeLists_minizip.txt", "minizip.patch"]
@@ -53,8 +53,7 @@ class ZlibConan(ConanFile):
             configure_file = os.path.join(self._source_subfolder, "configure")
             st = os.stat(configure_file)
             os.chmod(configure_file, st.st_mode | stat.S_IEXEC)
-        if self.options.minizip:
-            tools.patch(patch_file="minizip.patch", base_path=self._source_subfolder)
+        tools.patch(patch_file="minizip.patch", base_path=self._source_subfolder)
 
     def build(self):
         self._build_zlib()
@@ -192,3 +191,10 @@ class ZlibConan(ConanFile):
             if self.options.shared:
                 self.cpp_info.defines.append('MINIZIP_DLL')
         self.cpp_info.libs.append('zlib' if self.settings.os == "Windows" else "z")
+        self.cpp_info.names["cmake_find_package"] = "ZLIB"
+        self.cpp_info.names["cmake_find_package_multi"] = "ZLIB"
+        if self.options.shared:
+            if self.settings.os == "Windows":
+                self.env_info.PATH.append(os.path.join( self.package_folder, "bin"))
+            else:
+                self.env_info.LD_LIBRARY_PATH.append(os.path.join(self.package_folder, "lib"))

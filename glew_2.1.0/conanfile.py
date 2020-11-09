@@ -7,23 +7,30 @@ class GlewConan(ConanFile):
     description = "The GLEW library"
     url = "http://github.com/bincrafters/conan-glew"
     homepage = "http://github.com/nigels-com/glew"
-    author = "Bincrafters <bincrafters@gmail.com>"
+    topics = ("conan", "glew", "opengl", "wrangler", "loader", "binding")
     license = "MIT"
-    exports = ["LICENSE.md"]
-    exports_sources = ["CMakeLists.txt", "FindGLEW.cmake"]
+    exports_sources = ["CMakeLists.txt", "FindGLEW.cmake.in", "vs16-release-fix.patch"]
     generators = "cmake"
     settings = "os", "arch", "build_type", "compiler"
-    options = {"shared": [True, False]}
-    default_options = {"shared": False}
+    options = {"shared": [True, False], "fPIC": [True, False]}
+    default_options = {"shared": False, "fPIC": True}
     _source_subfolder = "_source_subfolder"
+
+    def requirements(self):
+        self.requires("glu/9.0.1@mercseng/v0")
 
     def configure(self):
         del self.settings.compiler.libcxx
+        del self.settings.compiler.cppstd
+        if self.settings.os == "Windows":
+            del self.options.fPIC
 
     def source(self):
         release_name = "%s-%s" % (self.name, self.version)
         tools.get("{0}/releases/download/{1}/{1}.tgz".format(self.homepage, release_name), sha256="04de91e7e6763039bc11940095cd9c7f880baba82196a7765f727ac05a993c95")
         os.rename(release_name, self._source_subfolder)
+        # Fix build for Visual Studio 16 Release (issue #1087)
+        tools.patch(base_path=self._source_subfolder, patch_file="vs16-release-fix.patch")
         tools.replace_in_file("%s/build/cmake/CMakeLists.txt" % self._source_subfolder, "include(GNUInstallDirs)",
 """
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
@@ -34,7 +41,8 @@ include(GNUInstallDirs)
     def _configure_cmake(self):
         cmake = CMake(self)
         cmake.definitions["BUILD_UTILS"] = "OFF"
-        cmake.configure(source_folder="{}/build/cmake".format(self._source_subfolder))
+        cmake.definitions["CONAN_GLEW_DEFINITIONS"] = ";".join(self._glew_defines)
+        cmake.configure()
         return cmake
 
     def build(self):
@@ -85,12 +93,17 @@ include(GNUInstallDirs)
             else:
                 self.copy(pattern="*.a", dst="lib", keep_path=False)
 
+    @property
+    def _glew_defines(self):
+        defines = []
+        if self.settings.os == "Windows" and not self.options.shared:
+            defines.append("GLEW_STATIC")
+        return defines
+
     def package_info(self):
+        self.cpp_info.defines = self._glew_defines
         if self.settings.os == "Windows":
             self.cpp_info.libs = ['glew32']
-
-            if not self.options.shared:
-                self.cpp_info.defines.append("GLEW_STATIC")
 
             if self.settings.compiler == "Visual Studio":
                 if not self.options.shared:
@@ -102,9 +115,12 @@ include(GNUInstallDirs)
         else:
             self.cpp_info.libs = ['GLEW']
             if self.settings.os == "Macos":
-                self.cpp_info.exelinkflags.append("-framework OpenGL")
-            elif not self.options.shared:
-                self.cpp_info.libs.append("GL")
+                self.cpp_info.frameworks = ["OpenGL"]
 
         if self.settings.build_type == "Debug":
             self.cpp_info.libs[0] += "d"
+        if self.options.shared:
+            if self.settings.os == "Windows":
+                self.env_info.PATH.append(os.path.join( self.package_folder, "bin"))
+            else:
+                self.env_info.LD_LIBRARY_PATH.append(os.path.join(self.package_folder, "lib"))

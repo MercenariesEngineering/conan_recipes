@@ -6,13 +6,21 @@ class OpenVdbConan(ConanFile):
     version = "4.0.2"
     license = ""
     url = "https://github.com/dreamworksanimation/openvdb"
-    build_requires = "glew/2.1.0@pierousseau/stable", "glfw/3.3@pierousseau/stable"
-    requires = "blosc/1.11.2@pierousseau/stable", "boost/1.64.0@conan/stable", "IlmBase/2.2.0@pierousseau/stable", "OpenEXR/2.2.0@pierousseau/stable", "TBB/2019_U6@pierousseau/stable", "zlib/1.2.11@conan/stable"
     description = "OpenVDB - Sparse volume data structure and tools http://www.openvdb.org/"
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False], "fPIC": [True, False]}
-    default_options = "shared=False", "fPIC=True", "TBB:shared=True", "blosc:shared=False","OpenEXR:shared=False","IlmBase:shared=False","zlib:shared=False", "boost:shared=False", "boost:without_filesystem=False", "boost:without_regex=False", "boost:without_system=False", "boost:without_thread=False"
+    default_options = "shared=False", "fPIC=True"
     generators = "cmake"
+
+    recipe_version="v0"
+
+    def requirements(self):
+        """Define runtime requirements."""
+        self.requires("blosc/1.11.2@mercseng/v0")
+        self.requires("boost/1.73.0@mercseng/v0")
+        self.requires("OpenEXR/2.5.1@mercseng/v0")
+        self.requires("tbb/2020.02@mercseng/v1")
+        self.requires("zlib/1.2.11@mercseng/v0")
 
     def config_options(self):
         if self.settings.os == "Windows":
@@ -44,12 +52,12 @@ include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
 set(BOOST_ROOT ${CONAN_BOOST_ROOT})
 set(BOOST_LIBRARYDIR ${CONAN_BOOST_ROOT}/lib)
-set(GLEW_LOCATION ${CONAN_GLEW_ROOT})
-set(GLFW_LOCATION ${CONAN_GLFW_ROOT})
 set(TBB_LOCATION ${CONAN_TBB_ROOT})
-set(ILMBASE_LOCATION ${CONAN_ILMBASE_ROOT})
+set(ILMBASE_LOCATION ${CONAN_OPENEXR_ROOT})
+set(OPENEXR_LOCATION ${CONAN_OPENEXR_ROOT})
 set(OPENVDB_BUILD_UNITTESTS OFF CACHE BOOL "unit tests")
 set(OPENVDB_DISABLE_BOOST_IMPLICIT_LINKING OFF CACHE BOOL "")
+set(OPENVDB_BUILD_VDB_VIEW OFF)
 %s
 """ % boost_libs)
 
@@ -63,18 +71,44 @@ set(OPENVDB_DISABLE_BOOST_IMPLICIT_LINKING OFF CACHE BOOL "")
             "COMPILE_FLAGS \"-DOPENVDB_USE_BLOSC ${OPENVDB_USE_GLFW_FLAG} -DGL_GLEXT_PROTOTYPES=1\"",
             "COMPILE_FLAGS \"-DOPENVDB_USE_BLOSC ${OPENVDB_USE_GLFW_FLAG} -DGL_GLEXT_PROTOTYPES=1 $<$<CXX_COMPILER_ID:MSVC>:/bigobj>\"")
 
-        tools.replace_in_file("openvdb-%s/cmake/FindGLEW.cmake" % self.version,
-            "FIND_LIBRARY ( GLEW_LIBRARY_PATH GLEW32 PATHS ${GLEW_LOCATION}/lib )",
-            """FIND_LIBRARY ( GLEW_LIBRARY_PATH GLEW32D PATHS ${GLEW_LOCATION}/lib )
-FIND_LIBRARY ( GLEW_LIBRARY_PATH GLEW32 PATHS ${GLEW_LOCATION}/lib )""")
+        # Disable VdbViewer
+        tools.replace_in_file("openvdb-%s/openvdb/CMakeLists.txt" % self.version,
+            """IF ( USE_GLFW3 )""",
+            """IF (OPENVDB_BUILD_VDB_VIEW AND NOT WIN32)
+IF ( USE_GLFW3 )""")
+        tools.replace_in_file("openvdb-%s/openvdb/CMakeLists.txt" % self.version,
+            """SET ( GLFW_INCLUDE_DIRECTORY  ${GLFW_INCLUDE_DIR} CACHE STRING "GLFW include directory")
+ENDIF ()""",
+            """SET ( GLFW_INCLUDE_DIRECTORY  ${GLFW_INCLUDE_DIR} CACHE STRING "GLFW include directory")
+ENDIF ()
+ENDIF ()""")
+        tools.replace_in_file("openvdb-%s/openvdb/CMakeLists.txt" % self.version,
+            """FIND_PACKAGE ( GLEW REQUIRED )""",
+            """IF (OPENVDB_BUILD_VDB_VIEW)
+FIND_PACKAGE ( GLEW REQUIRED )
+ENDIF()""")
+        tools.replace_in_file("openvdb-%s/openvdb/CMakeLists.txt" % self.version,
+            "IF (NOT WIN32)",
+            "IF (OPENVDB_BUILD_VDB_VIEW AND NOT WIN32)")
+        tools.replace_in_file("openvdb-%s/openvdb/CMakeLists.txt" % self.version,
+            "IF ( NOT WIN32 )",
+            "IF (OPENVDB_BUILD_VDB_VIEW AND NOT WIN32)")
 
-        tools.replace_in_file("openvdb-%s/cmake/FindGLFW.cmake" % self.version,
-            "SET( GLFW_glfw_LIBRARY ${GLFW_LIBRARY_PATH} CACHE STRING \"GLFW library\")",
-            """SET( GLFW_glfw_LIBRARY ${GLFW_LIBRARY_PATH})""")
-
-        tools.replace_in_file("openvdb-%s/cmake/FindGLFW.cmake" % self.version,
-            "FIND_LIBRARY ( GLFW_LIBRARY_PATH glfw PATHS ${GLFW_LOCATION}/lib ${GLFW_LOCATION}/lib64",
-            """FIND_LIBRARY ( GLFW_LIBRARY_PATH glfw3 PATHS ${GLFW_LOCATION}/lib ${GLFW_LOCATION}/lib64""")
+        # Find Half library
+        tools.replace_in_file("openvdb-%s/cmake/FindILMBase.cmake" % self.version,
+            """SET ( IEX_LIBRARY_NAME       Iex-${ILMBASE_VERSION_MAJOR}_${ILMBASE_VERSION_MINOR}       )""",
+            """SET ( IEX_LIBRARY_NAME       Iex-${ILMBASE_VERSION_MAJOR}_${ILMBASE_VERSION_MINOR}       )
+SET ( HALF_LIBRARY_NAME       Half-${ILMBASE_VERSION_MAJOR}_${ILMBASE_VERSION_MINOR}       )""")
+        tools.replace_in_file("openvdb-%s/cmake/FindILMBase.cmake" % self.version,
+            """SET ( IEX_LIBRARY_NAME       Iex       )""",
+            """SET ( IEX_LIBRARY_NAME       Iex       )
+SET ( HALF_LIBRARY_NAME       Half)""")
+        tools.replace_in_file("openvdb-%s/cmake/FindILMBase.cmake" % self.version,
+            """FIND_LIBRARY ( Ilmbase_HALF_LIBRARY Half PATHS ${ILMBASE_LIBRARYDIR} )""",
+            """FIND_LIBRARY ( Ilmbase_HALF_LIBRARY ${HALF_LIBRARY_NAME} PATHS ${ILMBASE_LIBRARYDIR} )""")
+        tools.replace_in_file("openvdb-%s/cmake/FindILMBase.cmake" % self.version,
+            """FIND_LIBRARY ( Ilmbase_HALF_LIBRARY Half PATHS ${ILMBASE_LIBRARYDIR}""",
+            """FIND_LIBRARY ( Ilmbase_HALF_LIBRARY ${HALF_LIBRARY_NAME} PATHS ${ILMBASE_LIBRARYDIR}""")
 
     def configure(self):
         pass
