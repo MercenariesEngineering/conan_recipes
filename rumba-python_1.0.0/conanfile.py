@@ -14,8 +14,10 @@ class PythonPackages(ConanFile):
         ("recommonmark", "0.6.0"),
         ("sphinx-rtd-theme", "0.4.3"),
         ("sphinx-markdown-tables", "0.0.10"),
-        ("pytest", "5.3.4")
+        ("pytest", "5.3.4"),
+        ("PyOpenGL", "3.1.5")
     ]
+    recipe_version = "1"
 
     def config_options(self):
         if self.settings.os == "Windows":
