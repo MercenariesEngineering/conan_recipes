@@ -14,10 +14,11 @@ class OpenimageioConan(ConanFile):
     exports_sources = "CMakeLists.txt"
     generators = "cmake"
     _source_subfolder = "source_subfolder"
+    recipe_version = "1"
 
     def requirements(self):
         """Define runtime requirements."""
-        self.requires("boost/1.73.0@mercseng/v0")
+        self.requires("boost/1.73.0@mercseng/v1")
         self.requires("bzip2/1.0.8@mercseng/v0")
         self.requires("freetype/2.10.2_with_Harfbuzz@mercseng/v0")
         self.requires("jbig/20160605@mercseng/v0")

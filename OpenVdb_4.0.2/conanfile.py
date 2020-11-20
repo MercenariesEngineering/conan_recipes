@@ -17,7 +17,7 @@ class OpenVdbConan(ConanFile):
     def requirements(self):
         """Define runtime requirements."""
         self.requires("blosc/1.11.2@mercseng/v0")
-        self.requires("boost/1.73.0@mercseng/v0")
+        self.requires("boost/1.73.0@mercseng/v1")
         self.requires("OpenEXR/2.5.1@mercseng/v0")
         self.requires("tbb/2020.02@mercseng/v1")
         self.requires("zlib/1.2.11@mercseng/v0")

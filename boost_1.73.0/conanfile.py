@@ -1,6 +1,6 @@
 from conans import ConanFile
 from conans import tools
-from conans.tools import Version, cppstd_flag
+from conans.tools import Version, cppstd_flag, which
 from conans.errors import ConanException
 
 from conans.errors import ConanInvalidConfiguration
@@ -43,8 +43,6 @@ class BoostConan(ConanFile):
         "fPIC": [True, False],
         "layout": ["system", "versioned", "tagged", "b2-default"],
         "magic_autolink": [True, False],  # enables BOOST_ALL_NO_LIB
-        "python_executable": "ANY",  # system default python installation is used, if None
-        "python_version": "ANY",  # major.minor; computed automatically, if None
         "namespace": "ANY",  # custom boost namespace for bcp, e.g. myboost
         "namespace_alias": [True, False],  # enable namespace alias for bcp, boost=myboost
         "multithreading": [True, False],  # enables multithreading support
@@ -70,8 +68,6 @@ class BoostConan(ConanFile):
         'fPIC': True,
         'layout': 'system',
         'magic_autolink': False,
-        'python_executable': 'None',
-        'python_version': 'None',
         'namespace': 'boost',
         'namespace_alias': False,
         'multithreading': True,
@@ -93,6 +89,7 @@ class BoostConan(ConanFile):
     short_paths = True
     no_copy_source = True
     exports_sources = ['patches/*']
+    recipe_version = "1"
 
     @property
     def _source_subfolder(self):
@@ -120,7 +117,7 @@ class BoostConan(ConanFile):
         obtain full path to the python interpreter executable
         :return: path to the python interpreter executable, either set by option, or system default
         """
-        exe = self.options.python_executable if self.options.python_executable else sys.executable
+        exe = which("python")
         return str(exe).replace('\\', '/')
 
     def config_options(self):
@@ -142,6 +139,7 @@ class BoostConan(ConanFile):
 
     def build_requirements(self):
         self.build_requires("b2/4.2.0@mercseng/v0")
+        self.build_requires("cpython/3.7.7@mercseng/v0")
 
     def requirements(self):
         if self._zip_bzip2_requires_needed:
@@ -164,16 +162,19 @@ class BoostConan(ConanFile):
             del self.info.options.debug_level
             del self.info.options.pch
             del self.info.options.python_executable  # PATH to the interpreter is not important, only version matters
-            if self.options.without_python:
-                del self.info.options.python_version
-            else:
-                self.info.options.python_version = self._python_version
 
     def source(self):
         tools.get(**self.conan_data["sources"][self.version])
         os.rename("boost_%s" % self.version.replace(".", "_"), self._source_subfolder)
         for patch in self.conan_data["patches"].get(self.version, []):
             tools.patch(**patch)
+        # https://github.com/boostorg/python/issues/280
+        tools.replace_in_file(
+            os.path.join(self._source_subfolder, "libs", "python", "src", "module.cpp"),
+            "handle_exception(init_function)",
+            "if(handle_exception(init_function)) return NULL;"
+        )
+
 
     ##################### BUILDING METHODS ###########################
 
@@ -238,17 +239,7 @@ class BoostConan(ConanFile):
 
     @property
     def _python_version(self):
-        """
-        obtain version of python interpreter
-        :return: python interpreter version, in format major.minor
-        """
-        version = self._run_python_script("from __future__ import print_function; "
-                                          "import sys; "
-                                          "print('%s.%s' % (sys.version_info[0], sys.version_info[1]))")
-        if self.options.python_version and version != self.options.python_version:
-            raise ConanInvalidConfiguration("detected python version %s doesn't match conan option %s" % (version,
-                                                                                          self.options.python_version))
-        return version
+        return "3.7"
 
     @property
     def _python_inc(self):
