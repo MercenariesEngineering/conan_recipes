@@ -14,7 +14,7 @@ class OpenimageioConan(ConanFile):
     exports_sources = "CMakeLists.txt"
     generators = "cmake"
     _source_subfolder = "source_subfolder"
-    recipe_version = "1"
+    recipe_version = "2"
 
     def requirements(self):
         """Define runtime requirements."""
@@ -27,7 +27,7 @@ class OpenimageioConan(ConanFile):
         self.requires("libtiff/4.0.9@mercseng/v0")
         self.requires("lzma/5.2.4@mercseng/v0")
         self.requires("OpenEXR/2.5.1@mercseng/v0")
-        self.requires("tbb/2020.02@mercseng/v1")
+        self.requires("tbb/2020.02@mercseng/v2")
         self.requires("zlib/1.2.11@mercseng/v0")
 
     def config_options(self):

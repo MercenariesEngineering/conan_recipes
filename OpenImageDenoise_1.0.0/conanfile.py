@@ -14,10 +14,11 @@ class OpenImageDenoiseConan(ConanFile):
     exports_sources = "CMakeLists.txt"
     generators = "cmake"
     _source_subfolder = "source_subfolder"
+    recipe_version="v2"
 
     def requirements(self):
         """Define runtime requirements."""
-        self.requires("tbb/2020.02@mercseng/v1")
+        self.requires("tbb/2020.02@mercseng/v2")
 
     def configure(self):
         """fPIC is linux only."""

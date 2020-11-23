@@ -14,7 +14,7 @@ class OpenEXRIdConan(ConanFile):
     def requirements(self):
         # From our recipes :
         self.requires("OpenEXR/2.5.1@mercseng/v0")
-        self.requires("OpenImageIO/2.1.15.0@mercseng/v0")
+        self.requires("OpenImageIO/2.1.15.0@mercseng/v2")
         self.requires("re2/2019-06-01@mercseng/v0")
         self.requires("zlib/1.2.11@mercseng/v0")
 

@@ -15,7 +15,7 @@ class OpenVdbConan(ConanFile):
     generators = "cmake"
     _source_subfolder = "source_subfolder"
 
-    recipe_version="v0"
+    recipe_version="v1"
 
     def requirements(self):
         """Define runtime requirements."""
@@ -23,7 +23,7 @@ class OpenVdbConan(ConanFile):
         self.requires("boost/1.73.0@mercseng/v1")
         self.requires("jemalloc/4.3.1@mercseng/v0")
         self.requires("OpenEXR/2.5.1@mercseng/v0")
-        self.requires("tbb/2020.02@mercseng/v1")
+        self.requires("tbb/2020.02@mercseng/v2")
         self.requires("zlib/1.2.11@mercseng/v0")
 
     def config_options(self):

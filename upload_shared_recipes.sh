@@ -12,7 +12,7 @@
 #conan upload cpython/3.7.7@mercseng/v0                                          -r mercseng --all --confirm
 #conan upload double-conversion/3.1.5@mercseng/v0                                -r mercseng --all --confirm
 #conan upload eigen/3.3.7@mercseng/v0                                            -r mercseng --all --confirm
-#conan upload embree/3.9.0@mercseng/v1                                           -r mercseng --all --confirm
+#conan upload embree/3.9.0@mercseng/v2                                           -r mercseng --all --confirm
 #conan upload expat/2.2.9@mercseng/v0                                            -r mercseng --all --confirm
 #conan upload FBX/2020.0.1@mercseng/v0                                           -r mercseng --all --confirm
 #conan upload flex/2.6.4@mercseng/v0                                             -r mercseng --all --confirm
@@ -53,12 +53,12 @@
 #conan upload OpenColorIO/1.1.1@mercseng/v0                                      -r mercseng --all --confirm
 #conan upload OpenEXR/2.5.1@mercseng/v0                                          -r mercseng --all --confirm
 #conan upload OpenExrId/1.0-beta.22@mercseng/v0                                  -r mercseng --all --confirm
-#conan upload OpenImageDenoise/1.0.0@mercseng/v1                                 -r mercseng --all --confirm
-#conan upload OpenImageIO/2.1.15.0@mercseng/v0                                   -r mercseng --all --confirm
+#conan upload OpenImageDenoise/1.0.0@mercseng/v2                                 -r mercseng --all --confirm
+#conan upload OpenImageIO/2.1.15.0@mercseng/v2                                   -r mercseng --all --confirm
 #conan upload OpenSSL/1.1.1g@mercseng/v0                                         -r mercseng --all --confirm
-#conan upload OpenSubdiv/3.4.3@mercseng/v0                                       -r mercseng --all --confirm
-#conan upload OpenVdb/4.0.2@mercseng/v0                                          -r mercseng --all --confirm
-#conan upload OpenVdb/6.2.1@mercseng/v0                                          -r mercseng --all --confirm
+#conan upload OpenSubdiv/3.4.3@mercseng/v1                                       -r mercseng --all --confirm
+#conan upload OpenVdb/4.0.2@mercseng/v1                                          -r mercseng --all --confirm
+#conan upload OpenVdb/6.2.1@mercseng/v1                                          -r mercseng --all --confirm
 #conan upload partio/1.7.4@mercseng/v0                                           -r mercseng --all --confirm
 #conan upload pcre2/10.33@mercseng/v0                                            -r mercseng --all --confirm
 #conan upload PortAudio/2018-12-24@mercseng/v0                                   -r mercseng --all --confirm
@@ -74,7 +74,7 @@
 #conan upload rumba-python-dev/1.0.0@mercseng/v0                                 -r mercseng --all --confirm
 #conan upload spdlog-rumba/1.5.0@mercseng/v0                                     -r mercseng --all --confirm
 #conan upload sqlite3/3.32.3@mercseng/v0                                         -r mercseng --all --confirm
-#conan upload tbb/2020.02@mercseng/v1                                            -r mercseng --all --confirm
+#conan upload tbb/2020.02@mercseng/v2                                            -r mercseng --all --confirm
 #conan upload unistd/1.0@mercseng/v0                                             -r mercseng --all --confirm
 #conan upload USD/20.05@mercseng/v4                                              -r mercseng --all --confirm
 #conan upload USD/20.11@mercseng/v1                                              -r mercseng --all --confirm
