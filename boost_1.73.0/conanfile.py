@@ -89,7 +89,7 @@ class BoostConan(ConanFile):
     short_paths = True
     no_copy_source = True
     exports_sources = ['patches/*']
-    recipe_version = "1"
+    recipe_version = "2"
 
     @property
     def _source_subfolder(self):
@@ -330,7 +330,9 @@ class BoostConan(ConanFile):
                 self.output.info('checking %s' % python_lib)
                 if os.path.isfile(python_lib):
                     self.output.info('found python library: %s' % python_lib)
-                    return python_lib.replace('\\', '/')
+                    # Fix msvc link issue with python
+                    # https://github.com/conan-io/conan-center-index/issues/2973
+                    return (libdir if tools.os_info.is_windows else python_lib).replace('\\', '/')
         raise ConanInvalidConfiguration("couldn't locate python libraries - make sure you have installed python development files")
 
     def _clean(self):
