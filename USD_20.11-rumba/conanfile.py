@@ -14,13 +14,13 @@ class USDConan(ConanFile):
     default_options = "shared=True", "fPIC=True", "debug_symbols=False", "*:shared=False", "tbb:shared=True", "*:fPIC=True", "boost:i18n_backend=icu", "boost:zstd=True", "boost:lzma=True"
     generators = "cmake"
     short_paths = True
-    recipe_version = "0"
+    recipe_version = "1"
     _source_subfolder = "source_subfolder"
 
     def requirements(self):
         """Define runtime requirements."""
         self.requires("Alembic/1.7.12@mercseng/v1")
-        self.requires("boost/1.73.0@mercseng/v1")
+        self.requires("boost/1.73.0@mercseng/v2")
         self.requires("hdf5/1.10.6@mercseng/v0")
         self.requires("materialx/1.37.1@mercseng/v0")
         self.requires("OpenColorIO/1.1.1@mercseng/v0")
@@ -44,7 +44,7 @@ class USDConan(ConanFile):
 
     def source(self):
         """Retrieve source code."""
-        hash_version = "79c2c4c9fa27ead1c07eece0e5c58d19045607b5"
+        hash_version = "406d22e3b53649e3975ebf75dc969286aa3e3f12"
         tools.get("https://github.com/tdelame/USD/archive/{}.zip".format(hash_version))
         os.rename("USD-{}".format(hash_version), self._source_subfolder)
  
