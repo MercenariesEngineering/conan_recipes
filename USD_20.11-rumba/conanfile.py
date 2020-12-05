@@ -11,7 +11,7 @@ class USDConan(ConanFile):
     license = "Modified Apache 2.0 License"
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False], "fPIC": [True, False], "debug_symbols": [True, False]}
-    default_options = "shared=True", "fPIC=True", "debug_symbols=False", "*:shared=False", "tbb:shared=True", "*:fPIC=True", "boost:i18n_backend=icu", "boost:zstd=True", "boost:lzma=True"
+    default_options = "shared=True", "fPIC=True", "debug_symbols=False", "*:shared=False", "glew:shared=True", "tbb:shared=True", "*:fPIC=True", "boost:i18n_backend=icu", "boost:zstd=True", "boost:lzma=True"
     generators = "cmake"
     short_paths = True
     recipe_version = "1"
@@ -44,7 +44,7 @@ class USDConan(ConanFile):
 
     def source(self):
         """Retrieve source code."""
-        hash_version = "406d22e3b53649e3975ebf75dc969286aa3e3f12"
+        hash_version = "988d665e8c01374bf579ca5c0f4c13cf50c2e6ab"
         tools.get("https://github.com/tdelame/USD/archive/{}.zip".format(hash_version))
         os.rename("USD-{}".format(hash_version), self._source_subfolder)
  
