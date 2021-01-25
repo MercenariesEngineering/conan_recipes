@@ -64,9 +64,9 @@
 #conan upload PortAudio/2018-12-24@mercseng/v0                                   -r mercseng --all --confirm
 #conan upload ptex/2.3.2@mercseng/v0                                             -r mercseng --all --confirm
 #conan upload pybind11/2.5.0@mercseng/v0                                         -r mercseng --all --confirm
-#conan upload PySide2/5.12.6@mercseng/v0                                         -r mercseng --all --confirm
+# conan upload PySide2/5.12.6@mercseng/v2                                         -r mercseng --all --confirm
 #conan upload python/2.6@mercseng/v0                                             -r mercseng --all --confirm
-#conan upload qt/5.12.6@mercseng/v0                                              -r mercseng --all --confirm
+# conan upload qt/5.12.6@mercseng/v1                                              -r mercseng --all --confirm
 #conan upload rapidjson/1.1.0@mercseng/v0                                        -r mercseng --all --confirm
 #conan upload re2/2019-06-01@mercseng/v0                                         -r mercseng --all --confirm
 #conan upload readline/8.0@mercseng/v0                                           -r mercseng --all --confirm
@@ -78,6 +78,7 @@
 #conan upload unistd/1.0@mercseng/v0                                             -r mercseng --all --confirm
 #conan upload USD/20.05@mercseng/v4                                              -r mercseng --all --confirm
 #conan upload USD/20.11@mercseng/v1                                              -r mercseng --all --confirm
+# conan upload USD/20.11-rumba@mercseng/v2                                        -r mercseng --all --confirm
 #conan upload winflexbison/2.5.22@mercseng/v0                                    -r mercseng --all --confirm
 #conan upload wxwidgets/2.8.12@mercseng/v0                                       -r mercseng --all --confirm
 #conan upload zlib/1.2.11@mercseng/v0                                            -r mercseng --all --confirm

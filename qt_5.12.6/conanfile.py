@@ -716,6 +716,7 @@ class QtConan(ConanFile):
     author = "Bincrafters <bincrafters@gmail.com>"
     exports = ["LICENSE.md", "qtmodules.conf", "*.diff"]
     settings = "os", "arch", "compiler", "build_type"
+    recipe_version = "1"
 
     options = dict({
         "shared": [True, False],
@@ -921,9 +922,6 @@ class QtConan(ConanFile):
         if self.options.with_sqlite3 and not self.options.multiconfiguration:
             self.requires("sqlite3/3.32.3@mercseng/v0")
             self.options["sqlite3"].enable_column_metadata = True
-
-        if self.options.with_libalsa:
-            self.requires("libalsa/1.2.2@mercseng/v0")
 
 
         if self.options.with_glib:

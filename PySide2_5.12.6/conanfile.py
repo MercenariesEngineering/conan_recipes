@@ -13,7 +13,7 @@ class PySide2(ConanFile):
     default_options = "shared=True", "fPIC=True"
     _source_subfolder = "source_subfolder"
     short_paths = True
-    recipe_version = "1"
+    recipe_version = "2"
 
     def build_requirements(self):
         """Define buid toolset."""
@@ -23,7 +23,7 @@ class PySide2(ConanFile):
 
     def requirements(self):
         """Define runtime requirements."""
-        self.requires("qt/5.12.6@mercseng/v0")
+        self.requires("qt/5.12.6@mercseng/v1")
         self.requires("OpenSSL/1.1.1g@mercseng/v0")
         self.requires("libxml2/2.9.9@mercseng/v0")
 

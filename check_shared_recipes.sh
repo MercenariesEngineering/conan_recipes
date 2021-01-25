@@ -93,9 +93,9 @@ CheckRecipe pcre2/10.33@mercseng/v0
 CheckRecipe PortAudio/2018-12-24@mercseng/v0
 CheckRecipe ptex/2.3.2@mercseng/v0
 CheckRecipe pybind11/2.5.0@mercseng/v0
-CheckRecipe PySide2/5.12.6@mercseng/v0
+CheckRecipe PySide2/5.12.6@mercseng/v2
 CheckRecipe python/2.6@mercseng/v0
-CheckRecipe qt/5.12.6@mercseng/v0
+CheckRecipe qt/5.12.6@mercseng/v1
 CheckRecipe rapidjson/1.1.0@mercseng/v0
 CheckRecipe re2/2019-06-01@mercseng/v0
 CheckRecipe readline/8.0@mercseng/v0

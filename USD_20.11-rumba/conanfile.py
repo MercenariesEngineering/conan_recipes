@@ -32,8 +32,8 @@ class USDConan(ConanFile):
         self.requires("glu/9.0.1@mercseng/v0")
         self.requires("glew/2.1.0@mercseng/v0")
         self.requires("cpython/3.7.7@mercseng/v0")
-        self.requires("qt/5.12.6@mercseng/v0")
-        self.requires("PySide2/5.12.6@mercseng/v1")
+        self.requires("qt/5.12.6@mercseng/v1")
+        self.requires("PySide2/5.12.6@mercseng/v2")
         self.requires("rumba-python/1.0.0@mercseng/v1")
 
 
@@ -120,3 +120,4 @@ class USDConan(ConanFile):
         
         self.env_info.PYTHONPATH.append(os.path.join(self.package_folder, "lib", "python"))
         self.env_info.PXR_PLUGINPATH_NAME = os.path.join(self.package_folder, "plugin", "usd")
+        self.env_info.PATH.append(os.path.join(self.package_folder, "bin"))
