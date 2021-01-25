@@ -1144,7 +1144,7 @@ QMAKE_CXX               = %s""" % (self.env["CC"], self.env["CXX"]))
         if not self.options.openssl:
             args += ["-no-openssl"]
         else:
-            if self.options["openssl"].shared:
+            if self.options["OpenSSL"].shared:
                 args += ["-openssl-runtime"]
             else:
                 args += ["-openssl-linked"]

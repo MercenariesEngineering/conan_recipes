@@ -34,11 +34,12 @@ class FFmpegConan(ConanFile):
 
             args = self.configure_options.split(" ")
             args.append('--prefix=%s' % self.package_folder)
-            args.append('--with-pic')
+            args.append('--enable-pic')
 
-            env_build.configure(args=args)
-            env_build.make()
-            env_build.make(args=['install'])
+            with tools.chdir(self._source_subfolder):
+                env_build.configure(args=args)
+                env_build.make()
+                env_build.make(args=['install'])
 
     def build_msvc(self):
         env_vars = tools.vcvars_dict(self)

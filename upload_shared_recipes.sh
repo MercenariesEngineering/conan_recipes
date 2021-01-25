@@ -15,6 +15,7 @@
 #conan upload embree/3.9.0@mercseng/v2                                           -r mercseng --all --confirm
 #conan upload expat/2.2.9@mercseng/v0                                            -r mercseng --all --confirm
 #conan upload FBX/2020.0.1@mercseng/v0                                           -r mercseng --all --confirm
+#conan upload FFmpeg/4.3.1@mercseng/v0                                           -r mercseng --all --confirm
 #conan upload flex/2.6.4@mercseng/v0                                             -r mercseng --all --confirm
 #conan upload fontstash/1.0.1@mercseng/v0                                        -r mercseng --all --confirm
 #conan upload freetype/2.10.2_with_Harfbuzz@mercseng/v0                          -r mercseng --all --confirm   
@@ -32,7 +33,7 @@
 #conan upload jemalloc/4.3.1@mercseng/v0                                         -r mercseng --all --confirm
 #conan upload jom_installer/1.1.2@mercseng/v0                                    -r mercseng --all --confirm
 #conan upload libalsa/1.2.2@mercseng/v0                                          -r mercseng --all --confirm
-#conan upload libcurl/7.71.0@mercseng/v0                                         -r mercseng --all --confirm
+#conan upload libcurl/7.71.0@mercseng/v1                                         -r mercseng --all --confirm
 #conan upload libffi/3.3@mercseng/v0                                             -r mercseng --all --confirm
 #conan upload libiconv/1.15@mercseng/v0                                          -r mercseng --all --confirm
 #conan upload libjpeg-turbo/1.5.2@mercseng/v0                                    -r mercseng --all --confirm
@@ -64,9 +65,9 @@
 #conan upload PortAudio/2018-12-24@mercseng/v0                                   -r mercseng --all --confirm
 #conan upload ptex/2.3.2@mercseng/v0                                             -r mercseng --all --confirm
 #conan upload pybind11/2.5.0@mercseng/v0                                         -r mercseng --all --confirm
-# conan upload PySide2/5.12.6@mercseng/v2                                         -r mercseng --all --confirm
+#conan upload PySide2/5.12.6@mercseng/v2                                         -r mercseng --all --confirm
 #conan upload python/2.6@mercseng/v0                                             -r mercseng --all --confirm
-# conan upload qt/5.12.6@mercseng/v1                                              -r mercseng --all --confirm
+#conan upload qt/5.12.6@mercseng/v1                                              -r mercseng --all --confirm
 #conan upload rapidjson/1.1.0@mercseng/v0                                        -r mercseng --all --confirm
 #conan upload re2/2019-06-01@mercseng/v0                                         -r mercseng --all --confirm
 #conan upload readline/8.0@mercseng/v0                                           -r mercseng --all --confirm
@@ -78,7 +79,7 @@
 #conan upload unistd/1.0@mercseng/v0                                             -r mercseng --all --confirm
 #conan upload USD/20.05@mercseng/v4                                              -r mercseng --all --confirm
 #conan upload USD/20.11@mercseng/v1                                              -r mercseng --all --confirm
-# conan upload USD/20.11-rumba@mercseng/v2                                        -r mercseng --all --confirm
+#conan upload USD/20.11-rumba@mercseng/v2                                        -r mercseng --all --confirm
 #conan upload winflexbison/2.5.22@mercseng/v0                                    -r mercseng --all --confirm
 #conan upload wxwidgets/2.8.12@mercseng/v0                                       -r mercseng --all --confirm
 #conan upload zlib/1.2.11@mercseng/v0                                            -r mercseng --all --confirm
