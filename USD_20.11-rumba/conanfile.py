@@ -44,7 +44,7 @@ class USDConan(ConanFile):
 
     def source(self):
         """Retrieve source code."""
-        hash_version = "63ea9221ef647c3b8df721267a1ad10e0dd83b9b"
+        hash_version = "8aa1a2e90491dbc07e3594833f33228096c8251a"
         tools.get("https://github.com/MercenariesEngineering/USD/archive/{}.zip".format(hash_version))
         os.rename("USD-{}".format(hash_version), self._source_subfolder)
  
