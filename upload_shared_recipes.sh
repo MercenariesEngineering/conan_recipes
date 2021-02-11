@@ -78,7 +78,7 @@
 #conan upload unistd/1.0@mercseng/v0                                             -r mercseng --all --confirm
 #conan upload USD/20.05@mercseng/v4                                              -r mercseng --all --confirm
 #conan upload USD/20.11@mercseng/v1                                              -r mercseng --all --confirm
-# conan upload USD/20.11-rumba@mercseng/v2                                        -r mercseng --all --confirm
+#conan upload USD/20.11-rumba@mercseng/v3                                        -r mercseng --all --confirm
 #conan upload winflexbison/2.5.22@mercseng/v0                                    -r mercseng --all --confirm
 #conan upload wxwidgets/2.8.12@mercseng/v0                                       -r mercseng --all --confirm
 #conan upload zlib/1.2.11@mercseng/v0                                            -r mercseng --all --confirm
