@@ -7,7 +7,7 @@
 #conan upload blosc/1.11.2@mercseng/v0                                           -r mercseng --all --confirm
 #conan upload boost/1.73.0@mercseng/v0                                           -r mercseng --all --confirm
 #conan upload bzip2/1.0.8@mercseng/v0                                            -r mercseng --all --confirm
-#conan upload catch2/3.0.0@mercseng/v0                                           -r mercseng --all --confirm
+#conan upload catch2/3.0.0-preview3@mercseng/v0                                  -r mercseng --all --confirm
 #conan upload cmake/3.17.3@mercseng/v0                                           -r mercseng --all --confirm
 #conan upload cpython/3.7.7@mercseng/v0                                          -r mercseng --all --confirm
 #conan upload double-conversion/3.1.5@mercseng/v0                                -r mercseng --all --confirm
