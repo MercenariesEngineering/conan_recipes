@@ -13,6 +13,7 @@ class PySide2(ConanFile):
     default_options = "shared=True", "fPIC=True"
     _source_subfolder = "source_subfolder"
     short_paths = True
+    recipe_version = "2"
 
     def build_requirements(self):
         """Define buid toolset."""
@@ -22,7 +23,7 @@ class PySide2(ConanFile):
 
     def requirements(self):
         """Define runtime requirements."""
-        self.requires("qt/5.12.6@mercseng/v0")
+        self.requires("qt/5.12.6@mercseng/v1")
         self.requires("OpenSSL/1.1.1g@mercseng/v0")
         self.requires("libxml2/2.9.9@mercseng/v0")
 
@@ -112,6 +113,20 @@ class PySide2(ConanFile):
     def package(self):
         """Assemble the package."""
         self.copy(pattern="LICENSE.LGPLv3", dst="licenses", src=os.path.join(self.source_folder, self._source_subfolder))
+        if self.settings.os == "Linux":
+            # fix shebangs
+            python_shebang = "#!/usr/bin/env python3.7\n"
+            bin_directory = os.path.join(self.package_folder, "bin")
+            if os.path.exists(bin_directory):
+                with tools.chdir(bin_directory):
+                    for filename in [entry for entry in os.listdir(".") if os.path.isfile(entry)]:
+                        with open(filename, "r") as infile:
+                            lines = infile.readlines()
+                        
+                        if len(lines[0]) > 2 and lines[0].startswith("#!"):
+                            lines[0] = python_shebang
+                            with open(filename, "w") as outfile:
+                                outfile.writelines(lines)
 
     def package_info(self):
         """Edit package info."""

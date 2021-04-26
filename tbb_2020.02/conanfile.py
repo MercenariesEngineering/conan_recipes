@@ -11,6 +11,7 @@ class tbb(ConanFile):
     options = {"shared": [True, False], "fPIC": [True, False]}
     default_options = "shared=True", "fPIC=True"
     generators = "cmake"
+    recipe_version = "2"
 
     def configure(self):
         if self.settings.os == "Windows":
@@ -70,7 +71,7 @@ class tbb(ConanFile):
             # by cmake. The symlink is added to prevent the library loader to use the system one
             # if it exists or to fail if it doesn't.
             os.symlink(
-                os.path.join(self.package_folder, "lib", "libtbbmalloc.so"),
+                "libtbbmalloc.so", # has to be a relative path
                 os.path.join(self.package_folder, "lib", "libtbbmalloc.so.2"))
 
     def package_info(self):

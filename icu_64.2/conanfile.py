@@ -8,6 +8,7 @@ from conans.tools import Version
 
 class ICUBase(ConanFile):
     name = "icu"
+    version = "v1"
     homepage = "http://site.icu-project.org"
     license = "ICU"
     description = "ICU is a mature, widely used set of C/C++ and Java libraries " \
@@ -44,6 +45,7 @@ class ICUBase(ConanFile):
         if tools.os_info.is_windows and "CONAN_BASH_PATH" not in os.environ and \
                 tools.os_info.detect_windows_subsystem() != "msys2":
             self.build_requires("msys2/20190524")
+        self.build_requires("cpython/3.7.7@mercseng/v0")
 
     def source(self):
         tools.get(**self.conan_data["sources"][self.version])

@@ -14,10 +14,11 @@ class opensubdiv(ConanFile):
     exports_sources = "CMakeLists.txt"
     generators = "cmake"
     _source_subfolder = "source_subfolder"
+    recipe_version="v1"
     
     def requirements(self):
         """Define runtime requirements."""
-        self.requires("tbb/2020.02@mercseng/v1")
+        self.requires("tbb/2020.02@mercseng/v2")
         self.requires("zlib/1.2.11@mercseng/v0")
         if self.settings.os == "Linux":
             self.requires("glu/9.0.1@mercseng/v0")

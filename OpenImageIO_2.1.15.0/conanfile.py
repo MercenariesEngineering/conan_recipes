@@ -14,10 +14,11 @@ class OpenimageioConan(ConanFile):
     exports_sources = "CMakeLists.txt"
     generators = "cmake"
     _source_subfolder = "source_subfolder"
+    recipe_version = "2"
 
     def requirements(self):
         """Define runtime requirements."""
-        self.requires("boost/1.73.0@mercseng/v0")
+        self.requires("boost/1.73.0@mercseng/v1")
         self.requires("bzip2/1.0.8@mercseng/v0")
         self.requires("freetype/2.10.2_with_Harfbuzz@mercseng/v0")
         self.requires("jbig/20160605@mercseng/v0")
@@ -26,8 +27,9 @@ class OpenimageioConan(ConanFile):
         self.requires("libtiff/4.0.9@mercseng/v0")
         self.requires("lzma/5.2.4@mercseng/v0")
         self.requires("OpenEXR/2.5.1@mercseng/v0")
-        self.requires("tbb/2020.02@mercseng/v1")
+        self.requires("tbb/2020.02@mercseng/v2")
         self.requires("zlib/1.2.11@mercseng/v0")
+        self.requires("FFmpeg/4.3.1@mercseng/v0")
 
     def config_options(self):
         """fPIC is linux only."""
@@ -75,10 +77,11 @@ class OpenimageioConan(ConanFile):
             "USE_Qt5": False,
             "USE_Libsquish": False,
             "USE_OpenJpeg": False,
-            "USE_FFmpeg": False,
+            "USE_FFmpeg": True,
             "USE_GIF": False,
             "USE_JPEGTurbo": True,
 
+            "FFmpeg_ROOT": "%s/bin" % self.deps_cpp_info["FFmpeg"].rootpath,
             "JPEGTurbo_ROOT": self.deps_cpp_info["libjpeg-turbo"].rootpath,
             "JPEG_NAMES": "turbojpeg-static.lib" if self.settings.os == "Windows" else "libturbojpeg.a",
             "BOOST_ROOT": self.deps_cpp_info["boost"].rootpath,

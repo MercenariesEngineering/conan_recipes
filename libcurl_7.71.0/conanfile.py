@@ -14,6 +14,7 @@ class LibcurlConan(ConanFile):
     license = "MIT"
     exports_sources = ["lib_Makefile_add.am", "CMakeLists.txt"]
     generators = "cmake", "pkg_config"
+    recipe_version = "1"
 
     settings = "os", "arch", "compiler", "build_type"
     options = {"shared": [True, False],
@@ -100,7 +101,7 @@ class LibcurlConan(ConanFile):
         if self.options.with_openssl:
             # enforce shared linking due to openssl dependency
             if not tools.is_apple_os(self.settings.os) or not self.options.darwin_ssl:
-                self.options["openssl"].shared = self.options.shared
+                self.options["OpenSSL"].shared = self.options.shared
         if self.options.with_libssh2:
             if self.settings.compiler != "Visual Studio":
                 self.options["libssh2"].shared = self.options.shared

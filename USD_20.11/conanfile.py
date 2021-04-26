@@ -6,7 +6,6 @@ from conans.tools import Version
 class USDConan(ConanFile):
     name = "USD"
     version = "20.11"
-    license = ""
     url = "https://graphics.pixar.com/usd/docs/index.html"
     description = "Universal scene description"
     license = "Modified Apache 2.0 License"
@@ -16,7 +15,7 @@ class USDConan(ConanFile):
     exports_sources = "CMakeLists.txt"
     generators = "cmake"
     short_paths = True
-    recipe_version = "1"
+    recipe_version = "2"
     _source_subfolder = "source_subfolder"
 
     def requirements(self):
@@ -46,8 +45,9 @@ class USDConan(ConanFile):
 
     def source(self):
         """Retrieve source code."""
-        tools.get("https://github.com/PixarAnimationStudios/USD/archive/v%s.tar.gz" % self.version)
-        os.rename("USD-%s" % self.version, self._source_subfolder)
+        hash_version = "c2c75c801a6124fdf55436894fe77ba34f9f74a2"
+        tools.get("https://github.com/tdelame/USD/archive/{}.zip".format(hash_version))
+        os.rename("USD-{}".format(hash_version), self._source_subfolder)
  
         # point to HDF5
         tools.replace_in_file("%s/CMakeLists.txt" % self._source_subfolder, "project(usd)",
@@ -60,16 +60,9 @@ IF (DEFINED HDF5_ROOT)
 ENDIF()
 """)
 
-        # Keeping this would mess up dllimport directives in MSVC
-        tools.replace_in_file("%s/cmake/defaults/msvcdefaults.cmake" % self._source_subfolder, """_add_define("BOOST_ALL_DYN_LINK")""", "")
         # Nope, openEXR is not necessarily built as a dll. If it actually is, it will be added back by OpenEXR recipe anyway.
         tools.replace_in_file("%s/cmake/defaults/msvcdefaults.cmake" % self._source_subfolder, """_add_define("OPENEXR_DLL")""", "")
-        # Alembic plugin needs to link against OpenExr libraries.
-        tools.replace_in_file("%s/cmake/modules/FindOpenEXR.cmake" % self._source_subfolder, "IlmThread", "IlmThread IlmImfUtil IexMath")
-        tools.replace_in_file("%s/pxr/usd/plugin/usdAbc/CMakeLists.txt" % self._source_subfolder, 
-            """${OPENEXR_Iex_LIBRARY}
-        ${OPENEXR_Half_LIBRARY}""", 
-        "${OPENEXR_Half_LIBRARY} ${OPENEXR_Imath_LIBRARY} ${OPENEXR_Iex_LIBRARY} ${OPENEXR_IexMath_LIBRARY}")
+
         # Help Usd use our TBB package in debug
         tools.replace_in_file(
             os.path.join(self._source_subfolder, "cmake", "modules", "FindTBB.cmake"),
@@ -77,43 +70,11 @@ ENDIF()
             """find_library(TBB_${_comp}_LIBRARY_DEBUG ${_comp}""")
 
         if self.settings.os == "Linux":
-            # see https://github.com/PixarAnimationStudios/USD/issues/1291
-            tools.replace_in_file(
-                os.path.join(self._source_subfolder, "pxr", "base", "arch", "defines.h"),
-                "#if defined(ARCH_OS_LINUX) && defined(ARCH_COMPILER_GCC)",
-                "#if defined(ARCH_OS_LINUX) && (defined(ARCH_COMPILER_GCC) || defined(USD_FORCE_GNU_STL_EXTENSIONS))"
-            )
-
             # Older GCC won't support this c++14 std::less with no argument.
             if (self.settings.compiler == "gcc" and Version(str(self.settings.compiler.version)) < 8.0):
                 tools.replace_in_file("%s/pxr/base/vt/dictionary.h" % self._source_subfolder,
                 """typedef std::map<std::string, VtValue, std::less<>> _Map;""", """typedef std::map<std::string, VtValue> _Map;""")
 
-            # Not all compilers have the implementation for this std::max operator
-            tools.replace_in_file(
-                os.path.join(self._source_subfolder, "pxr", "imaging", "hgi", "types.cpp"),
-                "const int dim = std::max({dimensions[0], dimensions[1], dimensions[2]});",
-                "const int dim = std::max(dimensions[0], std::max(dimensions[1], dimensions[2]));")
-        
-        # Hack to use Rumba's render buffers in Hydra without copy/duplication
-        tools.replace_in_file(
-            os.path.join(self._source_subfolder, "pxr", "imaging", "hgiGL", "texture.h"),
-            """~HgiGLTexture() override;""",
-            """~HgiGLTexture() override;
-
-    /// The three following lines are added to reuse textures in Hydra
-    HgiGLTexture( const HgiTextureDesc& desc, uint32_t texture_id ) : HgiTexture( desc ), _textureId{ texture_id } {}
-    void setDescriptor( const HgiTextureDesc& desc ) { _descriptor = desc; }
-    void setTextureId( uint32_t id ) { _textureId = id; }""")
-
-        # Fix FindMaterialX
-        tools.replace_in_file("%s/cmake/modules/FindMaterialX.cmake" % self._source_subfolder, """documents/Libraries""", """libraries/stdlib""")
-
-        tools.replace_in_file(
-            "%s/pxr/usd/ar/packageUtils.cpp" % self._source_subfolder,
-            "#include \"pxr/pxr.h\"",
-            """#include "pxr/pxr.h"
-#include <algorithm>""")
 
         # Add a wrapper CMakeLists.txt file which initializes conan before executing the real CMakeLists.txt
         os.rename(os.path.join(self._source_subfolder, "CMakeLists.txt"), os.path.join(self._source_subfolder, "CMakeLists_original.txt"))
@@ -127,6 +88,7 @@ ENDIF()
             cmake.build_type = 'RelWithDebInfo'
 
         definition_dict = {
+            "Boost_USE_STATIC_LIBS": True,
             "BUILD_SHARED_LIBS":self.options.shared,
             "PXR_BUILD_ALEMBIC_PLUGIN":True,
             "PXR_BUILD_DOCUMENTATION": False,
