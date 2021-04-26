@@ -14,7 +14,7 @@ class USDConan(ConanFile):
     default_options = "shared=True", "fPIC=True", "debug_symbols=False", "*:shared=False", "glew:shared=True", "tbb:shared=True", "*:fPIC=True", "boost:i18n_backend=icu", "boost:zstd=True", "boost:lzma=True"
     generators = "cmake"
     short_paths = True
-    recipe_version = "1"
+    recipe_version = "3"
     _source_subfolder = "source_subfolder"
 
     def requirements(self):
@@ -44,8 +44,8 @@ class USDConan(ConanFile):
 
     def source(self):
         """Retrieve source code."""
-        hash_version = "988d665e8c01374bf579ca5c0f4c13cf50c2e6ab"
-        tools.get("https://github.com/tdelame/USD/archive/{}.zip".format(hash_version))
+        hash_version = "8aa1a2e90491dbc07e3594833f33228096c8251a"
+        tools.get("https://github.com/MercenariesEngineering/USD/archive/{}.zip".format(hash_version))
         os.rename("USD-{}".format(hash_version), self._source_subfolder)
  
     def _configure_cmake(self):
