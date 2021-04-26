@@ -157,8 +157,10 @@ class PythonPackages(ConanFile):
         ("pyinstaller", "3.6"),
         ("pytest", "5.3.4"),
         ("pylint", "2.4.4"),
-        ("doxypypy", "0.8.8.6")
+        ("doxypypy", "0.8.8.6"),
+        ("stdlib-list", "0.8.0")
     ]
+    exports_sources = "bootloader_Windows-64bit.zip"
     
     def config_options(self):
         if self.settings.os == "Windows":
@@ -193,6 +195,16 @@ class PythonPackages(ConanFile):
                 os.path.join(self.package_folder, "PyInstaller", "utils", "hooks", "qt.py"),
                 PYINSTALLER_PATCH_IN, 
                 PYINSTALLER_PATCH_OUT)
+
+        # Patch the bootloader with the provided one
+        if self.settings.os == "Windows":
+            boot_loader_path = os.path.join(self.package_folder, "PyInstaller", "bootloader")
+            boot_loader_win64_path = os.path.join(boot_loader_path, "Windows-64bit")
+            import shutil
+            shutil.rmtree(boot_loader_win64_path)
+            import zipfile
+            with zipfile.ZipFile("bootloader_Windows-64bit.zip", 'r') as zip_ref:
+                zip_ref.extractall(boot_loader_path)
 
     def package(self):
         """Assemble the package."""
