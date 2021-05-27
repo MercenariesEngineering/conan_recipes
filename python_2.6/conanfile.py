@@ -11,4 +11,7 @@ class pythonConan(ConanFile):
 
     def package(self):
         """Assemble the package."""
-        self.copy("*.h", src="dist/include", dst="include")
+        if self.settings.os != "Linux":
+            self.copy("*.h", src="dist/windows", dst="include")
+        else:
+            self.copy("*.h", src="dist/linux", dst="include")
