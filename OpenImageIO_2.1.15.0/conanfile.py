@@ -14,7 +14,7 @@ class OpenimageioConan(ConanFile):
     exports_sources = "CMakeLists.txt"
     generators = "cmake"
     _source_subfolder = "source_subfolder"
-    recipe_version = "2"
+    recipe_version = "3"
 
     def requirements(self):
         """Define runtime requirements."""
@@ -86,10 +86,10 @@ class OpenimageioConan(ConanFile):
             "JPEG_NAMES": "turbojpeg-static.lib" if self.settings.os == "Windows" else "libturbojpeg.a",
             "BOOST_ROOT": self.deps_cpp_info["boost"].rootpath,
             "BOOST_LIBRARYDIR": "%s/lib" % self.deps_cpp_info["boost"].rootpath,
-            "Boost_FILESYSTEM_LIBRARY": "boost_filesystem" if self.settings.os == "Windows" else "libboost_filesystem",
-            "Boost_REGEX_LIBRARY": "boost_regex" if self.settings.os == "Windows" else "libboost_regex",
-            "Boost_SYSTEM_LIBRARY": "boost_system" if self.settings.os == "Windows" else "libboost_system",
-            "Boost_THREAD_LIBRARY": "boost_thread" if self.settings.os == "Windows" else "libboost_thread",
+            "Boost_FILESYSTEM_LIBRARY": "boost_filesystem" if "boost_filesystem" in self.deps_cpp_info["boost"].libs else "libboost_filesystem",
+            "Boost_REGEX_LIBRARY": "boost_regex" if "boost_regex" in self.deps_cpp_info["boost"].libs else "libboost_regex",
+            "Boost_SYSTEM_LIBRARY": "boost_system" if "boost_system" in self.deps_cpp_info["boost"].libs else "libboost_system",
+            "Boost_THREAD_LIBRARY": "boost_thread" if "boost_thread" in self.deps_cpp_info["boost"].libs else "libboost_thread",
         }
 
         if (self.settings.compiler == "gcc" and self.settings.compiler.version == 4.1):

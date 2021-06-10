@@ -84,7 +84,7 @@ CheckRecipe OpenColorIO/1.1.1@mercseng/v0
 CheckRecipe OpenEXR/2.5.1@mercseng/v0
 CheckRecipe OpenExrId/1.0-beta.22@mercseng/v0
 CheckRecipe OpenImageDenoise/1.0.0@mercseng/v2
-CheckRecipe OpenImageIO/2.1.15.0@mercseng/v2
+CheckRecipe OpenImageIO/2.1.15.0@mercseng/v3
 CheckRecipe OpenSSL/1.1.1g@mercseng/v0
 CheckRecipe OpenSubdiv/3.4.3@mercseng/v1
 CheckRecipe OpenVdb/6.2.1@mercseng/v1
