@@ -1,8 +1,8 @@
 from conans import ConanFile, tools
 
 class pythonConan(ConanFile):
-    name = "python"
-    version = "2.6"
+    name = "python3"
+    version = "3.7"
     settings = "os"
     description = "Python is a programming language that lets you work quickly and integrate systems more effectively"
     url = "https://www.python.org/"

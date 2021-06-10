@@ -66,7 +66,8 @@
 #conan upload ptex/2.3.2@mercseng/v0                                             -r mercseng --all --confirm
 #conan upload pybind11/2.5.0@mercseng/v0                                         -r mercseng --all --confirm
 #conan upload PySide2/5.12.6@mercseng/v2                                         -r mercseng --all --confirm
-#conan upload python/2.6@mercseng/v0                                             -r mercseng --all --confirm
+#conan upload python/2.6@mercseng/v1                                             -r mercenaries --all --confirm
+#conan upload python3/3.7@mercseng/v0                                            -r mercenaries --all --confirm
 #conan upload qt/5.12.6@mercseng/v1                                              -r mercseng --all --confirm
 #conan upload rapidjson/1.1.0@mercseng/v0                                        -r mercseng --all --confirm
 #conan upload re2/2019-06-01@mercseng/v0                                         -r mercseng --all --confirm
