@@ -68,6 +68,7 @@ CheckRecipe libiconv/1.15@mercseng/v0
 CheckRecipe libjpeg-turbo/1.5.2@mercseng/v0
 CheckRecipe libpng/1.6.37@mercseng/v0
 CheckRecipe libsndfile/1.0.29@mercseng/v0
+CheckRecipe libsquish/1.10@mercseng/v1
 CheckRecipe libtiff/4.0.9@mercseng/v0
 CheckRecipe libunwind/1.3.1@mercseng/v0
 CheckRecipe libuuid/1.0.3@mercseng/v0

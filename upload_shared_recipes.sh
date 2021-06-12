@@ -39,6 +39,7 @@
 #conan upload libjpeg-turbo/1.5.2@mercseng/v0                                    -r mercseng --all --confirm
 #conan upload libpng/1.6.37@mercseng/v0                                          -r mercseng --all --confirm
 #conan upload libsndfile/1.0.29@mercseng/v0                                      -r mercseng --all --confirm
+#conan upload libsquish/1.10@mercseng/v1                                         -r mercenaries --all --confirm
 #conan upload libtiff/4.0.9@mercseng/v0                                          -r mercseng --all --confirm
 #conan upload libunwind/1.3.1@mercseng/v0                                        -r mercseng --all --confirm
 #conan upload libuuid/1.0.3@mercseng/v0                                          -r mercseng --all --confirm

@@ -38,6 +38,7 @@
 #conan export  libpng_1.6.37/conanfile.py                       libpng/1.6.37@mercseng/v0
 #conan export  libsndfile_1.0.29/conanfile.py                   libsndfile/1.0.29@mercseng/v0
 #conan export  libtiff_4.0.9/conanfile.py                       libtiff/4.0.9@mercseng/v0
+#conan export  libsquish_1.10/conanfile.py                       libsquish/1.10@mercseng/v1
 #conan export  libunwind_1.3.1/conanfile.py                     libunwind/1.3.1@mercseng/v0
 #conan export  libuuid_1.0.3/conanfile.py                       libuuid/1.0.3@mercseng/v0
 #conan export  libwebp_1.1.0/conanfile.py                       libwebp/1.1.0@mercseng/v0
