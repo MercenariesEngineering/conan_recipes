@@ -89,7 +89,7 @@ class BoostConan(ConanFile):
     short_paths = True
     no_copy_source = True
     exports_sources = ['patches/*']
-    recipe_version = "2"
+    recipe_version = "3"
 
     @property
     def _source_subfolder(self):
@@ -153,6 +153,8 @@ class BoostConan(ConanFile):
                 self.requires("zstd/1.4.5@mercseng/v0")
         if self.options.i18n_backend == 'icu':
             self.requires("icu/64.2@mercseng/v0")
+        if not self.options.without_python:
+            self.requires("cpython/3.7.7@mercseng/v0")
 
     def package_id(self):
         if self.options.header_only:

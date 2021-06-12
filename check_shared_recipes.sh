@@ -35,7 +35,7 @@ CheckRecipe Alembic/1.7.12@mercseng/v1
 CheckRecipe b2/4.2.0@mercseng/v0
 CheckRecipe bison/3.5.3@mercseng/v0
 CheckRecipe blosc/1.11.2@mercseng/v0
-CheckRecipe boost/1.73.0@mercseng/v0
+CheckRecipe boost/1.73.0@mercseng/v3
 CheckRecipe bzip2/1.0.8@mercseng/v0
 CheckRecipe catch2/3.0.0-preview3@mercseng/v0
 CheckRecipe cmake/3.17.3@mercseng/v0
