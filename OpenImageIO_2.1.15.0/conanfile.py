@@ -30,6 +30,7 @@ class OpenimageioConan(ConanFile):
         self.requires("tbb/2020.02@mercseng/v2")
         self.requires("zlib/1.2.11@mercseng/v0")
         self.requires("FFmpeg/4.3.1@mercseng/v0")
+        self.requires("unistd/1.0@mercseng/v0")
 
     def config_options(self):
         """fPIC is linux only."""
@@ -87,7 +88,6 @@ class OpenimageioConan(ConanFile):
             "BOOST_ROOT": self.deps_cpp_info["boost"].rootpath,
             "BOOST_LIBRARYDIR": "%s/lib" % self.deps_cpp_info["boost"].rootpath,
             "Boost_FILESYSTEM_LIBRARY": "boost_filesystem" if "boost_filesystem" in self.deps_cpp_info["boost"].libs else "libboost_filesystem",
-            "Boost_REGEX_LIBRARY": "boost_regex" if "boost_regex" in self.deps_cpp_info["boost"].libs else "libboost_regex",
             "Boost_SYSTEM_LIBRARY": "boost_system" if "boost_system" in self.deps_cpp_info["boost"].libs else "libboost_system",
             "Boost_THREAD_LIBRARY": "boost_thread" if "boost_thread" in self.deps_cpp_info["boost"].libs else "libboost_thread",
         }

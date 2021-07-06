@@ -26,9 +26,15 @@ class LibSquish( ConanFile ):
 
     version = "1.10"
     settings = "os", "arch", "compiler", "build_type"
-    options = { "shared": [ True, False ] }
-    default_options = { "shared": False }
+    options = { "shared": [ True, False ], "fPIC": [True, False] }
+    default_options = "shared=False", "fPIC=True"
     _source_subfolder = "source_subfolder"
+    recipe_version="v1"
+
+    def config_options(self):
+        """fPIC is linux only."""
+        if self.settings.os != "Linux":
+            self.options.remove("fPIC")
 
     def source( self ):
         sha = "c763145a30512c10450954b7a2b5b3a2f9a94e00"
@@ -43,11 +49,13 @@ class LibSquish( ConanFile ):
 
     def build( self ):
         cmake = CMake(self)
-        cmake.definitions['CMAKE_BUILD_TYPE'] = "Release"
+        #cmake.definitions['CMAKE_BUILD_TYPE'] = "Release"
 
         definition_dict = {
             "CMAKE_BUILD_TYPE": "Release"
         }
+        if ("fPIC" in self.options.fields and self.options.fPIC == True):
+            definition_dict["CMAKE_POSITION_INDEPENDENT_CODE"] = True
 
         cmake.configure(defs = definition_dict, source_dir=self._source_subfolder)
         cmake.build()

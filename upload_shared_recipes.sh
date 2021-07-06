@@ -5,7 +5,7 @@
 #conan upload b2/4.2.0@mercseng/v0                                               -r mercseng --all --confirm
 #conan upload bison/3.5.3@mercseng/v0                                            -r mercseng --all --confirm
 #conan upload blosc/1.11.2@mercseng/v0                                           -r mercseng --all --confirm
-#conan upload boost/1.73.0@mercseng/v0                                           -r mercseng --all --confirm
+#conan upload boost/1.73.0@mercseng/v3                                           -r mercenaries --all --confirm
 #conan upload bzip2/1.0.8@mercseng/v0                                            -r mercseng --all --confirm
 #conan upload catch2/3.0.0-preview3@mercseng/v0                                  -r mercseng --all --confirm
 #conan upload cmake/3.17.3@mercseng/v0                                           -r mercseng --all --confirm
@@ -39,6 +39,7 @@
 #conan upload libjpeg-turbo/1.5.2@mercseng/v0                                    -r mercseng --all --confirm
 #conan upload libpng/1.6.37@mercseng/v0                                          -r mercseng --all --confirm
 #conan upload libsndfile/1.0.29@mercseng/v0                                      -r mercseng --all --confirm
+#conan upload libsquish/1.10@mercseng/v1                                         -r mercenaries --all --confirm
 #conan upload libtiff/4.0.9@mercseng/v0                                          -r mercseng --all --confirm
 #conan upload libunwind/1.3.1@mercseng/v0                                        -r mercseng --all --confirm
 #conan upload libuuid/1.0.3@mercseng/v0                                          -r mercseng --all --confirm

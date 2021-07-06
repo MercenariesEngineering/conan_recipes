@@ -89,7 +89,7 @@ class BoostConan(ConanFile):
     short_paths = True
     no_copy_source = True
     exports_sources = ['patches/*']
-    recipe_version = "2"
+    recipe_version = "3"
 
     @property
     def _source_subfolder(self):
@@ -153,6 +153,8 @@ class BoostConan(ConanFile):
                 self.requires("zstd/1.4.5@mercseng/v0")
         if self.options.i18n_backend == 'icu':
             self.requires("icu/64.2@mercseng/v0")
+        if not self.options.without_python:
+            self.requires("cpython/3.7.7@mercseng/v0")
 
     def package_id(self):
         if self.options.header_only:
@@ -241,8 +243,7 @@ class BoostConan(ConanFile):
     def _python_version(self):
         return "3.7"
 
-    @property
-    def _python_inc(self):
+    def _get_python_sc_inc(self):
         """
         obtain the result of the "sysconfig.get_python_inc()" call
         :return: result of the "sysconfig.get_python_inc()" execution
@@ -250,6 +251,18 @@ class BoostConan(ConanFile):
         return self._run_python_script("from __future__ import print_function; "
                                        "import sysconfig; "
                                        "print(sysconfig.get_python_inc())")
+
+    def _get_python_du_inc(self):
+        """
+        obtain the result of the "sysconfig.get_python_inc()" call
+        :return: result of the "sysconfig.get_python_inc()" execution
+        """
+        return self._run_python_script("from __future__ import print_function; "
+                                       "import distutils.sysconfig; "
+                                       "print(distutils.sysconfig.get_python_inc())")
+
+    def _get_python_inc(self):
+        return self._get_python_sc_inc() or self._get_python_du_inc()
 
     @property
     def _python_abiflags(self):
@@ -271,7 +284,7 @@ class BoostConan(ConanFile):
         plat_include = self._get_python_path('platinclude')
         include_py = self._get_python_var('INCLUDEPY')
         include_dir = self._get_python_var('INCLUDEDIR')
-        python_inc = self._python_inc
+        python_inc = self._get_python_inc()
 
         candidates = [include,
                       plat_include,
@@ -296,6 +309,7 @@ class BoostConan(ConanFile):
         library = self._get_python_var("LIBRARY")
         ldlibrary = self._get_python_var("LDLIBRARY")
         libdir = self._get_python_var("LIBDIR")
+        data_libdir = self._get_python_path("data")+"/lib"
         multiarch = self._get_python_var("MULTIARCH")
         masd = self._get_python_var("multiarchsubdir")
         with_dyld = self._get_python_var("WITH_DYLD")
@@ -327,6 +341,14 @@ class BoostConan(ConanFile):
         for candidate in candidates:
             if candidate:
                 python_lib = os.path.join(libdir, candidate)
+                self.output.info('checking %s' % python_lib)
+                if os.path.isfile(python_lib):
+                    self.output.info('found python library: %s' % python_lib)
+                    # Fix msvc link issue with python
+                    # https://github.com/conan-io/conan-center-index/issues/2973
+                    return (libdir if tools.os_info.is_windows else python_lib).replace('\\', '/')
+
+                python_lib = os.path.join(data_libdir, candidate)
                 self.output.info('checking %s' % python_lib)
                 if os.path.isfile(python_lib):
                     self.output.info('found python library: %s' % python_lib)
