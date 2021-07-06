@@ -81,6 +81,7 @@ CheckRecipe nasm/2.13.02@mercseng/v0
 CheckRecipe ncurses/6.2@mercseng/v0
 CheckRecipe ninja/1.10.0@mercseng/v0
 CheckRecipe OpenColorIO/1.1.1@mercseng/v0
+CheckRecipe OpenColorIO/2.0@mercseng/v0
 CheckRecipe OpenEXR/2.5.1@mercseng/v0
 CheckRecipe OpenExrId/1.0-beta.22@mercseng/v0
 CheckRecipe OpenImageDenoise/1.0.0@mercseng/v2
@@ -94,6 +95,7 @@ CheckRecipe PortAudio/2018-12-24@mercseng/v0
 CheckRecipe ptex/2.3.2@mercseng/v0
 CheckRecipe pybind11/2.5.0@mercseng/v0
 CheckRecipe PySide2/5.12.6@mercseng/v2
+CheckRecipe pystring/1.1.3@mercseng/v0
 CheckRecipe python/2.6@mercseng/v0
 CheckRecipe qt/5.12.6@mercseng/v1
 CheckRecipe rapidjson/1.1.0@mercseng/v0
@@ -109,5 +111,6 @@ CheckRecipe USD/20.05@mercseng/v4
 CheckRecipe USD/20.11-rumba@mercseng/v4
 CheckRecipe winflexbison/2.5.22@mercseng/v0
 CheckRecipe wxwidgets/2.8.12@mercseng/v0
+CheckRecipe yaml-cpp/0.6.3@mercseng/v0
 CheckRecipe zlib/1.2.11@mercseng/v0
 CheckRecipe zstd/1.4.5@mercseng/v0

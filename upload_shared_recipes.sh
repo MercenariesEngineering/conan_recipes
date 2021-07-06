@@ -52,6 +52,7 @@
 #conan upload ncurses/6.2@mercseng/v0                                            -r mercseng --all --confirm
 #conan upload ninja/1.10.0@mercseng/v0                                           -r mercseng --all --confirm
 #conan upload OpenColorIO/1.1.1@mercseng/v0                                      -r mercseng --all --confirm
+#conan upload OpenColorIO/2.0@mercseng/v0                                         -r mercseng --all --confirm
 #conan upload OpenEXR/2.5.1@mercseng/v0                                          -r mercseng --all --confirm
 #conan upload OpenExrId/1.0-beta.22@mercseng/v0                                  -r mercseng --all --confirm
 #conan upload OpenImageDenoise/1.0.0@mercseng/v2                                 -r mercseng --all --confirm
@@ -66,6 +67,7 @@
 #conan upload ptex/2.3.2@mercseng/v0                                             -r mercseng --all --confirm
 #conan upload pybind11/2.5.0@mercseng/v0                                         -r mercseng --all --confirm
 #conan upload PySide2/5.12.6@mercseng/v2                                         -r mercseng --all --confirm
+#conan  upload pystring/1.1.3@mercseng/v0                                         -r mercseng --all --confirm
 #conan upload python/2.6@mercseng/v1                                             -r mercenaries --all --confirm
 #conan upload python3/3.7@mercseng/v0                                            -r mercenaries --all --confirm
 #conan upload qt/5.12.6@mercseng/v1                                              -r mercseng --all --confirm
@@ -83,5 +85,6 @@
 #conan upload USD/20.11-rumba@mercseng/v4                                        -r mercseng --all --confirm
 #conan upload winflexbison/2.5.22@mercseng/v0                                    -r mercseng --all --confirm
 #conan upload wxwidgets/2.8.12@mercseng/v0                                       -r mercseng --all --confirm
+#conan upload  yaml-cpp/0.6.3@mercseng/v0                                         -r mercseng --all --confirm
 #conan upload zlib/1.2.11@mercseng/v0                                            -r mercseng --all --confirm
 #conan upload zstd/1.4.5@mercseng/v0                                             -r mercseng --all --confirm
