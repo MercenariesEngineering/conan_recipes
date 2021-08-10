@@ -10,24 +10,27 @@ class USDConan(ConanFile):
     description = "Universal scene description"
     license = "Modified Apache 2.0 License"
     settings = "os", "compiler", "build_type", "arch"
-    options = {"shared": [True, False], "fPIC": [True, False], "debug_symbols": [True, False]}
-    default_options = "shared=True", "fPIC=True", "debug_symbols=False", "*:shared=False", "glew:shared=True", "tbb:shared=True", "*:fPIC=True", "boost:i18n_backend=icu", "boost:zstd=True", "boost:lzma=True"
+    options = {"shared": [True, False], "fPIC": [True, False], "debug_symbols": [True, False], "use_imaging": [True, False]}
+    default_options = "shared=True", "fPIC=True", "debug_symbols=False", "use_imaging=True", "*:shared=False", "glew:shared=True", "tbb:shared=True", "*:fPIC=True", "boost:i18n_backend=icu", "boost:zstd=True", "boost:lzma=True"
+    exports_sources = "CMakeLists.txt"
     generators = "cmake"
     short_paths = True
-    recipe_version = "4"
+    recipe_version = "5"
     _source_subfolder = "source_subfolder"
 
     def requirements(self):
         """Define runtime requirements."""
+
         self.requires("Alembic/1.7.12@mercseng/v1")
         self.requires("boost/1.73.0@mercseng/v2")
         self.requires("hdf5/1.10.6@mercseng/v0")
         self.requires("materialx/1.37.1@mercseng/v0")
-        self.requires("OpenColorIO/1.1.1@mercseng/v0")
-        self.requires("OpenImageIO/2.1.15.0@mercseng/v2")
-        self.requires("ptex/2.3.2@mercseng/v0")
-        self.requires("OpenSubdiv/3.4.3@mercseng/v1")
-        self.requires("tbb/2020.02@mercseng/v2")
+        if self.options.use_imaging:
+            self.requires("OpenColorIO/1.1.1@mercseng/v0")
+            self.requires("OpenImageIO/2.1.15.0@mercseng/v2")
+            self.requires("ptex/2.3.2@mercseng/v0")
+        self.requires("OpenSubdiv/3.4.3@mercseng/v0")
+        self.requires("tbb/2020.02@mercseng/v1")
         self.requires("zlib/1.2.11@mercseng/v0")
         self.requires("glu/9.0.1@mercseng/v0")
         self.requires("glew/2.1.0@mercseng/v0")
@@ -44,10 +47,11 @@ class USDConan(ConanFile):
 
     def source(self):
         """Retrieve source code."""
-        hash_version = "13bd97c2400a5d27925a0d56bd6bc9b4733ad5a6"
+        hash_version = "938f7f52ebc43c90247359b161ce751e08ab5592"
         tools.get("https://github.com/MercenariesEngineering/USD/archive/{}.zip".format(hash_version))
         os.rename("USD-{}".format(hash_version), self._source_subfolder)
  
+
     def _configure_cmake(self):
         """Configure CMake."""
         cmake = CMake(self)
@@ -56,8 +60,34 @@ class USDConan(ConanFile):
             cmake.build_type = 'RelWithDebInfo'
 
         definition_dict = {
-            "BUILD_SHARED_LIBS":self.options.shared,
+            "BUILD_SHARED_LIBS": self.options.shared,
+            "PXR_BUILD_ALEMBIC_PLUGIN": True,
+            "PXR_BUILD_DOCUMENTATION": False,
+            "PXR_BUILD_DRACO_PLUGIN": False,
+            "PXR_BUILD_EMBREE_PLUGIN": False,
+            "PXR_BUILD_HOUDINI_PLUGIN": False,
+            "PXR_BUILD_IMAGING": self.options.use_imaging,
+            "PXR_BUILD_KATANA_PLUGIN": False,
+            "PXR_BUILD_MATERIALX_PLUGIN": True,
+            "PXR_BUILD_OPENCOLORIO_PLUGIN": (self.options.use_imaging and (self.deps_cpp_info["OpenColorIO"].version[0] == '1')),       # OpenColorIO v2 is not compatible with this USD version.
+            "PXR_BUILD_OPENIMAGEIO_PLUGIN": self.options.use_imaging,
+            "PXR_BUILD_PRMAN_PLUGIN": False,
+            "PXR_BUILD_TESTS": False,
+            "PXR_BUILD_USD_IMAGING": self.options.use_imaging,
+            "PXR_BUILD_USDVIEW": ((self.settings.os == "Linux") and self.options.use_imaging),
+            "PXR_ENABLE_GL_SUPPORT": True,
+            "PXR_ENABLE_HDF5_SUPPORT": True,
+            "PXR_ENABLE_OPENVDB_SUPPORT": False,
+            "PXR_ENABLE_OSL_SUPPORT": False,
+            "PXR_ENABLE_PTEX_SUPPORT": True,
+            "PXR_ENABLE_PYTHON_SUPPORT": (self.settings.os == "Linux"),
+            "PXR_USE_PYTHON_3": True,
+            "Boost_USE_STATIC_LIBS": not self.options["boost"].shared,
+            "HDF5_USE_STATIC_LIBRARIES": not self.options["hdf5"].shared
         }
+
+        if self.options.use_imaging:
+            definition_dict["OIIO_LOCATION"] = self.deps_cpp_info["OpenImageIO"].rootpath
 
         # Boost default find package is not great... give it a hand.
         #boost_libs = ['atomic', 'chrono', 'container', 'context', 'contract', 'coroutine', 'date_time', 'exception', 'fiber', 'filesystem', 'graph', 'graph_parallel', 'iostreams', 'locale', 'log', 'math', 'mpi', 'program_options', 'python', 'random', 'regex', 'serialization', 'stacktrace', 'system', 'test', 'thread', 'timer', 'type_erasure', 'wave']
