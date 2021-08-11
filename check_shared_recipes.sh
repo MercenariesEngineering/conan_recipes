@@ -82,7 +82,7 @@ CheckRecipe nasm/2.13.02@mercseng/v0
 CheckRecipe ncurses/6.2@mercseng/v0
 CheckRecipe ninja/1.10.0@mercseng/v0
 CheckRecipe OpenColorIO/1.1.1@mercseng/v0
-CheckRecipe OpenColorIO/2.0@mercseng/v0
+CheckRecipe OpenColorIO/2.0@mercseng/v2
 CheckRecipe OpenEXR/2.5.1@mercseng/v0
 CheckRecipe OpenExrId/1.0-beta.22@mercseng/v0
 CheckRecipe OpenImageDenoise/1.0.0@mercseng/v2

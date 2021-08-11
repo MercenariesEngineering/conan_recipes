@@ -14,7 +14,7 @@ class OpenColorIOConan(ConanFile):
     exports_sources = "CMakeLists.txt"
     generators = "cmake"
     _source_subfolder = "source_subfolder"
-    recipe_version= "v1"
+    recipe_version= "v2"
 
     def requirements(self):
         """Define runtime requirements."""
@@ -39,6 +39,10 @@ class OpenColorIOConan(ConanFile):
         os.rename(os.path.join(self._source_subfolder, "CMakeLists.txt"), os.path.join(self._source_subfolder, "CMakeLists_original.txt"))
         shutil.copy("CMakeLists.txt", os.path.join(self._source_subfolder, "CMakeLists.txt"))
 
+        tools.replace_in_file(os.path.join(self._source_subfolder, "share", "cmake", "utils", "CppVersion.cmake"),
+                              r'set_property(CACHE CMAKE_CXX_STANDARD PROPERTY STRINGS "${SUPPORTED_CXX_STANDARDS}")',
+                              r'')
+        
     def cmake_definitions(self):
         """Setup CMake definitions."""
         definition_dict = {
@@ -90,7 +94,7 @@ class OpenColorIOConan(ConanFile):
         """Edit package info."""
         self.cpp_info.libs = tools.collect_libs(self)
         if (not self.options.shared):
-            self.cpp_info.defines = ["OpenColorIO_STATIC"]
+            self.cpp_info.defines = ["OpenColorIO_STATIC", "OpenColorIO_SKIP_IMPORTS"]
         if self.options.shared:
             if self.settings.os == "Windows":
                 self.env_info.PATH.append(os.path.join( self.package_folder, "bin"))
