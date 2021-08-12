@@ -13,7 +13,7 @@ class PySide2(ConanFile):
     default_options = "shared=True", "fPIC=True"
     _source_subfolder = "source_subfolder"
     short_paths = True
-    recipe_version = "2"
+    recipe_version = "3"
 
     def build_requirements(self):
         """Define buid toolset."""
@@ -50,6 +50,14 @@ class PySide2(ConanFile):
                 "QVersionNumber lastVersionNumber(1, 0, 0);",
                 "QVersionNumber lastVersionNumber(0, 0, 0);"
             )
+
+        tools.replace_in_file(
+            os.path.join(self._source_subfolder, "build_scripts", "main.py"),
+            """"include/python{}".format(py_version))""",
+            """"include/python{}".format(py_version))
+                if not os.path.exists(py_include_dir):
+                    py_include_dir = py_include_dir + get_config_var("ABIFLAGS")"""
+        )
 
         if self.settings.os == "Windows" and not "LLVM_INSTALL_DIR" in os.environ:
             if self.settings.compiler.version == 14:
