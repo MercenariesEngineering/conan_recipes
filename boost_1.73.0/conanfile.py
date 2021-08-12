@@ -89,7 +89,7 @@ class BoostConan(ConanFile):
     short_paths = True
     no_copy_source = True
     exports_sources = ['patches/*']
-    recipe_version = "3"
+    recipe_version = "4"
 
     @property
     def _source_subfolder(self):
@@ -308,7 +308,8 @@ class BoostConan(ConanFile):
         """
         library = self._get_python_var("LIBRARY")
         ldlibrary = self._get_python_var("LDLIBRARY")
-        libdir = self._get_python_var("LIBDIR")
+        #libdir = self._get_python_var("LIBDIR")
+        libdir = self.deps_cpp_info["cpython"].lib_paths[0]
         data_libdir = self._get_python_path("data")+"/lib"
         multiarch = self._get_python_var("MULTIARCH")
         masd = self._get_python_var("multiarchsubdir")
