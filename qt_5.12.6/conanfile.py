@@ -716,7 +716,7 @@ class QtConan(ConanFile):
     author = "Bincrafters <bincrafters@gmail.com>"
     exports = ["LICENSE.md", "qtmodules.conf", "*.diff"]
     settings = "os", "arch", "compiler", "build_type"
-    recipe_version = "1"
+    recipe_version = "2"
 
     options = dict({
         "shared": [True, False],
@@ -1331,6 +1331,24 @@ QMAKE_CXX               = %s""" % (self.env["CC"], self.env["CXX"]))
 
     def package(self):
         self.copy("bin/qt.conf", src="qtbase")
+
+
+        if self.settings.os == "Linux":
+          # Don't reference the build computer's libGL
+          tools.replace_in_file(os.path.join(self.package_folder,"lib/cmake/Qt5Gui/Qt5GuiConfigExtras.cmake"),
+            """_qt5gui_find_extra_libs(OPENGL""",
+            """set(Qt5Gui_GL_INCLUDE_DIRS "/usr/include/libdrm")
+find_library(Qt5Gui_GL_LIBRARY libGL.so)
+add_library(Qt5::Gui_GL SHARED IMPORTED)
+set_property(TARGET Qt5::Gui_GL APPEND PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${Qt5Gui_OPENGL_INCLUDE_DIRS})
+set_property(TARGET Qt5::Gui_GL APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
+_qt5_Gui_check_file_exists("${Qt5Gui_GL_LIBRARY}")
+set_property(TARGET Qt5::Gui_GL PROPERTY IMPORTED_LOCATION_RELEASE "${Qt5Gui_GL_LIBRARY}")
+unset(Qt5Gui_GL_LIBRARY CACHE)
+list(APPEND Qt5Gui_OPENGL_LIBRARIES Qt5::Gui_GL)
+
+#_qt5gui_find_extra_libs(OPENGL""")
+
 
     def package_id(self):
         # Backwards compatibility for cross_compile to not affect package_id
