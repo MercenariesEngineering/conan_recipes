@@ -98,7 +98,7 @@ CheckRecipe pybind11/2.5.0@mercseng/v0
 CheckRecipe PySide2/5.12.6@mercseng/v3
 CheckRecipe pystring/1.1.3@mercseng/v0
 CheckRecipe python/2.6@mercseng/v0
-CheckRecipe qt/5.12.6@mercseng/v2
+CheckRecipe qt/5.12.6@mercseng/v3
 CheckRecipe rapidjson/1.1.0@mercseng/v0
 CheckRecipe re2/2019-06-01@mercseng/v0
 CheckRecipe readline/8.0@mercseng/v0

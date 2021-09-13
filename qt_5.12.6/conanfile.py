@@ -716,7 +716,7 @@ class QtConan(ConanFile):
     author = "Bincrafters <bincrafters@gmail.com>"
     exports = ["LICENSE.md", "qtmodules.conf", "*.diff"]
     settings = "os", "arch", "compiler", "build_type"
-    recipe_version = "2"
+    recipe_version = "3"
 
     options = dict({
         "shared": [True, False],
@@ -987,7 +987,7 @@ class QtConan(ConanFile):
         tools.get(**self.conan_data["sources"][self.version])
         shutil.move("qt-everywhere-src-%s" % self.version, "qt5")
 
-        for patch in ["cc04651dea4c4678c626cb31b3ec8394426e2b25.diff", "99e43db7cea1c838993c151d2d40fc2874a94256.diff"]:
+        for patch in ["cc04651dea4c4678c626cb31b3ec8394426e2b25.diff", "99e43db7cea1c838993c151d2d40fc2874a94256.diff", "qt_glfont_patch.diff"]:
             tools.patch("qt5/qtbase", patch)
         for patch in ["a9cc8aa.diff"]:
             tools.patch("qt5/qtmultimedia", patch)
