@@ -45,6 +45,7 @@ CheckRecipe eigen/3.3.7@mercseng/v0
 CheckRecipe embree/3.9.0@mercseng/v2
 CheckRecipe expat/2.2.9@mercseng/v0
 CheckRecipe FBX/2020.0.1@mercseng/v0
+CheckRecipe FFmpeg/4.3.1@mercseng/v1
 CheckRecipe flex/2.6.4@mercseng/v0
 CheckRecipe fontstash/1.0.1@mercseng/v0
 CheckRecipe freetype/2.10.2_with_Harfbuzz@mercseng/v0
