@@ -5,7 +5,7 @@
 #conan upload b2/4.2.0@mercseng/v0                                               -r mercseng --all --confirm
 #conan upload bison/3.5.3@mercseng/v0                                            -r mercseng --all --confirm
 #conan upload blosc/1.11.2@mercseng/v0                                           -r mercseng --all --confirm
-#conan upload boost/1.73.0@mercseng/v4                                           -r mercenaries --all --confirm
+#conan upload boost/1.73.0@mercseng/v5                                           -r mercenaries --all --confirm
 #conan upload bzip2/1.0.8@mercseng/v0                                            -r mercseng --all --confirm
 #conan upload catch2/3.0.0-preview3@mercseng/v0                                  -r mercseng --all --confirm
 #conan upload cmake/3.17.3@mercseng/v0                                           -r mercseng --all --confirm
@@ -26,7 +26,7 @@
 #conan upload glu/9.0.1@mercseng/v0                                              -r mercseng --all --confirm
 #conan upload GSL/2.1.0@mercseng/v0                                              -r mercseng --all --confirm
 #conan upload hdf5/1.10.6@mercseng/v0                                            -r mercseng --all --confirm
-#conan upload icu/64.2@mercseng/v0                                               -r mercseng --all --confirm
+#conan upload icu/64.2@mercseng/v1                                               -r mercseng --all --confirm
 #conan upload ispc/1.13.0@mercseng/v0                                            -r mercseng --all --confirm
 #conan upload ispc/1.9.2@mercseng/v0                                             -r mercseng --all --confirm
 #conan upload jbig/20160605@mercseng/v0                                          -r mercseng --all --confirm
