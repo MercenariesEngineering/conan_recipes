@@ -12,6 +12,7 @@ class CpythonConan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False], "fPIC": [True, False], "optimizations": [True, False]}
     default_options = "shared=True", "fPIC=True", "optimizations=True"
+    recipe_version = "1"
 
     def requirements(self):
         """Define runtime requirements."""
@@ -76,8 +77,9 @@ class CpythonConan(ConanFile):
                         out_folder = {"x86_64": "amd64", "x86": "win32"}.get(str(self.settings.arch))
                         with tools.chdir(out_folder):
                             python_exe = "python_d.exe" if self.settings.build_type == "Debug" else "python.exe"
-                            self.run(python_exe + " -m ensurepip")
-                            self.run(python_exe + " -m pip install wheel")
+                            with tools.environment_append({"PYTHONHOME": None}):
+                                self.run(python_exe + " -m ensurepip")
+                                self.run(python_exe + " -m pip install wheel")
             else:
                 atools = AutoToolsBuildEnvironment(self)
                 args = [
@@ -104,7 +106,9 @@ class CpythonConan(ConanFile):
 
                 atools.configure(args=args)
                 atools.make()
-                self.run("python -m pip install wheel")
+                with tools.environment_append({"LD_LIBRARY_PATH": ["."]}):
+                    self.run("./python -m ensurepip")
+                    self.run("./python -m pip install wheel")
 
     def package(self):
         """Assemble the package."""

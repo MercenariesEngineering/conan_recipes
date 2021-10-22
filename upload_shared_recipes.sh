@@ -9,7 +9,7 @@
 #conan upload bzip2/1.0.8@mercseng/v0                                            -r mercseng --all --confirm
 #conan upload catch2/3.0.0-preview3@mercseng/v0                                  -r mercseng --all --confirm
 #conan upload cmake/3.17.3@mercseng/v0                                           -r mercseng --all --confirm
-#conan upload cpython/3.7.7@mercseng/v0                                          -r mercseng --all --confirm
+#conan upload cpython/3.7.7@mercseng/v1                                          -r mercenaries --all --confirm
 #conan upload double-conversion/3.1.5@mercseng/v0                                -r mercseng --all --confirm
 #conan upload eigen/3.3.7@mercseng/v0                                            -r mercseng --all --confirm
 #conan upload embree/3.9.0@mercseng/v2                                           -r mercseng --all --confirm
