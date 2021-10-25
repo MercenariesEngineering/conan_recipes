@@ -75,7 +75,7 @@ CheckRecipe libunwind/1.3.1@mercseng/v0
 CheckRecipe libuuid/1.0.3@mercseng/v0
 CheckRecipe libwebp/1.1.0@mercseng/v0
 CheckRecipe libxml2/2.9.9@mercseng/v0
-CheckRecipe llvm/3.5.1@mercseng/v0
+CheckRecipe llvm/3.5.1@mercseng/v1
 CheckRecipe lzma/5.2.4@mercseng/v0
 CheckRecipe m4/1.4.18@mercseng/v0
 CheckRecipe materialx/1.37.1@mercseng/v0
@@ -101,7 +101,7 @@ CheckRecipe pystring/1.1.3@mercseng/v0
 CheckRecipe python/2.6@mercseng/v0
 CheckRecipe qt/5.12.6@mercseng/v3
 CheckRecipe rapidjson/1.1.0@mercseng/v0
-CheckRecipe re2/2019-06-01@mercseng/v0
+CheckRecipe re2/2019-06-01@mercseng/v1
 CheckRecipe readline/8.0@mercseng/v0
 CheckRecipe rumba-python/1.0.0@mercseng/v0
 CheckRecipe rumba-python-dev/1.0.0@mercseng/v0

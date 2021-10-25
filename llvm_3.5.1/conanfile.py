@@ -12,7 +12,9 @@ class LlvmConan(ConanFile):
     default_options = "shared=False", "fPIC=True"
     generators = "cmake"
     exports = ["llvm_3.5.1.diff"]
+    exports_sources = "CMakeLists.txt"
     short_paths = True # LLVM uses long filenames, which are a problem on windows. This helps.
+    recipe_version = "1"
 
     def configure(self):
         if self.settings.os == "Windows":
@@ -20,10 +22,7 @@ class LlvmConan(ConanFile):
 
     def source(self):
         # "http://releases.llvm.org/3.5.1/llvm-3.5.1.src.tar.xz" but xz is not suported so use "https://github.com/llvm/llvm-project/archive/llvmorg-3.5.1.tar.gz"
-        filename = "llvmorg-%s.tar.gz" % self.version
-        tools.download("https://github.com/llvm/llvm-project/archive/%s" % filename, filename)
-        tools.untargz(filename)
-        os.unlink(filename)
+        tools.get("https://github.com/llvm/llvm-project/archive/llvmorg-%s.tar.gz" % self.version)
 
         # diff -r -u "C:\.conan\517d7e\1\llvm-project-llvmorg-3.5.1/llvm" "X:\Dev\GuerillaLibs1.1\contrib\llvm-3.5.1" > /x/Dev/ConanRecipes/llvm_3.5.1/llvm_3.5.1.diff
         #tools.patch(patch_file="llvm_3.5.1.diff") # This should work but doesn't...
@@ -31,10 +30,7 @@ class LlvmConan(ConanFile):
 
     def build(self):
         cmake = CMake(self)
-        if ("fPIC" in self.options.fields and self.options.fPIC == True):
-            cmake.definitions["CMAKE_POSITION_INDEPENDENT_CODE"] = True
-        cmake.configure(source_dir="llvm-project-llvmorg-%s/llvm/" % self.version)
-
+        cmake.configure(build_dir="build")
         cmake.build()
 
     def _libs(self):
@@ -192,21 +188,21 @@ class LlvmConan(ConanFile):
     def package(self):
         self.copy("*.h", src="llvm-project-llvmorg-%s/llvm/include/" % self.version, dst="include")
         self.copy("*.def", src="llvm-project-llvmorg-%s/llvm/include/" % self.version, dst="include")
-        self.copy("*.h", src="include/llvm/", dst="include/llvm/")
-        self.copy("*.def", src="include/llvm/", dst="include/llvm/")
-        self.copy("*.gen", src="include/llvm/", dst="include/llvm/")
+        self.copy("*.h", src="build/llvm-project-llvmorg-%s/llvm/include/llvm/" % self.version, dst="include/llvm/")
+        self.copy("*.def", src="build/llvm-project-llvmorg-%s/llvm/include/llvm/" % self.version, dst="include/llvm/")
+        self.copy("*.gen", src="build/llvm-project-llvmorg-%s/llvm/include/llvm/" % self.version, dst="include/llvm/")
 
         if self.settings.os == "Windows" :
             libs = self._libs()
-            src_path = "%s\\lib\\" % self.settings.build_type
+            src_path = "build\\llvm-project-llvmorg-%s\\llvm\\%s\\lib\\" % (self.version, self.settings.build_type)
         elif self.settings.os == "Linux" :
             libs = self._libs()
-            src_path = "lib/"
+            src_path = "build/lib/"
         else :
             libs = []
 
         for l in libs:
-            self.copy(l, dst="lib", src=src_path, keep_path=False)
+            self.copy(l, src=src_path, dst="lib", keep_path=False)
 
     def package_info(self):
         if self.settings.os == "Windows" :
