@@ -13,7 +13,7 @@ class PySide2(ConanFile):
     default_options = "shared=True", "fPIC=True"
     _source_subfolder = "source_subfolder"
     short_paths = True
-    recipe_version = "3"
+    recipe_version = "4"
 
     def build_requirements(self):
         """Define buid toolset."""
@@ -59,17 +59,19 @@ class PySide2(ConanFile):
                     py_include_dir = py_include_dir + get_config_var("ABIFLAGS")"""
         )
 
-        if self.settings.os == "Windows" and not "LLVM_INSTALL_DIR" in os.environ:
+        if self.settings.os == "Windows":
             if self.settings.compiler.version == 14:
                 clang_file = "libclang-release_70-based-windows-vs2015_64.7z"
             elif self.settings.compiler.version == 15:
                 clang_file = "libclang-release_80-based-windows-vs2017_64.7z"
             else:
                 clang_file = "libclang-release_100-based-windows-vs2019_64.7z"
-            tools.download("http://download.qt.io/development_releases/prebuilt/libclang/%s" % clang_file, "clang.7z")
-            # Conan won't natively handle 7z files. Cmake is actually the easiest unzipping tool at hand.
-            self.run("cmake -E tar xf clang.7z")
-            os.unlink("clang.7z")
+        else:
+            clang_file = "libclang-release_100-based-linux-Rhel7.6-gcc5.3-x86_64.7z"
+        tools.download("http://download.qt.io/development_releases/prebuilt/libclang/%s" % clang_file, "clang.7z")
+        # Conan won't natively handle 7z files. Cmake is actually the easiest unzipping tool at hand.
+        self.run("cmake -E tar xf clang.7z")
+        os.unlink("clang.7z")
 
     def build(self):
         """Build the elements to package."""        
@@ -84,14 +86,18 @@ class PySide2(ConanFile):
         environment["PYSIDE_DISABLE_INTERNAL_QT_CONF"] = "1"
 
         # There may be a DLL conflict. Put Qt and libClang DLLs in front of the PATH.
+        clang_path = os.path.join(self.source_folder, "libclang")
         if self.settings.os == "Windows":
             if not "PATH" in environment:
                 environment["PATH"] = []
             environment["PATH"].insert(0, self.deps_cpp_info["qt"].bin_paths[0])
-            if not "LLVM_INSTALL_DIR" in os.environ:
-                clang_path = os.path.join(self.source_folder, "libclang")
-                environment["PATH"].insert(0, (os.path.join(clang_path, "bin")))
-                environment["LLVM_INSTALL_DIR"] = clang_path
+            environment["PATH"].insert(0, (os.path.join(clang_path, "bin")))
+            environment["CLANG_INSTALL_DIR"] = clang_path
+        else:
+            if not "LD_LIBRARY_PATH" in environment:
+                environment["LD_LIBRARY_PATH"] = []
+            environment["LD_LIBRARY_PATH"].insert(0, (os.path.join(clang_path, "lib")))
+            environment["CLANG_INSTALL_DIR"] = clang_path
 
         arguments = [
             "--qmake=\"%s\"" % os.path.join(self.deps_cpp_info["qt"].rootpath, "bin", qmake),
@@ -122,6 +128,11 @@ class PySide2(ConanFile):
         """Assemble the package."""
         self.copy(pattern="LICENSE.LGPLv3", dst="licenses", src=os.path.join(self.source_folder, self._source_subfolder))
         if self.settings.os == "Linux":
+            # package minimal libclang
+            self.copy(pattern="*", src=os.path.join(self.source_folder, "libclang", "include"), dst=os.path.join("libclang", "include"))
+            self.copy(pattern="*", src=os.path.join(self.source_folder, "libclang", "lib", "clang"), dst=os.path.join("libclang", "lib", "clang"))
+            self.copy(pattern="libclang.so.10", src=os.path.join(self.source_folder, "libclang", "lib"), dst=os.path.join("libclang", "lib"))
+
             # fix shebangs
             python_shebang = "#!/usr/bin/env python3.7\n"
             bin_directory = os.path.join(self.package_folder, "bin")
@@ -144,4 +155,6 @@ class PySide2(ConanFile):
         else:
             self.env_info.PATH.append(os.path.join(self.package_folder, "bin"))
             self.env_info.PYTHONPATH.append(os.path.join(self.package_folder, "lib", "python3.7", "site-packages"))
+            self.env_info.LD_LIBRARY_PATH.append(os.path.join(self.package_folder, "libclang", "lib"))
+            self.env_info.CLANG_INSTALL_DIR.append(os.path.join(self.package_folder, "libclang"))
         
