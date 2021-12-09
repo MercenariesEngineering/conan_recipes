@@ -11,7 +11,7 @@ class tbb(ConanFile):
     options = {"shared": [True, False], "fPIC": [True, False]}
     default_options = "shared=True", "fPIC=True"
     generators = "cmake"
-    recipe_version = "2"
+    recipe_version = "3"
 
     def configure(self):
         if self.settings.os == "Windows":
@@ -82,6 +82,8 @@ class tbb(ConanFile):
                 self.env_info.LD_LIBRARY_PATH.append(os.path.join(self.package_folder, "lib"))
         self.cpp_info.libs = tools.collect_libs(self)
 
-        if self.settings.build_type == "Debug":
-            self.cpp_info.defines.append( "TBB_USE_DEBUG=1" )
+        self.cpp_info.defines.append( "TBB_USE_DEBUG=" + ( "1" if (self.settings.build_type == "Debug") else "0" ) )
+        self.cpp_info.defines.append( "TBB_USE_ASSERT=" + ( "1" if (self.settings.build_type == "Debug") else "0" ) )
+        self.cpp_info.defines.append( "TBB_USE_PERFORMANCE_WARNINGS=0" )
+        self.cpp_info.defines.append( "TBB_USE_THREADING_TOOLS=0" )
         self.cpp_info.defines.append( "__TBB_NO_IMPLICIT_LINKAGE" )

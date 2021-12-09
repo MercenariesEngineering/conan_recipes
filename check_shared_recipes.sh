@@ -107,7 +107,7 @@ CheckRecipe rumba-python/1.0.0@mercseng/v0
 CheckRecipe rumba-python-dev/1.0.0@mercseng/v0
 CheckRecipe spdlog-rumba/1.5.0@mercseng/v0
 CheckRecipe sqlite3/3.32.3@mercseng/v0
-CheckRecipe tbb/2020.02@mercseng/v2
+CheckRecipe tbb/2020.02@mercseng/v3
 CheckRecipe unistd/1.0@mercseng/v0
 CheckRecipe USD/20.05@mercseng/v4
 CheckRecipe USD/20.11-rumba@mercseng/v5
