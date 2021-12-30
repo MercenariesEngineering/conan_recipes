@@ -35,7 +35,7 @@
 #conan upload libalsa/1.2.2@mercseng/v0                                          -r mercseng --all --confirm
 #conan upload libcurl/7.71.0@mercseng/v1                                         -r mercseng --all --confirm
 #conan upload libffi/3.3@mercseng/v0                                             -r mercseng --all --confirm
-#conan upload libiconv/1.15@mercseng/v0                                          -r mercseng --all --confirm
+#conan upload libiconv/1.15@mercseng/v1                                          -r mercenaries --all --confirm
 #conan upload libjpeg-turbo/1.5.2@mercseng/v0                                    -r mercseng --all --confirm
 #conan upload libpng/1.6.37@mercseng/v0                                          -r mercseng --all --confirm
 #conan upload libsndfile/1.0.29@mercseng/v0                                      -r mercseng --all --confirm

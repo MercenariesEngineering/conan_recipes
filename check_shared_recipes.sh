@@ -65,7 +65,7 @@ CheckRecipe jom_installer/1.1.2@mercseng/v0
 CheckRecipe libalsa/1.2.2@mercseng/v0
 CheckRecipe libcurl/7.71.0@mercseng/v0
 CheckRecipe libffi/3.3@mercseng/v0
-CheckRecipe libiconv/1.15@mercseng/v0
+CheckRecipe libiconv/1.15@mercseng/v1
 CheckRecipe libjpeg-turbo/1.5.2@mercseng/v0
 CheckRecipe libpng/1.6.37@mercseng/v0
 CheckRecipe libsndfile/1.0.29@mercseng/v0

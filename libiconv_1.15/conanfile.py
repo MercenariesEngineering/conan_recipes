@@ -22,6 +22,7 @@ class LibiconvConan(ConanFile):
     default_options = {'shared': False, 'fPIC': True}
     short_paths = True
     _source_subfolder = "source_subfolder"
+    recipe_version = "1"
 
     @property
     def _is_mingw_windows(self):
@@ -31,10 +32,9 @@ class LibiconvConan(ConanFile):
     def _is_msvc(self):
         return self.settings.compiler == 'Visual Studio'
 
-    def build_requirements(self):
-        if tools.os_info.is_windows:
-            if "CONAN_BASH_PATH" not in os.environ:
-                self.build_requires("cygwin_installer/2.9.0@bincrafters/stable")
+    def build_requirements(self): 
+        if self.settings.os == 'Windows' and "CONAN_BASH_PATH" not in os.environ:
+            self.build_requires("msys2/20190524")
 
     def configure(self):
         del self.settings.compiler.libcxx
