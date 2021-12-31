@@ -17,7 +17,7 @@ class FFmpegConan(ConanFile):
     _source_subfolder = "source_subfolder"
     configure_options = "--enable-yasm --enable-asm --enable-shared --disable-static --disable-programs --enable-avresample"
     settings = "os", "arch", "compiler", "build_type"
-    recipe_version = "1"
+    recipe_version = "2"
 
     def source(self):
         tools.get("https://github.com/FFmpeg/FFmpeg/archive/n%s.tar.gz" % (self.version))
@@ -25,7 +25,7 @@ class FFmpegConan(ConanFile):
 
     def build_requirements(self):
         if tools.os_info.is_windows:
-            self.build_requires("msys2_installer/latest@bincrafters/stable")
+            self.build_requires("msys2/20190524")
             self.build_requires("yasm/1.3.0")
         self.build_requires("nasm/2.13.02@mercseng/v0")
 

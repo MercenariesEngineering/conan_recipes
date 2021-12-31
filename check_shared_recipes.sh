@@ -45,7 +45,7 @@ CheckRecipe eigen/3.3.7@mercseng/v0
 CheckRecipe embree/3.9.0@mercseng/v2
 CheckRecipe expat/2.2.9@mercseng/v0
 CheckRecipe FBX/2020.0.1@mercseng/v0
-CheckRecipe FFmpeg/4.3.1@mercseng/v1
+CheckRecipe FFmpeg/4.3.1@mercseng/v2
 CheckRecipe flex/2.6.4@mercseng/v0
 CheckRecipe fontstash/1.0.1@mercseng/v0
 CheckRecipe freetype/2.10.2_with_Harfbuzz@mercseng/v0
@@ -76,7 +76,7 @@ CheckRecipe libuuid/1.0.3@mercseng/v0
 CheckRecipe libwebp/1.1.0@mercseng/v0
 CheckRecipe libxml2/2.9.9@mercseng/v0
 CheckRecipe llvm/3.5.1@mercseng/v1
-CheckRecipe lzma/5.2.4@mercseng/v0
+CheckRecipe lzma/5.2.4@mercseng/v1
 CheckRecipe m4/1.4.18@mercseng/v0
 CheckRecipe materialx/1.37.1@mercseng/v0
 CheckRecipe nasm/2.13.02@mercseng/v0

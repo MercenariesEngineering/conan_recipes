@@ -20,6 +20,7 @@ class LZMAConan(ConanFile):
     default_options = {'shared': True, 'fPIC': True}
     description = "LZMA library is part of XZ Utils"
     _source_subfolder = 'sources'
+    recipe_version = "1"
 
     # copied from conan, need to make expose it
     def _system_registry_key(self, key, subkey, query):
@@ -68,7 +69,7 @@ class LZMAConan(ConanFile):
 
     def build_requirements(self):
         if self._is_mingw_windows:
-            self.build_requires("msys2_installer/latest@bincrafters/stable")
+            self.build_requires("msys2/20190524")
 
     def _effective_msbuild_type(self):
         # treat 'RelWithDebInfo' and 'MinSizeRel' as 'Release'
