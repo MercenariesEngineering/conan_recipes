@@ -14,6 +14,7 @@
 #conan export  embree_3.9.0/conanfile.py                        embree/3.9.0@mercseng/v2
 #conan export  expat_2.2.9/conanfile.py                         expat/2.2.9@mercseng/v0
 #conan export  FBX_2020.0.1/conanfile.py                        FBX/2020.0.1@mercseng/v0
+#conan export  FBX_2020.2.1/conanfile.py                        FBX/2020.2.1@mercseng/v0
 #conan export  FFmpeg_4.3.1/conanfile.py                        FFmpeg/4.3.1@mercseng/v2
 #conan export  flex_2.6.4/conanfile.py                          flex/2.6.4@mercseng/v0
 #conan export  fontstash_1.0.1/conanfile.py                     fontstash/1.0.1@mercseng/v0
