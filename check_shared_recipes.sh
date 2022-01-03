@@ -77,6 +77,7 @@ CheckRecipe libuuid/1.0.3@mercseng/v0
 CheckRecipe libwebp/1.1.0@mercseng/v0
 CheckRecipe libxml2/2.9.9@mercseng/v0
 CheckRecipe llvm/3.5.1@mercseng/v1
+CheckRecipe llvm/13.0.0@mercseng/v0
 CheckRecipe lzma/5.2.4@mercseng/v1
 CheckRecipe m4/1.4.18@mercseng/v0
 CheckRecipe materialx/1.37.1@mercseng/v0
