@@ -13,13 +13,13 @@ class PySide2(ConanFile):
     default_options = "shared=True", "fPIC=True"
     _source_subfolder = "source_subfolder"
     short_paths = True
-    recipe_version = "4"
+    recipe_version = "5"
 
     def build_requirements(self):
         """Define buid toolset."""
         if tools.os_info.is_windows and self.settings.compiler == "Visual Studio":
             self.build_requires("jom_installer/1.1.2@mercseng/v0")
-        self.build_requires("cpython/3.7.7@mercseng/v0")
+        self.build_requires("cpython/3.7.7@mercseng/v1")
 
     def requirements(self):
         """Define runtime requirements."""
@@ -65,7 +65,7 @@ class PySide2(ConanFile):
             elif self.settings.compiler.version == 15:
                 clang_file = "libclang-release_80-based-windows-vs2017_64.7z"
             else:
-                clang_file = "libclang-release_100-based-windows-vs2019_64.7z"
+                clang_file = "libclang-release_130-based-windows-vs2019_64.7z"
         else:
             clang_file = "libclang-release_100-based-linux-Rhel7.6-gcc5.3-x86_64.7z"
         tools.download("http://download.qt.io/development_releases/prebuilt/libclang/%s" % clang_file, "clang.7z")
@@ -80,7 +80,12 @@ class PySide2(ConanFile):
         environment = {}
         if self.settings.os == "Windows":
             environment = tools.vcvars_dict(self)
-            environment["CMAKE_GENERATOR"] = "Visual Studio 14 2015 Win64"
+            if self.settings.compiler.version == 14:
+                environment["CMAKE_GENERATOR"] = "Visual Studio 14 2015 Win64"
+            elif self.settings.compiler.version == 15:
+                environment["CMAKE_GENERATOR"] = "Visual Studio 15 2017 Win64"
+            else:
+                environment["CMAKE_GENERATOR"] = "Visual Studio 16 2019 Win64"
             qmake += ".exe"
 
         environment["PYSIDE_DISABLE_INTERNAL_QT_CONF"] = "1"
