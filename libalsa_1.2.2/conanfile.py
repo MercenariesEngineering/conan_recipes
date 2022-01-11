@@ -15,6 +15,7 @@ class LibalsaConan(ConanFile):
     default_options = {'shared': True, 'fPIC': True, 'disable_python': False}
     settings = "os", "compiler", "build_type", "arch"
     _autotools = None
+    recipe_version = "1"
 
     @property
     def _source_subfolder(self):
@@ -28,7 +29,7 @@ class LibalsaConan(ConanFile):
 
     def requirements(self):
         if not self.options.disable_python:
-            self.requires("cpython/3.7.7@mercseng/v0")
+            self.requires("cpython/3.7.7@mercseng/v1")
 
     def source(self):
         tools.get(**self.conan_data["sources"][self.version])

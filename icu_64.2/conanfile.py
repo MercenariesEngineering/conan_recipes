@@ -32,7 +32,7 @@ class ICUBase(ConanFile):
                        "with_unit_tests": False,
                        "silent": True,
                        "with_dyload": True}
-    recipe_version = "1"
+    recipe_version = "2"
 
     @property
     def _is_msvc(self):
@@ -46,7 +46,9 @@ class ICUBase(ConanFile):
         if tools.os_info.is_windows and "CONAN_BASH_PATH" not in os.environ and \
                 tools.os_info.detect_windows_subsystem() != "msys2":
             self.build_requires("msys2/20190524")
-        self.build_requires("cpython/3.7.7@mercseng/v1")
+
+    def requirements(self):
+        self.requires("cpython/3.7.7@mercseng/v1")
 
     def source(self):
         tools.get(**self.conan_data["sources"][self.version])

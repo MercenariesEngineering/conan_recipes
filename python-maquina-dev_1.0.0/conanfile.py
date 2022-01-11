@@ -149,8 +149,8 @@ class Qt5LibraryInfo:
 '''
 
 class PythonPackages(ConanFile):
-    description = "List of python packages used by Rumba."
-    name = "rumba-python-dev"
+    description = "List of python packages used by Maquina."
+    name = "python-maquina-dev"
     version = "1.0.0"
     settings = "os", "compiler", "build_type", "arch"
     packages = [
@@ -161,22 +161,24 @@ class PythonPackages(ConanFile):
         ("stdlib-list", "0.8.0")
     ]
     exports_sources = "bootloader_Windows-64bit.zip"
+    recipe_version = "2"
     
     def config_options(self):
         if self.settings.os == "Windows":
             self.settings.remove("build_type")
             self.settings.remove("compiler")
 
-    def build_requirements(self):
-        self.build_requires("cpython/3.7.7@mercseng/v0")
+    def requirements(self):
+        self.requires("cpython/3.7.7@mercseng/v1")
 
     def build(self):
         """Build the elements to package."""
         for package_name, package_version in self.packages:
-            command = "python -m pip install {name}=={version} --target={package_folder} --upgrade".format(
+            command = "python -m pip install {name}=={version} --target={package_folder} --upgrade --cache-dir={cache_folder}".format(
                 name=package_name,
                 version=package_version,
-                package_folder=self.package_folder)
+                package_folder=self.package_folder,
+                cache_folder=os.path.join(self.build_folder, "cache"))
             self.run(command)
 
         # PyInstaller relies on QLibraryInfo to find Qt installation paths. The default behavior of

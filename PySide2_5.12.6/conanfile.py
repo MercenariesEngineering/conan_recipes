@@ -13,19 +13,19 @@ class PySide2(ConanFile):
     default_options = "shared=True", "fPIC=True"
     _source_subfolder = "source_subfolder"
     short_paths = True
-    recipe_version = "5"
+    recipe_version = "6"
 
     def build_requirements(self):
         """Define buid toolset."""
         if tools.os_info.is_windows and self.settings.compiler == "Visual Studio":
             self.build_requires("jom_installer/1.1.2@mercseng/v0")
-        self.build_requires("cpython/3.7.7@mercseng/v1")
 
     def requirements(self):
         """Define runtime requirements."""
         self.requires("qt/5.12.6@mercseng/v1")
         self.requires("OpenSSL/1.1.1g@mercseng/v0")
         self.requires("libxml2/2.9.9@mercseng/v0")
+        self.requires("cpython/3.7.7@mercseng/v1")
 
     def config_options(self):
         """fPIC is linux only."""

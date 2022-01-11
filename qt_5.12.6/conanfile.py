@@ -716,7 +716,7 @@ class QtConan(ConanFile):
     author = "Bincrafters <bincrafters@gmail.com>"
     exports = ["LICENSE.md", "qtmodules.conf", "*.diff"]
     settings = "os", "arch", "compiler", "build_type"
-    recipe_version = "3"
+    recipe_version = "4"
 
     options = dict({
         "shared": [True, False],
@@ -821,7 +821,7 @@ class QtConan(ConanFile):
             if not tools.which('pkg-config'):
                 self.build_requires('pkg-config_installer/0.29.2@bincrafters/stable')
             if self.options.with_libalsa:
-                self.build_requires("libalsa/1.2.2@mercseng/v0")
+                self.build_requires("libalsa/1.2.2@mercseng/v1")
 
     def config_options(self):
         if self.settings.os != "Linux":

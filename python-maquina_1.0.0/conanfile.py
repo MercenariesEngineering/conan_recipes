@@ -2,11 +2,14 @@ import os
 from conans import ConanFile, tools
 
 class PythonPackages(ConanFile):
-    description = "List of python packages used by Rumba."
-    name = "rumba-python"
+    description = "List of python packages used by Maquina."
+    name = "python-maquina"
     version = "1.0.0"
     settings = "os", "compiler", "build_type", "arch"
     packages = [
+        ("pip", None),
+        ("setuptools", None),
+        ("wheel", None),
         ("numpy", "1.17.5"),
         ("psutil", "5.6.7"),
         ("pylint", "2.4.4"),
@@ -17,24 +20,25 @@ class PythonPackages(ConanFile):
         ("pytest", "5.3.4"),
         ("PyOpenGL", "3.1.5")
     ]
-    recipe_version = "1"
+    recipe_version = "2"
 
     def config_options(self):
         if self.settings.os == "Windows":
             self.settings.remove("build_type")
             self.settings.remove("compiler")
 
-    def build_requirements(self):
-        self.build_requires("cpython/3.7.7@mercseng/v0")
+    def requirements(self):
+        self.requires("cpython/3.7.7@mercseng/v1")
 
     def build(self):
         """Build the elements to package."""
-        for package_name, package_version in self.packages:
-            command = "python -m pip install {name}=={version} --target={package_folder} --upgrade".format(
-                name=package_name,
-                version=package_version,
-                package_folder=self.package_folder)
-            self.run(command)
+        with tools.environment_append({"PYTHONPATH": self.package_folder}):
+            for package_name, package_version in self.packages:
+                command = "python -m pip install {package} --target={package_folder} --upgrade --cache-dir={cache_folder}".format(
+                    package=package_name+"=="+package_version if package_version else package_name,
+                    package_folder=self.package_folder,
+                    cache_folder=os.path.join(self.build_folder))
+                self.run(command)
 
     def package(self):
         """Assemble the package."""
@@ -59,4 +63,3 @@ class PythonPackages(ConanFile):
         bin_directory = os.path.join(self.package_folder, "bin")
         if os.path.exists(bin_directory):
             self.env_info.PATH.append(bin_directory)
-

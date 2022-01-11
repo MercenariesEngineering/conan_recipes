@@ -15,30 +15,28 @@ class USDConan(ConanFile):
     exports_sources = "CMakeLists.txt"
     generators = "cmake"
     short_paths = True
-    recipe_version = "5"
+    recipe_version = "6"
     _source_subfolder = "source_subfolder"
 
     def requirements(self):
         """Define runtime requirements."""
-
         self.requires("Alembic/1.7.12@mercseng/v1")
-        self.requires("boost/1.73.0@mercseng/v2")
+        self.requires("boost/1.73.0@mercseng/v6")
         self.requires("hdf5/1.10.6@mercseng/v0")
         self.requires("materialx/1.37.1@mercseng/v0")
         if self.options.use_imaging:
             self.requires("OpenColorIO/1.1.1@mercseng/v0")
-            self.requires("OpenImageIO/2.1.15.0@mercseng/v2")
+            self.requires("OpenImageIO/2.1.15.0@mercseng/v3")
             self.requires("ptex/2.3.2@mercseng/v0")
-        self.requires("OpenSubdiv/3.4.3@mercseng/v0")
-        self.requires("tbb/2020.02@mercseng/v1")
+        self.requires("OpenSubdiv/3.4.3@mercseng/v1")
+        self.requires("tbb/2020.02@mercseng/v3")
         self.requires("zlib/1.2.11@mercseng/v0")
         self.requires("glu/9.0.1@mercseng/v0")
         self.requires("glew/2.1.0@mercseng/v0")
-        self.requires("cpython/3.7.7@mercseng/v0")
-        self.requires("qt/5.12.6@mercseng/v1")
-        self.requires("PySide2/5.12.6@mercseng/v2")
-        self.requires("rumba-python/1.0.0@mercseng/v1")
-
+        self.requires("cpython/3.7.7@mercseng/v1")
+        self.requires("qt/5.12.6@mercseng/v5")
+        self.requires("PySide2/5.12.6@mercseng/v6")
+        self.requires("python-maquina/1.0.0@mercseng/v2")
 
     def config_options(self):
         """fPIC is linux only."""
@@ -50,7 +48,6 @@ class USDConan(ConanFile):
         hash_version = "938f7f52ebc43c90247359b161ce751e08ab5592"
         tools.get("https://github.com/MercenariesEngineering/USD/archive/{}.zip".format(hash_version))
         os.rename("USD-{}".format(hash_version), self._source_subfolder)
- 
 
     def _configure_cmake(self):
         """Configure CMake."""
