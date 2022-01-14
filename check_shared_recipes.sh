@@ -102,7 +102,7 @@ CheckRecipe pystring/1.1.3@mercseng/v0
 CheckRecipe python/2.6@mercseng/v0
 CheckRecipe python-maquina/1.0.0@mercseng/v2
 CheckRecipe python-maquina-dev/1.0.0@mercseng/v2
-CheckRecipe qt/5.12.6@mercseng/v4
+CheckRecipe qt/5.12.6@mercseng/v5
 CheckRecipe rapidjson/1.1.0@mercseng/v0
 CheckRecipe re2/2019-06-01@mercseng/v1
 CheckRecipe readline/8.0@mercseng/v0

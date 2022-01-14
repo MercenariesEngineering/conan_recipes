@@ -716,7 +716,7 @@ class QtConan(ConanFile):
     author = "Bincrafters <bincrafters@gmail.com>"
     exports = ["LICENSE.md", "qtmodules.conf", "*.diff"]
     settings = "os", "arch", "compiler", "build_type"
-    recipe_version = "4"
+    recipe_version = "5"
 
     options = dict({
         "shared": [True, False],
@@ -1359,6 +1359,7 @@ list(APPEND Qt5Gui_OPENGL_LIBRARIES Qt5::Gui_GL)
     def package_info(self):
         """Edit package info."""
         self.cpp_info.libs = tools.collect_libs(self)
+        self.cpp_info.libs.remove("Qt5Bootstrap")
         self.cpp_info.includedirs = [os.path.join("include", name) for name in next(os.walk(os.path.join(self.package_folder, "include")))[1]]
         self.cpp_info.includedirs.append("include")
         self.env_info.PATH.append(os.path.join(self.package_folder, "bin"))

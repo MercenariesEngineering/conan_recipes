@@ -22,10 +22,11 @@ class PySide2(ConanFile):
 
     def requirements(self):
         """Define runtime requirements."""
-        self.requires("qt/5.12.6@mercseng/v1")
+        self.requires("qt/5.12.6@mercseng/v5")
         self.requires("OpenSSL/1.1.1g@mercseng/v0")
         self.requires("libxml2/2.9.9@mercseng/v0")
         self.requires("cpython/3.7.7@mercseng/v1")
+        self.requires("python-maquina/1.0.0@mercseng/v2")
 
     def config_options(self):
         """fPIC is linux only."""
@@ -89,6 +90,7 @@ class PySide2(ConanFile):
             qmake += ".exe"
 
         environment["PYSIDE_DISABLE_INTERNAL_QT_CONF"] = "1"
+        environment["BUILD_TYPE"] = ""
 
         # There may be a DLL conflict. Put Qt and libClang DLLs in front of the PATH.
         clang_path = os.path.join(self.source_folder, "libclang")
