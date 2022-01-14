@@ -170,13 +170,17 @@ class PythonPackages(ConanFile):
 
     def requirements(self):
         self.requires("cpython/3.7.7@mercseng/v1")
+        self.requires("python-maquina/1.0.0@mercseng/v2")
 
     def build(self):
         """Build the elements to package."""
-        for package_name, package_version in self.packages:
-            command = "python -m pip install {name}=={version} --target={package_folder} --upgrade --cache-dir={cache_folder}".format(
-                name=package_name,
-                version=package_version,
+        with tools.environment_append({"PYTHONPATH": [self.package_folder]}):
+            packages_list = ""
+            for package_name, package_version in self.packages:
+                packages_list = packages_list + " " + (package_name+"=="+package_version if package_version else package_name) 
+
+            command = "python -m pip install {packages_list} --target={package_folder} --upgrade --cache-dir={cache_folder}".format(
+                packages_list=packages_list,
                 package_folder=self.package_folder,
                 cache_folder=os.path.join(self.build_folder, "cache"))
             self.run(command)
