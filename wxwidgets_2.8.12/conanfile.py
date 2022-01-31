@@ -67,7 +67,7 @@ class wxWidgetsConan(ConanFile):
     }
     _source_subfolder = "source_subfolder"
 
-    recipe_version="v0"
+    recipe_version="v1"
 
     def config_options(self):
         if self.settings.os == 'Windows':
@@ -149,7 +149,7 @@ class wxWidgetsConan(ConanFile):
         # cut -l prefix
         for lib in pkg_config.libs_only_l:
           l = lib[2:]
-          if l != "freetype" or not self.options["freetype"].shared:
+          if l != "freetype":
             libs.append(l)
 
         lib_paths = [lib[2:] for lib in pkg_config.libs_only_L]  # cut -L prefix
