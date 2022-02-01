@@ -58,6 +58,7 @@ CheckRecipe glu/9.0.1@mercseng/v0
 CheckRecipe GSL/2.1.0@mercseng/v0
 CheckRecipe hdf5/1.10.6@mercseng/v0
 CheckRecipe icu/64.2@mercseng/v2
+CheckRecipe ispc/1.14.1@mercseng/v0
 CheckRecipe ispc/1.13.0@mercseng/v0
 CheckRecipe ispc/1.9.2@mercseng/v0
 CheckRecipe jbig/20160605@mercseng/v0

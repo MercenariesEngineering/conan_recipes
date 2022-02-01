@@ -27,6 +27,7 @@
 #conan export  GSL_2.1.0/conanfile.py                           GSL/2.1.0@mercseng/v0
 #conan export  hdf5_1.10.6/conanfile.py                         hdf5/1.10.6@mercseng/v0
 #conan export  icu_64.2/conanfile.py                         	icu/64.2@mercseng/v2
+#conan export  ispc_1.14.1/conanfile.py                         ispc/1.14.1@mercseng/v0
 #conan export  ispc_1.13.0/conanfile.py                         ispc/1.13.0@mercseng/v0
 #conan export  ispc_1.9.2/conanfile.py                          ispc/1.9.2@mercseng/v0
 #conan export  jbig_20160605/conanfile.py                       jbig/20160605@mercseng/v0

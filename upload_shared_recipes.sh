@@ -28,6 +28,7 @@
 #conan upload GSL/2.1.0@mercseng/v0                                              -r mercseng --all --confirm
 #conan upload hdf5/1.10.6@mercseng/v0                                            -r mercseng --all --confirm
 #conan upload icu/64.2@mercseng/v2                                               -r mercenaries --all --confirm
+#conan upload ispc/1.14.1@mercseng/v0                                            -r mercenaries --all --confirm
 #conan upload ispc/1.13.0@mercseng/v0                                            -r mercseng --all --confirm
 #conan upload ispc/1.9.2@mercseng/v0                                             -r mercseng --all --confirm
 #conan upload jbig/20160605@mercseng/v0                                          -r mercseng --all --confirm
