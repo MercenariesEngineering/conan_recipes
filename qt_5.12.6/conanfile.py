@@ -267,9 +267,6 @@ Gui, printing, widget options:
 
   -fontconfig .......... Enable Fontconfig support [auto] (Unix only)
   -freetype ............ Select used FreeType [system/qt/no]
-  -harfbuzz ............ Select used HarfBuzz-NG [system/qt/no]
-                         (Not auto-detected on Apple and Windows)
-
   -gtk ................. Enable GTK platform theme support [auto]
 
   -lgmon ............... Enable lgmon support [auto] (QNX only)
@@ -443,8 +440,6 @@ Qt Gui:
   Accessibility .......................... yes
   FreeType ............................... yes
     Using system FreeType ................ yes
-  HarfBuzz ............................... yes
-    Using system HarfBuzz ................ yes
   Fontconfig ............................. no
   Image formats:
     GIF .................................. yes
@@ -639,7 +634,6 @@ Qt WebEngine:
     lcms2 ................................ no
     png .................................. yes
     JPEG ................................. yes
-    harfbuzz ............................. no
     freetype ............................. yes
   Required system libraries:
     fontconfig ........................... no
@@ -716,7 +710,7 @@ class QtConan(ConanFile):
     author = "Bincrafters <bincrafters@gmail.com>"
     exports = ["LICENSE.md", "qtmodules.conf", "*.diff"]
     settings = "os", "arch", "compiler", "build_type"
-    recipe_version = "5"
+    recipe_version = "6"
 
     options = dict({
         "shared": [True, False],
@@ -730,7 +724,6 @@ class QtConan(ConanFile):
         "with_freetype": [True, False],
         "with_fontconfig": [True, False],
         "with_icu": [True, False],
-        "with_harfbuzz": [True, False],
         "with_libjpeg": [True, False],
         "with_libpng": [True, False],
         "with_sqlite3": [True, False],
@@ -767,7 +760,6 @@ class QtConan(ConanFile):
         "with_freetype": True,
         "with_fontconfig": False,
         "with_icu": True,
-        "with_harfbuzz": True,
         "with_libjpeg": True,
         "with_libpng": True,
         "with_sqlite3": True,
@@ -847,12 +839,8 @@ class QtConan(ConanFile):
             self.options.opengl = "no"
             self.options.with_freetype = False
             self.options.with_fontconfig = False
-            self.options.with_harfbuzz = False
             self.options.with_libjpeg = False
             self.options.with_libpng = False
-
-        # MercsEng: We use a shared freetype/harfbuzz recipe
-        self.options.with_harfbuzz = self.options.with_freetype
 
         if not self.options.qtgamepad:
             self.options.with_sdl2 = False
@@ -908,7 +896,7 @@ class QtConan(ConanFile):
             self.requires("pcre2/10.33@mercseng/v0")
 
         if self.options.with_freetype and not self.options.multiconfiguration:
-            self.requires("freetype/2.10.2_with_Harfbuzz@mercseng/v0")
+            self.requires("freetype/2.11.1_with_Harfbuzz@mercseng/v0")
 
         if self.options.with_icu:
             self.requires("icu/64.2@mercseng/v0")
@@ -1163,7 +1151,6 @@ QMAKE_CXX               = %s""" % (self.env["CC"], self.env["CXX"]))
         for opt, conf_arg in [
                               ("with_doubleconversion", "doubleconversion"),
                               ("with_freetype", "freetype"),
-                              ("with_harfbuzz", "harfbuzz"),
                               ("with_libjpeg", "libjpeg"),
                               ("with_libpng", "libpng"),
                               ("with_sqlite3", "sqlite")]:
@@ -1183,7 +1170,6 @@ QMAKE_CXX               = %s""" % (self.env["CC"], self.env["CXX"]))
                   ("freetype", "FREETYPE"),
                   ("fontconfig", "FONTCONFIG"),
                   ("icu", "ICU"),
-                  ("freetype", "HARFBUZZ"),
                   ("libjpeg-turbo", "LIBJPEG"),
                   ("libpng", "LIBPNG"),
                   ("sqlite3", "SQLITE"),

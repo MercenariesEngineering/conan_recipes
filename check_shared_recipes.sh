@@ -49,7 +49,7 @@ CheckRecipe FBX/2020.2.1@mercseng/v0
 CheckRecipe FFmpeg/4.3.1@mercseng/v2
 CheckRecipe flex/2.6.4@mercseng/v0
 CheckRecipe fontstash/1.0.1@mercseng/v0
-CheckRecipe freetype/2.10.2_with_Harfbuzz@mercseng/v0
+CheckRecipe freetype/2.11.1_with_Harfbuzz@mercseng/v0
 CheckRecipe fumefx/4.0@mercseng/v0
 CheckRecipe gdbm/1.18.1@mercseng/v0
 CheckRecipe glew/2.1.0@mercseng/v0
@@ -104,7 +104,7 @@ CheckRecipe pystring/1.1.3@mercseng/v0
 CheckRecipe python/2.6@mercseng/v0
 CheckRecipe python-maquina/1.0.0@mercseng/v2
 CheckRecipe python-maquina-dev/1.0.0@mercseng/v2
-CheckRecipe qt/5.12.6@mercseng/v5
+CheckRecipe qt/5.12.6@mercseng/v6
 CheckRecipe rapidjson/1.1.0@mercseng/v0
 CheckRecipe re2/2019-06-01@mercseng/v1
 CheckRecipe readline/8.0@mercseng/v0

@@ -19,7 +19,7 @@
 #conan upload FFmpeg/4.3.1@mercseng/v2                                           -r mercenaries --all --confirm
 #conan upload flex/2.6.4@mercseng/v0                                             -r mercseng --all --confirm
 #conan upload fontstash/1.0.1@mercseng/v0                                        -r mercseng --all --confirm
-#conan upload freetype/2.10.2_with_Harfbuzz@mercseng/v0                          -r mercseng --all --confirm   
+#conan upload freetype/2.11.1_with_Harfbuzz@mercseng/v0                          -r mercenaries --all --confirm
 #conan upload fumefx/4.0@mercseng/v0                                             -r mercseng --all --confirm
 #conan upload gdbm/1.18.1@mercseng/v0                                            -r mercseng --all --confirm
 #conan upload glew/2.1.0@mercseng/v0                                             -r mercseng --all --confirm
@@ -76,7 +76,7 @@
 #conan upload python3/3.7@mercseng/v0                                            -r mercenaries --all --confirm
 #conan upload python-maquina/1.0.0@mercseng/v2                                   -r mercenaries --all --confirm
 #conan upload python-maquina-dev/1.0.0@mercseng/v2                               -r mercenaries --all --confirm
-#conan upload qt/5.12.6@mercseng/v5                                              -r mercenaries --all --confirm
+#conan upload qt/5.12.6@mercseng/v6                                              -r mercenaries --all --confirm
 #conan upload rapidjson/1.1.0@mercseng/v0                                        -r mercseng --all --confirm
 #conan upload re2/2019-06-01@mercseng/v1                                         -r mercenaries --all --confirm
 #conan upload readline/8.0@mercseng/v0                                           -r mercseng --all --confirm
