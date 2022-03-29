@@ -15,7 +15,7 @@ class USDConan(ConanFile):
     exports_sources = "CMakeLists.txt"
     generators = "cmake"
     short_paths = True
-    recipe_version = "6"
+    recipe_version = "7"
     _source_subfolder = "source_subfolder"
 
     def requirements(self):
@@ -77,7 +77,7 @@ class USDConan(ConanFile):
             "PXR_ENABLE_OPENVDB_SUPPORT": False,
             "PXR_ENABLE_OSL_SUPPORT": False,
             "PXR_ENABLE_PTEX_SUPPORT": True,
-            "PXR_ENABLE_PYTHON_SUPPORT": (self.settings.os == "Linux"),
+            "PXR_ENABLE_PYTHON_SUPPORT": True,
             "PXR_USE_PYTHON_3": True,
             "Boost_USE_STATIC_LIBS": not self.options["boost"].shared,
             "HDF5_USE_STATIC_LIBRARIES": not self.options["hdf5"].shared
