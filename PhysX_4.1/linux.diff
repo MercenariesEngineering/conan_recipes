@@ -1,0 +1,58 @@
+diff --git a/PhysX-4.1/physx/buildtools/presets/public/linux.xml b/PhysX-4.1/physx/buildtools/presets/public/linux.xml
+index 8c5160c7..d4846eba 100644
+--- a/PhysX-4.1/physx/buildtools/presets/public/linux.xml
++++ b/PhysX-4.1/physx/buildtools/presets/public/linux.xml
+@@ -1,10 +1,10 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <preset name="linux" comment="Linux clang PhysX SDK general settings">
+-  <platform targetPlatform="linux" compiler="clang" />
++  <platform targetPlatform="linux" compiler="gcc" />
+   <CMakeSwitches>
+-    <cmakeSwitch name="PX_BUILDSNIPPETS" value="True" comment="Generate the snippets" />
+-    <cmakeSwitch name="PX_BUILDPUBLICSAMPLES" value="True" comment="Generate the samples" />
+-    <cmakeSwitch name="PX_GENERATE_STATIC_LIBRARIES" value="True" comment="Generate static libs" />    
++    <cmakeSwitch name="PX_BUILDSNIPPETS" value="False" comment="Generate the snippets" />
++    <cmakeSwitch name="PX_BUILDPUBLICSAMPLES" value="False" comment="Generate the samples" />
++    <cmakeSwitch name="PX_GENERATE_STATIC_LIBRARIES" value="False" comment="Generate static libs" />    
+   </CMakeSwitches>
+   <CMakeParams>
+     <cmakeParam name="CMAKE_INSTALL_PREFIX" value="install/linux/PhysX" comment="Install path relative to PhysX SDK root" />
+diff --git a/PhysX-4.1/physx/samples/samplebase/AcclaimLoader.cpp b/PhysX-4.1/physx/samples/samplebase/AcclaimLoader.cpp
+index beed5562..c3f48310 100644
+--- a/PhysX-4.1/physx/samples/samplebase/AcclaimLoader.cpp
++++ b/PhysX-4.1/physx/samples/samplebase/AcclaimLoader.cpp
+@@ -674,7 +674,7 @@ bool Acclaim::readAMCData(const char* filename, Acclaim::ASFData& asfData, Accla
+ 	amcData.mNbFrames = tempFrameData.size();
+ 
+ 	amcData.mFrameData = (FrameData*)malloc(sizeof(FrameData) * amcData.mNbFrames);
+-	memcpy(amcData.mFrameData, tempFrameData.begin(), sizeof(FrameData) * amcData.mNbFrames);
++	memcpy((void*)amcData.mFrameData, tempFrameData.begin(), sizeof(FrameData) * amcData.mNbFrames);
+ 
+ 	fclose(fp);
+ 
+diff --git a/PhysX-4.1/physx/source/geomutils/src/mesh/GuBV4Build.cpp b/PhysX-4.1/physx/source/geomutils/src/mesh/GuBV4Build.cpp
+index 00e6530e..c8fce53f 100644
+--- a/PhysX-4.1/physx/source/geomutils/src/mesh/GuBV4Build.cpp
++++ b/PhysX-4.1/physx/source/geomutils/src/mesh/GuBV4Build.cpp
+@@ -233,7 +233,7 @@ static bool local_Subdivide(AABBTreeNode* PX_RESTRICT node, const PxBounds3* PX_
+ 	return true;
+ }
+ 
+-static void local_BuildHierarchy(AABBTreeNode* PX_RESTRICT node, const PxBounds3* PX_RESTRICT Boxes, const PxVec3* PX_RESTRICT centers, BuildStats& stats, const AABBTreeNode* const PX_RESTRICT node_base, PxU32 limit)
++static void local_BuildHierarchy(AABBTreeNode* /* PX_RESTRICT */ node, const PxBounds3* PX_RESTRICT Boxes, const PxVec3* PX_RESTRICT centers, BuildStats& stats, const AABBTreeNode* const /* PX_RESTRICT */ node_base, PxU32 limit)
+ {
+ 	if(local_Subdivide(node, Boxes, centers, stats, node_base, limit))
+ 	{
+diff --git a/PhysX-4.1/physx/source/physxextensions/src/serialization/Xml/SnXmlSerialization.cpp b/PhysX-4.1/physx/source/physxextensions/src/serialization/Xml/SnXmlSerialization.cpp
+index 01a1cefa..af8186a9 100644
+--- a/PhysX-4.1/physx/source/physxextensions/src/serialization/Xml/SnXmlSerialization.cpp
++++ b/PhysX-4.1/physx/source/physxextensions/src/serialization/Xml/SnXmlSerialization.cpp
+@@ -466,7 +466,7 @@ namespace physx { namespace Sn {
+ 			, mVersionStr( getLatestVersion() )
+ 			, mPxCollection( &inPxCollection )
+ 		{
+-			memset( &mScale, 0, sizeof( PxTolerancesScale ) );
++			memset( (void*)&mScale, 0, sizeof( PxTolerancesScale ) );
+ 			PX_ASSERT( mScale.isValid() == false );
+ 		}
+ 
