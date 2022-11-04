@@ -59,6 +59,7 @@
 #conan export  OpenEXR_2.5.1/conanfile.py                       OpenEXR/2.5.1@mercseng/v0
 #conan export  OpenExrId_1.0-beta.22/conanfile.py               OpenExrId/1.0-beta.22@mercseng/v0
 #conan export  OpenImageDenoise_1.0.0/conanfile.py              OpenImageDenoise/1.0.0@mercseng/v2
+#conan export  OpenImageDenoise_1.4.2/conanfile.py              OpenImageDenoise/1.4.2@mercseng/v0
 #conan export  OpenImageIO_2.1.15.0/conanfile.py                OpenImageIO/2.1.15.0@mercseng/v3
 #conan export  OpenSSL_1.1.1g/conanfile.py                      OpenSSL/1.1.1g@mercseng/v0
 #conan export  OpenSubdiv_3.4.3/conanfile.py                    OpenSubdiv/3.4.3@mercseng/v1
