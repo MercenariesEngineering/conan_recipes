@@ -39,6 +39,12 @@ class opensubdiv(ConanFile):
             tools.replace_in_file( "CMakeLists.txt", """${CMAKE_CURRENT_SOURCE_DIR}/cmake""", """${CMAKE_MODULE_PATH}" "${CMAKE_CURRENT_SOURCE_DIR}/cmake""")
             # do not want to compile stuff for regressions while I said to not compile regressions...
             tools.replace_in_file( "CMakeLists.txt", "if (NOT ANDROID", "if (FALSE")
+            # bfr lib has a limits.h file which conflicts with system limits.h
+            os.rename("opensubdiv/bfr/limits.h", "opensubdiv/bfr/bfr_limits.h")
+            tools.replace_in_file("opensubdiv/bfr/CMakeLists.txt", "limits.h", "bfr_limits.h")
+            tools.replace_in_file("opensubdiv/bfr/vertexDescriptor.cpp", "#include \"../bfr/limits.h\"", "#include \"../bfr/bfr_limits.h\"")
+            tools.replace_in_file("opensubdiv/bfr/surfaceFactory.cpp", "#include \"../bfr/limits.h\"", "#include \"../bfr/bfr_limits.h\"")
+            tools.replace_in_file("opensubdiv/bfr/parameterization.cpp", "#include \"../bfr/limits.h\"", "#include \"../bfr/bfr_limits.h\"")
         
     def cmake_definitions(self):
         """Setup CMake definitions."""
