@@ -11,6 +11,10 @@ class AntlrConan(ConanFile):
     generators = "cmake"
     exports_sources = "src/*"
 
+    def requirements(self):
+        if self.settings.os == "Linux":
+            self.requires("libuuid/1.0.3@mercseng/v0")
+
     def build(self):
         cmake = CMake(self)
         cmake.configure(source_folder="src")
@@ -25,7 +29,7 @@ class AntlrConan(ConanFile):
         self.copy("*.lib", dst="lib", keep_path=False)
         self.copy("*.dll", dst="bin", keep_path=False)
         self.copy("*.dylib*", dst="lib", keep_path=False)
-        self.copy("*.so", dst="lib", keep_path=False)
+        self.copy("*.so*", dst="lib", keep_path=False)
         self.copy("*.a", dst="lib", keep_path=False)
         self.copy("*.jar", dst="class", src="src/class")
 

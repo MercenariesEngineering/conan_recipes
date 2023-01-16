@@ -40,8 +40,8 @@ if(CMAKE_VERSION VERSION_EQUAL "3.3.0" OR
 endif()
 
 if(CMAKE_SYSTEM_NAME MATCHES "Linux")
-  find_package(PkgConfig REQUIRED)
-  pkg_check_modules(UUID REQUIRED uuid)
+  include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+  conan_basic_setup()
 endif()
 if(APPLE)
   find_library(COREFOUNDATION_LIBRARY CoreFoundation)
