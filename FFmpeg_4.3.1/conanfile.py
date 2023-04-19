@@ -15,7 +15,7 @@ class FFmpegConan(ConanFile):
     homepage = "https://ffmpeg.org/"
     license = "LGPL v2.1+"
     _source_subfolder = "source_subfolder"
-    configure_options = "--enable-yasm --enable-asm --enable-shared --disable-static --disable-programs --enable-avresample"
+    configure_options = '--enable-yasm --enable-asm --enable-shared --disable-static --disable-programs --enable-avresample --enable-zlib'
     settings = "os", "arch", "compiler", "build_type"
     recipe_version = "2"
 
@@ -24,9 +24,7 @@ class FFmpegConan(ConanFile):
         os.rename("FFmpeg-n%s" % self.version, self._source_subfolder)
 
     def build_requirements(self):
-        if tools.os_info.is_windows:
-            self.build_requires("msys2/20190524")
-            self.build_requires("yasm/1.3.0")
+        self.build_requires("zlib/1.2.11@mercseng/v0")
         self.build_requires("nasm/2.13.02@mercseng/v0")
 
     def build(self):
@@ -46,6 +44,9 @@ class FFmpegConan(ConanFile):
 
     def build_msvc(self):
         env_vars = tools.vcvars_dict(self)
+        zlib = self.deps_cpp_info["zlib"]
+        env_vars["INCLUDE"] += zlib.include_paths
+        env_vars["LIB"] += zlib.lib_paths
         with tools.environment_append(env_vars):
             # FFmpeg only have configure/makefile option on Windows
             # We use msys2 and Visual to build it has required by the FFmpeg documentation
@@ -53,15 +54,17 @@ class FFmpegConan(ConanFile):
             f.write("""#/usr/bin/bash
 export PATH=/usr/bin:$PATH
 export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig
-pacman -S make --noconfirm
-pacman -S diffutils --noconfirm
 cd {}
-./configure --toolchain=msvc --arch=x86_64 {} --prefix={}
+./configure --toolchain=msvc --arch=x86_64 {} --extra-cflags="-MD" --prefix={}
 make -j8
 make install
             """.format(tools.unix_path(self._source_subfolder), self.configure_options, tools.unix_path(self.package_folder)))
             f.close()
-            self.run("bash.exe build.sh")
+            if not "MSYS2" in os.environ:
+                self.output.error("Please define MSYS2 with the path to the msys2 root directory. Don't forget to install make and diffutils in msys2:\n\tpacman -S make\n\tpacman -S diffutils")
+            msys2 = os.environ["MSYS2"]
+            self.output.info("Using MSYS2 in "+msys2)
+            self.run(msys2+'/usr/bin/bash.exe build.sh')
 
     def package_info(self):
         """Edit package info."""
