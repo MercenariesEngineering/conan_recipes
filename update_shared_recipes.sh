@@ -88,6 +88,7 @@
 #conan export  USD_20.05/conanfile.py                           USD/20.05@mercseng/v4
 #conan export  USD_20.11/conanfile.py                           USD/20.11@mercseng/v1
 #conan export  USD_20.11-rumba/conanfile.py                     USD/20.11-rumba@mercseng/v6
+#conan export  USD_23.11-rumba/conanfile.py                     USD/23.11-rumba@mercseng/v1
 #conan export  winflexbison_2.5.22/conanfile.py                 winflexbison/2.5.22@mercseng/v0
 #conan export  wxwidgets_2.8.12/conanfile.py                    wxwidgets/2.8.12@mercseng/v1
 #conan export   yaml-cpp_0.6.3/conanfile.py                      yaml-cpp/0.6.3@mercseng/v0
