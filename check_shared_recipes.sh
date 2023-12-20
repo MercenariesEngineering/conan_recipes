@@ -39,6 +39,7 @@ CheckRecipe boost/1.73.0@mercseng/v6
 CheckRecipe bzip2/1.0.8@mercseng/v0
 CheckRecipe catch2/3.0.0-preview3@mercseng/v0
 CheckRecipe cmake/3.17.3@mercseng/v0
+CheckRecipe cmake/3.28.1@mercseng/v0
 CheckRecipe cpython/3.7.7@mercseng/v1
 CheckRecipe double-conversion/3.1.5@mercseng/v0
 CheckRecipe eigen/3.3.7@mercseng/v0
