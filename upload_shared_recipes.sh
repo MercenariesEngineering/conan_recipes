@@ -77,6 +77,8 @@
 #conan upload PySide2/5.12.6@mercseng/v6                                         -r mercenaries --all --confirm
 #conan upload python/2.6@mercseng/v1                                             -r mercenaries --all --confirm
 #conan upload python3/3.7@mercseng/v0                                            -r mercenaries --all --confirm
+#conan upload python3/3.10@mercseng/v0                                           -r mercenaries --all --confirm
+#conan upload python3.10_headers/3.10@mercseng/v0                                -r mercenaries --all --confirm
 #conan upload python-maquina/1.0.0@mercseng/v2                                   -r mercenaries --all --confirm
 #conan upload python-maquina-dev/1.0.0@mercseng/v2                               -r mercenaries --all --confirm
 #conan upload qt/5.12.6@mercseng/v6                                              -r mercenaries --all --confirm
