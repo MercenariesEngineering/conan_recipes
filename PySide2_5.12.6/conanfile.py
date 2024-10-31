@@ -13,7 +13,7 @@ class PySide2(ConanFile):
     default_options = "shared=True", "fPIC=True"
     _source_subfolder = "source_subfolder"
     short_paths = True
-    recipe_version = "6"
+    recipe_version = "7"
 
     def build_requirements(self):
         """Define buid toolset."""
@@ -163,5 +163,5 @@ class PySide2(ConanFile):
             self.env_info.PATH.append(os.path.join(self.package_folder, "bin"))
             self.env_info.PYTHONPATH.append(os.path.join(self.package_folder, "lib", "python3.7", "site-packages"))
             self.env_info.LD_LIBRARY_PATH.append(os.path.join(self.package_folder, "libclang", "lib"))
-            self.env_info.CLANG_INSTALL_DIR.append(os.path.join(self.package_folder, "libclang"))
+            self.env_info.CLANG_INSTALL_DIR=os.path.join(self.package_folder, "libclang")
         
