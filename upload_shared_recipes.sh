@@ -75,7 +75,7 @@ export REPO="mercenaries"
 #conan upload ptex/2.3.2@mercseng/v0                                             -r $REPO --all --confirm
 #conan upload pybind11/2.5.0@mercseng/v0                                         -r $REPO --all --confirm
 #conan upload pystring/1.1.3@mercseng/v0                                         -r $REPO --all --confirm
-#conan upload PySide2/5.12.6@mercseng/v6                                         -r $REPO --all --confirm
+#conan upload PySide2/5.12.6@mercseng/v7                                         -r $REPO --all --confirm
 #conan upload python/2.6@mercseng/v1                                             -r $REPO --all --confirm
 #conan upload python3/3.7@mercseng/v0                                            -r $REPO --all --confirm
 #conan upload python3/3.10@mercseng/v0                                           -r $REPO --all --confirm
