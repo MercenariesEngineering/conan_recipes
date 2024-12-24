@@ -15,8 +15,9 @@ class USDConan(ConanFile):
     exports_sources = "CMakeLists.txt"
     generators = "cmake"
     short_paths = True
-    recipe_version = "1"
+    recipe_version = "2"
     _source_subfolder = "source_subfolder"
+    
 
     def requirements(self):
         """Define runtime requirements."""
@@ -40,6 +41,9 @@ class USDConan(ConanFile):
             self.requires("qt/5.12.6@mercseng/v5")
         if self.options.with_python and self.options.with_qt:
             self.requires("PySide2/5.12.6@mercseng/v6")
+
+    def build_requirements(self):
+        self.build_requires("cpython/3.7.7@mercseng/v1")
 
     def config_options(self):
         """fPIC is linux only."""
@@ -74,14 +78,13 @@ class USDConan(ConanFile):
             "PXR_BUILD_PRMAN_PLUGIN": False,
             "PXR_BUILD_TESTS": False,
             "PXR_BUILD_USD_IMAGING": self.options.use_imaging,
-            "PXR_BUILD_USDVIEW": ((self.settings.os == "Linux") and self.options.use_imaging),
+            "PXR_BUILD_USDVIEW": ((self.settings.os == "Linux") and self.options.use_imaging and self.options.with_python and self.options.with_qt),
             "PXR_ENABLE_GL_SUPPORT": True,
             "PXR_ENABLE_HDF5_SUPPORT": True,
             "PXR_ENABLE_OPENVDB_SUPPORT": False,
             "PXR_ENABLE_OSL_SUPPORT": False,
             "PXR_ENABLE_PTEX_SUPPORT": True,
             "PXR_ENABLE_PYTHON_SUPPORT": self.options.with_python,
-            "PXR_USE_PYTHON_3": True,
             "Boost_USE_STATIC_LIBS": not self.options["boost"].shared,
             "HDF5_USE_STATIC_LIBRARIES": not self.options["hdf5"].shared
         }
@@ -89,14 +92,11 @@ class USDConan(ConanFile):
         if self.options.use_imaging:
             definition_dict["OIIO_LOCATION"] = self.deps_cpp_info["OpenImageIO"].rootpath
 
-        # Boost default find package is not great... give it a hand.
-        #boost_libs = ['atomic', 'chrono', 'container', 'context', 'contract', 'coroutine', 'date_time', 'exception', 'fiber', 'filesystem', 'graph', 'graph_parallel', 'iostreams', 'locale', 'log', 'math', 'mpi', 'program_options', 'python', 'random', 'regex', 'serialization', 'stacktrace', 'system', 'test', 'thread', 'timer', 'type_erasure', 'wave']
-        boost_libs = ['program_options']
-        for searched_lib in boost_libs:
-            for built_lib in self.deps_cpp_info["boost"].libs:
-                if built_lib.find(searched_lib) != -1:
-                    definition_dict["Boost_%s_FOUND" % searched_lib.upper()] = True
-                    definition_dict["Boost_%s_LIBRARY" % searched_lib.upper()] = built_lib
+        if self.options.with_python:
+            definition_dict["Python3_ROOT_DIR"] = self.deps_cpp_info["cpython"].rootpath
+            definition_dict["Python3_FIND_STRATEGY"] = "LOCATION"
+            definition_dict["Python3_FIND_REGISTRY"] = "NEVER"
+            definition_dict["Python3_FIND_VIRTUALENV"] = "NEVER"
 
         cmake.configure(defs = definition_dict, source_folder = self._source_subfolder)
         return cmake
