@@ -54,6 +54,7 @@ export REPO="mercenaries"
 #conan upload lzma/5.2.4@mercseng/v1                                             -r $REPO --all --confirm
 #conan upload m4/1.4.18@mercseng/v0                                              -r $REPO --all --confirm
 #conan upload materialx/1.37.1@mercseng/v0                                       -r $REPO --all --confirm
+#conan upload materialx/1.38.10@mercseng/v0                                       -r $REPO --all --confirm
 #conan upload nasm/2.13.02@mercseng/v0                                           -r $REPO --all --confirm
 #conan upload ncurses/6.2@mercseng/v0                                            -r $REPO --all --confirm
 #conan upload ninja/1.10.0@mercseng/v0                                           -r $REPO --all --confirm
@@ -94,6 +95,7 @@ export REPO="mercenaries"
 #conan upload USD/20.11@mercseng/v1                                              -r $REPO --all --confirm
 #conan upload USD/20.11-rumba@mercseng/v6                                        -r $REPO --all --confirm
 #conan upload USD/23.11-rumba@mercseng/v2                                        -r $REPO --all --confirm
+#conan upload USD/24.11-rumba@mercseng/v1                                        -r $REPO --all --confirm
 #conan upload winflexbison/2.5.22@mercseng/v0                                    -r $REPO --all --confirm
 #conan upload wxwidgets/2.8.12@mercseng/v1                                       -r $REPO --all --confirm
 #conan upload yaml-cpp/0.6.3@mercseng/v0                                         -r $REPO --all --confirm
