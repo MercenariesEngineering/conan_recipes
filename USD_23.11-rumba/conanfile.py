@@ -15,7 +15,7 @@ class USDConan(ConanFile):
     exports_sources = "CMakeLists.txt"
     generators = "cmake"
     short_paths = True
-    recipe_version = "2"
+    recipe_version = "3"
     _source_subfolder = "source_subfolder"
     
 
@@ -52,7 +52,7 @@ class USDConan(ConanFile):
 
     def source(self):
         """Retrieve source code."""
-        hash_version = "353fcc8336f5e31d0b7cc29d5f6e5c30a14c8ad2"
+        hash_version = "72d2cfb4e9258e34ae80fd55b412713d737f1745"
         tools.get("https://github.com/MercenariesEngineering/USD/archive/{}.zip".format(hash_version))
         os.rename("USD-{}".format(hash_version), self._source_subfolder)
 
