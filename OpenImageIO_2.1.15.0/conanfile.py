@@ -14,11 +14,11 @@ class OpenimageioConan(ConanFile):
     exports_sources = "CMakeLists.txt"
     generators = "cmake"
     _source_subfolder = "source_subfolder"
-    recipe_version = "3"
+    recipe_version = "4"
 
     def requirements(self):
         """Define runtime requirements."""
-        self.requires("boost/1.73.0@mercseng/v1")
+        self.requires("boost/1.73.0@mercseng/v6")
         self.requires("bzip2/1.0.8@mercseng/v0")
         self.requires("freetype/2.10.2_with_Harfbuzz@mercseng/v0")
         self.requires("jbig/20160605@mercseng/v0")
@@ -29,7 +29,7 @@ class OpenimageioConan(ConanFile):
         self.requires("OpenEXR/2.5.1@mercseng/v0")
         self.requires("tbb/2020.02@mercseng/v2")
         self.requires("zlib/1.2.11@mercseng/v0")
-        self.requires("FFmpeg/4.3.1@mercseng/v0")
+        self.requires("FFmpeg/4.3.1@mercseng/v3")
         self.requires("unistd/1.0@mercseng/v0")
 
     def config_options(self):
@@ -39,8 +39,8 @@ class OpenimageioConan(ConanFile):
 
     def source(self):
         """Retrieve source code."""
-        tools.get("https://github.com/OpenImageIO/oiio/archive/Release-%s.tar.gz" % self.version)
-        os.rename("oiio-Release-%s" %self.version, self._source_subfolder)
+        tools.get("https://github.com/AcademySoftwareFoundation/OpenImageIO/archive/Release-%s.tar.gz" % self.version)
+        os.rename("OpenImageIO-Release-%s" %self.version, self._source_subfolder)
 
         # Add a wrapper CMakeLists.txt file which initializes conan before executing the real CMakeLists.txt
         os.rename(os.path.join(self._source_subfolder, "CMakeLists.txt"), os.path.join(self._source_subfolder, "CMakeLists_original.txt"))

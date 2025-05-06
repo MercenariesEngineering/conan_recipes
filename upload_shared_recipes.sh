@@ -64,7 +64,7 @@ export REPO="mercenaries"
 #conan upload OpenExrId/1.0-beta.22@mercseng/v0                                  -r $REPO --all --confirm
 #conan upload OpenImageDenoise/1.0.0@mercseng/v2                                 -r $REPO --all --confirm
 #conan upload OpenImageDenoise/1.4.2@mercseng/v0                                 -r $REPO --all --confirm
-#conan upload OpenImageIO/2.1.15.0@mercseng/v3                                   -r $REPO --all --confirm
+#conan upload OpenImageIO/2.1.15.0@mercseng/v4                                   -r $REPO --all --confirm
 #conan upload OpenSSL/1.1.1g@mercseng/v0                                         -r $REPO --all --confirm
 #conan upload OpenSubdiv/3.4.3@mercseng/v1                                       -r $REPO --all --confirm
 #conan upload OpenSubdiv/3.5.0@mercseng/v0                                       -r $REPO --all --confirm
