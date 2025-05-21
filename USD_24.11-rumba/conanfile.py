@@ -15,7 +15,7 @@ class USDConan(ConanFile):
     exports_sources = "CMakeLists.txt"
     generators = "cmake"
     short_paths = True
-    recipe_version = "1"
+    recipe_version = "2"
     _source_subfolder = "source_subfolder"
     
 
@@ -133,6 +133,11 @@ class USDConan(ConanFile):
                         except:
                             pass
 
+    def package_id(self):
+        opensubdiv_lib = self.info.requires["OpenSubdiv"]
+        # Changes in major and minor versions will change the Package ID but
+        # only a OpenSubdiv patch won't. E.g., from 1.2.3 to 1.2.89 won't change.
+        opensubdiv_lib.version = opensubdiv_lib.full_version.minor()
 
     def package_info(self):
         """Edit package info."""
