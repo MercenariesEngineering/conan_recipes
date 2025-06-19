@@ -1,0 +1,11 @@
+--- a/src/opengl/gl2paintengineex/qpaintengineex_opengl2.cpp
++++ b/src/opengl/gl2paintengineex/qpaintengineex_opengl2.cpp
+@@ -1640,7 +1640,7 @@
+ 
+     QGL2PaintEngineState *s = q->state();
+ 
+-    void *cacheKey = const_cast<QGLContext *>(QGLContextPrivate::contextGroup(ctx)->context());
++    void *cacheKey = ctx;
+     bool recreateVertexArrays = false;
+ 
+     QTransform glyphCacheTransform;

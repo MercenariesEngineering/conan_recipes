@@ -15,7 +15,7 @@ class USDConan(ConanFile):
     exports_sources = "CMakeLists.txt"
     generators = "cmake"
     short_paths = True
-    recipe_version = "2"
+    recipe_version = "3"
     _source_subfolder = "source_subfolder"
     
 
@@ -34,7 +34,7 @@ class USDConan(ConanFile):
         #self.requires("glu/9.0.1@mercseng/v0")
         #self.requires("glew/2.1.0@mercseng/v0")
         if self.options.with_python:
-            self.requires("cpython/3.7.7@mercseng/v1")
+            self.requires("cpython/3.9.21@mercseng/v0")
             self.requires("python-maquina/1.0.0@mercseng/v2")
         if self.options.with_qt:
             self.requires("qt/5.12.6@mercseng/v5")
@@ -42,7 +42,7 @@ class USDConan(ConanFile):
             self.requires("PySide2/5.12.6@mercseng/v6")
 
     def build_requirements(self):
-        self.build_requires("cpython/3.7.7@mercseng/v1")
+        self.build_requires("cpython/3.9.21@mercseng/v0")
 
     def config_options(self):
         """fPIC is linux only."""

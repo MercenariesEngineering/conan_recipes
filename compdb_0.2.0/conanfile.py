@@ -16,7 +16,7 @@ class PythonPackages(ConanFile):
         self.options["cpython"].shared = True
 
     def build_requirements(self):
-        self.build_requires("cpython/3.7.7@mercseng/v0")
+        self.build_requires("cpython/3.9.21@mercseng/v0")
 
     def build(self):
         """Build the elements to package."""

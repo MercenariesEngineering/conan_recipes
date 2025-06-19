@@ -4,7 +4,7 @@ from conans import ConanFile, tools
 
 class PySide2(ConanFile):
     name = "PySide2"
-    version = "5.12.6"
+    version = "5.15.2.1"
     description = "Qt for Python"
     license = "LGPL-3.0"
     url = "https://doc.qt.io/qtforpython"
@@ -13,7 +13,7 @@ class PySide2(ConanFile):
     default_options = "shared=True", "fPIC=True"
     _source_subfolder = "source_subfolder"
     short_paths = True
-    recipe_version = "8"
+    recipe_version = "0"
 
     def build_requirements(self):
         """Define buid toolset."""
@@ -22,7 +22,7 @@ class PySide2(ConanFile):
 
     def requirements(self):
         """Define runtime requirements."""
-        self.requires("qt/5.12.6@mercseng/v5")
+        self.requires("qt/5.15.2@mercseng/v5")
         self.requires("OpenSSL/1.1.1g@mercseng/v0")
         self.requires("libxml2/2.9.9@mercseng/v0")
         self.requires("cpython/3.9.21@mercseng/v0")
@@ -41,8 +41,8 @@ class PySide2(ConanFile):
     
     def source(self):
         """Retrieve source code."""        
-        tools.get("https://download.qt.io/official_releases/QtForPython/pyside2/PySide2-%s-src/pyside-setup-everywhere-src-%s.zip" % (self.version, self.version))
-        os.rename("pyside-setup-everywhere-src-%s" % self.version, self._source_subfolder)
+        tools.get("https://download.qt.io/official_releases/QtForPython/pyside2/PySide2-%s-src/pyside-setup-opensource-src-%s.zip" % (self.version, self.version))
+        os.rename("pyside-setup-opensource-src-5.15.2", self._source_subfolder)
 
         # https://bugreports.qt.io/browse/PYSIDE-1259
         if self.settings.os == "Linux":
@@ -52,13 +52,13 @@ class PySide2(ConanFile):
                 "QVersionNumber lastVersionNumber(0, 0, 0);"
             )
 
-        tools.replace_in_file(
-            os.path.join(self._source_subfolder, "build_scripts", "main.py"),
-            """"include/python{}".format(py_version))""",
-            """"include/python{}".format(py_version))
-                if not os.path.exists(py_include_dir):
-                    py_include_dir = py_include_dir + get_config_var("ABIFLAGS")"""
-        )
+        #tools.replace_in_file(
+        #    os.path.join(self._source_subfolder, "build_scripts", "main.py"),
+        #    """"include/python{}".format(py_version))""",
+        #    """"include/python{}".format(py_version))
+        #        if not os.path.exists(py_include_dir):
+        #            py_include_dir = py_include_dir + get_config_var("ABIFLAGS")"""
+        #)
 
         if self.settings.os == "Windows":
             if self.settings.compiler.version == 14:

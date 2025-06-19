@@ -32,7 +32,7 @@ class ICUBase(ConanFile):
                        "with_unit_tests": False,
                        "silent": True,
                        "with_dyload": True}
-    recipe_version = "2"
+    recipe_version = "3"
 
     @property
     def _is_msvc(self):
@@ -48,7 +48,7 @@ class ICUBase(ConanFile):
             self.build_requires("msys2/20190524")
 
     def requirements(self):
-        self.requires("cpython/3.7.7@mercseng/v1")
+        self.requires("cpython/3.9.21@mercseng/v0")
 
     def source(self):
         tools.get(**self.conan_data["sources"][self.version])
