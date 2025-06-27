@@ -1,0 +1,8 @@
+sources:
+  "2.8.12":
+    url: "https://github.com/wxWidgets/wxWidgets/releases/download/v2.8.12/wxWidgets-2.8.12.tar.gz"
+    sha256: "197c94f7d46269a7fc261a3c8c943f03a9807acf65381944489a538fd8b5dd21"
+patches:
+  "2.8.12":
+    - patch_file: "patches/2.8.12-0001.patch"
+      patch_description: "WX 2.8.12 patch"

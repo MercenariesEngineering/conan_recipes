@@ -1,0 +1,498 @@
+diff -r -u configure configure
+--- configure	2011-03-22 12:59:37.000000000 +0100
++++ configure	2019-07-04 15:36:39.862849800 +0200
+@@ -2074,7 +2074,7 @@
+ 
+   ;;
+ 
+-  *-*-cygwin* | *-*-mingw32* )
++  *-*-cygwin* | *-*-mingw32* | *-*-mingw64* )
+                 SO_SUFFIX=dll
+     PROGRAM_EXT=".exe"
+     DEFAULT_DEFAULT_wxUSE_MSW=1
+@@ -16556,7 +16556,7 @@
+     RESCOMP="$WINDRES"
+ else
+     case "${host}" in
+-    *-*-cygwin* | *-*-mingw32* )
++    *-*-cygwin* | *-*-mingw32* | *-*-mingw64* )
+                                 if test -n "$ac_tool_prefix"; then
+   # Extract the first word of "${ac_tool_prefix}windres", so it can be a program name with args.
+ set dummy ${ac_tool_prefix}windres; ac_word=$2
+@@ -24932,7 +24932,8 @@
+ 
+ 
+ 
+-SEARCH_INCLUDE="\
++SEARCH_INCLUDE="
++    /usr/lib/x86_64-linux-gnu/\
+     /usr/local/include        \
+     /usr/local/X11/include    \
+     /usr/local/include/X11    \
+@@ -27804,8 +27805,9 @@
+ 
+ 
+             case "${host}" in
+-	x86_64-*-mingw32* )
++	x86_64-*-mingw* )
+                         LIBS="$LIBS -lwinspool -lwinmm -lshell32 -lcomctl32 -lcomdlg32 -lwctl3d32 -ladvapi32 -lwsock32 -lgdi32"
++                        WINDRES_CPU_DEFINE="--define WX_CPU_AMD64"
+         ;;
+         * )
+             LIBS="$LIBS -lwinspool -lwinmm -lshell32 -lcomctl32 -lcomdlg32 -lctl3d32 -ladvapi32 -lwsock32 -lgdi32"
+@@ -27930,7 +27932,7 @@
+         GUIDIST=MSW_DIST
+ 
+                 case "${host}" in
+-            *-*-mingw32* )
++            *-*-mingw* )
+                 WXCONFIG_LDFLAGS_GUI="$LDFLAGS -Wl,--subsystem,windows -mwindows"
+         esac
+     fi
+@@ -33819,7 +33821,7 @@
+         fi
+       ;;
+ 
+-      *-*-cygwin* | *-*-mingw32* )
++      *-*-cygwin* | *-*-mingw32* | *-*-mingw64* )
+                         WXCONFIG_ONLY_CPPFLAGS="$WXCONFIG_ONLY_CPPFLAGS -DWXUSINGDLL"
+         ;;
+ 
+@@ -40925,7 +40927,7 @@
+ else
+     if test "$wxUSE_THREADS" = "yes" ; then
+       case "${host}" in
+-	x86_64-*-mingw32* )
++	x86_64-*-mingw* )
+         ;;
+         *-*-mingw32* )
+                         echo "$as_me:$LINENO: checking if compiler supports -mthreads" >&5
+@@ -48210,7 +48212,7 @@
+ 
+     LDFLAGS_GUI=
+     case ${BAKEFILE_HOST} in
+-        *-*-cygwin* | *-*-mingw32* )
++        *-*-cygwin* | *-*-mingw32* | *-*-mingw64* )
+         LDFLAGS_GUI="-mwindows"
+     esac
+ 
+@@ -48253,7 +48255,7 @@
+ 
+     if test "x$BAKEFILE_FORCE_PLATFORM" = "x"; then
+         case "${BAKEFILE_HOST}" in
+-            *-*-mingw32* )
++            *-*-mingw* )
+                 PLATFORM_WIN32=1
+             ;;
+             *-pc-msdosdjgpp )
+@@ -48382,7 +48384,7 @@
+             DLLPREFIX="cyg"
+             dlldir="$bindir"
+         ;;
+-        *-*-mingw32* )
++        *-*-mingw* )
+             SO_SUFFIX="dll"
+             SO_SUFFIX_MODULE="dll"
+             DLLIMP_SUFFIX="dll.a"
+@@ -48721,7 +48723,7 @@
+         fi
+       ;;
+ 
+-      *-*-cygwin* | *-*-mingw32* )
++      *-*-cygwin* | *-*-mingw32* | *-*-mingw64* )
+         PIC_FLAG=""
+         SHARED_LD_CC="\$(CC) -shared -o"
+         SHARED_LD_CXX="\$(CXX) -shared -o"
+@@ -49494,7 +49496,7 @@
+ 
+ 
+     case ${BAKEFILE_HOST} in
+-        *-*-cygwin* | *-*-mingw32* )
++        *-*-cygwin* | *-*-mingw32* | *-*-mingw64* )
+                         if test -n "$ac_tool_prefix"; then
+   # Extract the first word of "${ac_tool_prefix}windres", so it can be a program name with args.
+ set dummy ${ac_tool_prefix}windres; ac_word=$2
+diff -r -u include/msvc/wx/setup.h include/msvc/wx/setup.h
+--- include/msvc/wx/setup.h	2011-03-22 13:01:01.000000000 +0100
++++ include/msvc/wx/setup.h	2019-07-04 15:57:11.692624300 +0200
+@@ -23,108 +23,108 @@
+             #endif
+         #else
+             #ifdef _DEBUG
+-                #include "../../../lib/vc_lib/mswud/wx/setup.h"
++                #include "../../../lib/vc_lib64/mswud/wx/setup.h"
+             #else
+-                #include "../../../lib/vc_lib/mswu/wx/setup.h"
++                #include "../../../lib/vc_lib64/mswu/wx/setup.h"
+             #endif
+         #endif
+ 
+         #ifdef _DEBUG
+-            #pragma comment(lib,"wxbase28ud")
+-            #pragma comment(lib,"wxbase28ud_net")
+-            #pragma comment(lib,"wxbase28ud_xml")
++            // #pragma comment(lib,"wxbase28ud")
++            // #pragma comment(lib,"wxbase28ud_net")
++            // #pragma comment(lib,"wxbase28ud_xml")
+             #if wxUSE_REGEX
+-                #pragma comment(lib,"wxregexud")
++                // #pragma comment(lib,"wxregexud")
+             #endif
+ 
+             #if wxUSE_GUI
+                 #if wxUSE_XML
+-                    #pragma comment(lib,"wxexpatd")
++                    // #pragma comment(lib,"wxexpatd")
+                 #endif
+                 #if wxUSE_LIBJPEG
+-                    #pragma comment(lib,"wxjpegd")
++                    // #pragma comment(lib,"wxjpegd")
+                 #endif
+                 #if wxUSE_LIBPNG
+-                    #pragma comment(lib,"wxpngd")
++                    // #pragma comment(lib,"wxpngd")
+                 #endif
+                 #if wxUSE_LIBTIFF
+-                    #pragma comment(lib,"wxtiffd")
++                    // #pragma comment(lib,"wxtiffd")
+                 #endif
+                 #if wxUSE_ZLIB
+-                    #pragma comment(lib,"wxzlibd")
++                    // #pragma comment(lib,"wxzlibd")
+                 #endif
+-                #pragma comment(lib,"wxmsw28ud_adv")
+-                #pragma comment(lib,"wxmsw28ud_core")
+-                #pragma comment(lib,"wxmsw28ud_html")
++                // #pragma comment(lib,"wxmsw28ud_adv")
++                // #pragma comment(lib,"wxmsw28ud_core")
++                // #pragma comment(lib,"wxmsw28ud_html")
+                 #if wxUSE_GLCANVAS
+-                    #pragma comment(lib,"wxmsw28ud_gl")
++                    // #pragma comment(lib,"wxmsw28ud_gl")
+                 #endif
+                 #if wxUSE_DEBUGREPORT
+-                    #pragma comment(lib,"wxmsw28ud_qa")
++                    // #pragma comment(lib,"wxmsw28ud_qa")
+                 #endif
+                 #if wxUSE_XRC
+-                    #pragma comment(lib,"wxmsw28ud_xrc")
++                    // #pragma comment(lib,"wxmsw28ud_xrc")
+                 #endif
+                 #if wxUSE_AUI
+-                    #pragma comment(lib,"wxmsw28ud_aui")
++                    // #pragma comment(lib,"wxmsw28ud_aui")
+                 #endif
+                 #if wxUSE_RICHTEXT
+-                    #pragma comment(lib,"wxmsw28ud_richtext")
++                    // #pragma comment(lib,"wxmsw28ud_richtext")
+                 #endif
+                 #if wxUSE_MEDIACTRL
+-                    #pragma comment(lib,"wxmsw28ud_media")
++                    // #pragma comment(lib,"wxmsw28ud_media")
+                 #endif
+                 #if wxUSE_ODBC
+-                    #pragma comment(lib,"wxbase28ud_odbc")
++                    // #pragma comment(lib,"wxbase28ud_odbc")
+                 #endif
+             #endif // wxUSE_GUI
+         #else // release
+-            #pragma comment(lib,"wxbase28u")
+-            #pragma comment(lib,"wxbase28u_net")
+-            #pragma comment(lib,"wxbase28u_xml")
++            // #pragma comment(lib,"wxbase28u")
++            // #pragma comment(lib,"wxbase28u_net")
++            // #pragma comment(lib,"wxbase28u_xml")
+             #if wxUSE_REGEX
+-                #pragma comment(lib,"wxregexu")
++                // #pragma comment(lib,"wxregexu")
+             #endif
+ 
+             #if wxUSE_GUI
+                 #if wxUSE_XML
+-                    #pragma comment(lib,"wxexpat")
++                    // #pragma comment(lib,"wxexpat")
+                 #endif
+                 #if wxUSE_LIBJPEG
+-                    #pragma comment(lib,"wxjpeg")
++                    // #pragma comment(lib,"wxjpeg")
+                 #endif
+                 #if wxUSE_LIBPNG
+-                    #pragma comment(lib,"wxpng")
++                    // #pragma comment(lib,"wxpng")
+                 #endif
+                 #if wxUSE_LIBTIFF
+-                    #pragma comment(lib,"wxtiff")
++                    // #pragma comment(lib,"wxtiff")
+                 #endif
+                 #if wxUSE_ZLIB
+-                    #pragma comment(lib,"wxzlib")
++                    // #pragma comment(lib,"wxzlib")
+                 #endif
+-                #pragma comment(lib,"wxmsw28u_adv")
+-                #pragma comment(lib,"wxmsw28u_core")
+-                #pragma comment(lib,"wxmsw28u_html")
++                // #pragma comment(lib,"wxmsw28u_adv")
++                // #pragma comment(lib,"wxmsw28u_core")
++                // #pragma comment(lib,"wxmsw28u_html")
+                 #if wxUSE_GLCANVAS
+-                    #pragma comment(lib,"wxmsw28u_gl")
++                    // #pragma comment(lib,"wxmsw28u_gl")
+                 #endif
+                 #if wxUSE_DEBUGREPORT
+-                    #pragma comment(lib,"wxmsw28u_qa")
++                    // #pragma comment(lib,"wxmsw28u_qa")
+                 #endif
+                 #if wxUSE_XRC
+-                    #pragma comment(lib,"wxmsw28u_xrc")
++                    // #pragma comment(lib,"wxmsw28u_xrc")
+                 #endif
+                 #if wxUSE_AUI
+-                    #pragma comment(lib,"wxmsw28u_aui")
++                    // #pragma comment(lib,"wxmsw28u_aui")
+                 #endif
+                 #if wxUSE_RICHTEXT
+-                    #pragma comment(lib,"wxmsw28u_richtext")
++                    // #pragma comment(lib,"wxmsw28u_richtext")
+                 #endif
+                 #if wxUSE_MEDIACTRL
+-                    #pragma comment(lib,"wxmsw28u_media")
++                    // #pragma comment(lib,"wxmsw28u_media")
+                 #endif
+                 #if wxUSE_ODBC
+-                    #pragma comment(lib,"wxbase28u_odbc")
++                    // #pragma comment(lib,"wxbase28u_odbc")
+                 #endif
+             #endif // wxUSE_GUI
+         #endif // debug/release
+@@ -137,108 +137,108 @@
+             #endif
+         #else // static lib
+             #ifdef _DEBUG
+-                #include "../../../lib/vc_lib/mswd/wx/setup.h"
++                #include "../../../lib/vc_lib64/mswd/wx/setup.h"
+             #else
+-                #include "../../../lib/vc_lib/msw/wx/setup.h"
++                #include "../../../lib/vc_lib64/msw/wx/setup.h"
+             #endif
+         #endif // shared/static
+ 
+         #ifdef _DEBUG
+-            #pragma comment(lib,"wxbase28d")
+-            #pragma comment(lib,"wxbase28d_net")
+-            #pragma comment(lib,"wxbase28d_xml")
++            // #pragma comment(lib,"wxbase28d")
++            // #pragma comment(lib,"wxbase28d_net")
++            // #pragma comment(lib,"wxbase28d_xml")
+             #if wxUSE_REGEX
+-                #pragma comment(lib,"wxregexd")
++                // #pragma comment(lib,"wxregexd")
+             #endif
+ 
+             #if wxUSE_GUI
+                 #if wxUSE_XML
+-                    #pragma comment(lib,"wxexpatd")
++                    // #pragma comment(lib,"wxexpatd")
+                 #endif
+                 #if wxUSE_LIBJPEG
+-                    #pragma comment(lib,"wxjpegd")
++                    // #pragma comment(lib,"wxjpegd")
+                 #endif
+                 #if wxUSE_LIBPNG
+-                    #pragma comment(lib,"wxpngd")
++                    // #pragma comment(lib,"wxpngd")
+                 #endif
+                 #if wxUSE_LIBTIFF
+-                    #pragma comment(lib,"wxtiffd")
++                    // #pragma comment(lib,"wxtiffd")
+                 #endif
+                 #if wxUSE_ZLIB
+-                    #pragma comment(lib,"wxzlibd")
++                    // #pragma comment(lib,"wxzlibd")
+                 #endif
+-                #pragma comment(lib,"wxmsw28d_adv")
+-                #pragma comment(lib,"wxmsw28d_core")
+-                #pragma comment(lib,"wxmsw28d_html")
++                // #pragma comment(lib,"wxmsw28d_adv")
++                // #pragma comment(lib,"wxmsw28d_core")
++                // #pragma comment(lib,"wxmsw28d_html")
+                 #if wxUSE_GLCANVAS
+-                    #pragma comment(lib,"wxmsw28d_gl")
++                    // #pragma comment(lib,"wxmsw28d_gl")
+                 #endif
+                 #if wxUSE_DEBUGREPORT
+-                    #pragma comment(lib,"wxmsw28d_qa")
++                    // #pragma comment(lib,"wxmsw28d_qa")
+                 #endif
+                 #if wxUSE_XRC
+-                    #pragma comment(lib,"wxmsw28d_xrc")
++                    // #pragma comment(lib,"wxmsw28d_xrc")
+                 #endif
+                 #if wxUSE_AUI
+-                    #pragma comment(lib,"wxmsw28d_aui")
++                    // #pragma comment(lib,"wxmsw28d_aui")
+                 #endif
+                 #if wxUSE_RICHTEXT
+-                    #pragma comment(lib,"wxmsw28d_richtext")
++                    // #pragma comment(lib,"wxmsw28d_richtext")
+                 #endif
+                 #if wxUSE_MEDIACTRL
+-                    #pragma comment(lib,"wxmsw28d_media")
++                    // #pragma comment(lib,"wxmsw28d_media")
+                 #endif
+                 #if wxUSE_ODBC
+-                    #pragma comment(lib,"wxbase28d_odbc")
++                    // #pragma comment(lib,"wxbase28d_odbc")
+                 #endif
+             #endif // wxUSE_GUI
+         #else // release
+-            #pragma comment(lib,"wxbase28")
+-            #pragma comment(lib,"wxbase28_net")
+-            #pragma comment(lib,"wxbase28_xml")
++            // #pragma comment(lib,"wxbase28")
++            // #pragma comment(lib,"wxbase28_net")
++            // #pragma comment(lib,"wxbase28_xml")
+             #if wxUSE_REGEX
+-                #pragma comment(lib,"wxregex")
++                // #pragma comment(lib,"wxregex")
+             #endif
+ 
+             #if wxUSE_GUI
+                 #if wxUSE_XML
+-                    #pragma comment(lib,"wxexpat")
++                    // #pragma comment(lib,"wxexpat")
+                 #endif
+                 #if wxUSE_LIBJPEG
+-                    #pragma comment(lib,"wxjpeg")
++                    // #pragma comment(lib,"wxjpeg")
+                 #endif
+                 #if wxUSE_LIBPNG
+-                    #pragma comment(lib,"wxpng")
++                    // #pragma comment(lib,"wxpng")
+                 #endif
+                 #if wxUSE_LIBTIFF
+-                    #pragma comment(lib,"wxtiff")
++                    // #pragma comment(lib,"wxtiff")
+                 #endif
+                 #if wxUSE_ZLIB
+-                    #pragma comment(lib,"wxzlib")
++                    // #pragma comment(lib,"wxzlib")
+                 #endif
+-                #pragma comment(lib,"wxmsw28_adv")
+-                #pragma comment(lib,"wxmsw28_core")
+-                #pragma comment(lib,"wxmsw28_html")
++                // #pragma comment(lib,"wxmsw28_adv")
++                // #pragma comment(lib,"wxmsw28_core")
++                // #pragma comment(lib,"wxmsw28_html")
+                 #if wxUSE_GLCANVAS
+-                    #pragma comment(lib,"wxmsw28_gl")
++                    // #pragma comment(lib,"wxmsw28_gl")
+                 #endif
+                 #if wxUSE_DEBUGREPORT
+-                    #pragma comment(lib,"wxmsw28_qa")
++                    // #pragma comment(lib,"wxmsw28_qa")
+                 #endif
+                 #if wxUSE_XRC
+-                    #pragma comment(lib,"wxmsw28_xrc")
++                    // #pragma comment(lib,"wxmsw28_xrc")
+                 #endif
+                 #if wxUSE_AUI
+-                    #pragma comment(lib,"wxmsw28_aui")
++                    // #pragma comment(lib,"wxmsw28_aui")
+                 #endif
+                 #if wxUSE_RICHTEXT
+-                    #pragma comment(lib,"wxmsw28_richtext")
++                    // #pragma comment(lib,"wxmsw28_richtext")
+                 #endif
+                 #if wxUSE_MEDIACTRL
+-                    #pragma comment(lib,"wxmsw28_media")
++                    // #pragma comment(lib,"wxmsw28_media")
+                 #endif
+                 #if wxUSE_ODBC
+-                    #pragma comment(lib,"wxbase28_odbc")
++                    // #pragma comment(lib,"wxbase28_odbc")
+                 #endif
+             #endif // wxUSE_GUI
+         #endif // debug/release
+diff -r -u src/common/datetime.cpp src/common/datetime.cpp
+--- src/common/datetime.cpp	2011-03-22 12:59:40.000000000 +0100
++++ src/common/datetime.cpp	2019-07-04 15:54:12.550702100 +0200
+@@ -163,8 +163,8 @@
+         #define WX_TIMEZONE wxmw_timezone
+     #elif defined(__DARWIN__)
+         #define WX_GMTOFF_IN_TM
+-    #else // unknown platform - try timezone
+-        #define WX_TIMEZONE timezone
++    #else // unknown platform - try _timezone
++        #define WX_TIMEZONE _timezone
+     #endif
+ #endif // !WX_TIMEZONE && !WX_GMTOFF_IN_TM
+ 
+diff -r -u src/msw/control.cpp src/msw/control.cpp
+--- src/msw/control.cpp	2011-03-22 13:00:53.000000000 +0100
++++ src/msw/control.cpp	2019-07-04 15:58:08.292682600 +0200
+@@ -162,19 +162,19 @@
+         return false;
+     }
+ 
+-#if !wxUSE_UNICODE
+-    // Text labels starting with the character 0xff (which is a valid character
+-    // in many code pages) don't appear correctly as CreateWindowEx() has some
+-    // special treatment for this case, apparently the strings starting with -1
+-    // are not really strings but something called "ordinals". There is no
+-    // documentation about it but the fact is that the label gets mangled or
+-    // not displayed at all if we don't do this, see #9572.
+-    //
+-    // Notice that 0xffff is not a valid Unicode character so the problem
+-    // doesn't arise in Unicode build.
+-    if ( !label.empty() && label[0] == -1 )
+-        ::SetWindowText(GetHwnd(), label.c_str());
+-#endif // !wxUSE_UNICODE
++//#if !wxUSE_UNICODE
++//    // Text labels starting with the character 0xff (which is a valid character
++//    // in many code pages) don't appear correctly as CreateWindowEx() has some
++//    // special treatment for this case, apparently the strings starting with -1
++//    // are not really strings but something called "ordinals". There is no
++//    // documentation about it but the fact is that the label gets mangled or
++//    // not displayed at all if we don't do this, see #9572.
++//    //
++//    // Notice that 0xffff is not a valid Unicode character so the problem
++//    // doesn't arise in Unicode build.
++//    if ( !label.empty() && label[0] == -1 )
++//        ::SetWindowText(GetHwnd(), label.c_str());
++//#endif // !wxUSE_UNICODE
+ 
+     // install wxWidgets window proc for this window
+     SubclassWin(m_hWnd);
+diff -r -u src/msw/fontenum.cpp src/msw/fontenum.cpp
+--- src/msw/fontenum.cpp	2011-03-22 13:00:53.000000000 +0100
++++ src/msw/fontenum.cpp	2019-07-04 15:58:50.949065600 +0200
+@@ -99,7 +99,7 @@
+ 
+ #ifndef __WXMICROWIN__
+ int CALLBACK wxFontEnumeratorProc(LPLOGFONT lplf, LPTEXTMETRIC lptm,
+-                                  DWORD dwStyle, LONG lParam);
++                                  DWORD dwStyle, LPARAM lParam);
+ #endif
+ 
+ // ============================================================================
+@@ -269,7 +269,7 @@
+ 
+ #ifndef __WXMICROWIN__
+ int CALLBACK wxFontEnumeratorProc(LPLOGFONT lplf, LPTEXTMETRIC lptm,
+-                                  DWORD WXUNUSED(dwStyle), LONG lParam)
++                                  DWORD WXUNUSED(dwStyle), LPARAM lParam)
+ {
+ 
+     // we used to process TrueType fonts only, but there doesn't seem to be any
+diff -r -u src/msw/window.cpp src/msw/window.cpp
+--- src/msw/window.cpp	2011-03-22 13:00:55.000000000 +0100
++++ src/msw/window.cpp	2019-07-04 15:59:09.654773200 +0200
+@@ -107,7 +107,7 @@
+ #endif
+ 
+ #if !defined __WXWINCE__ && !defined NEED_PBT_H
+-    #include <pbt.h>
++    //#include <pbt.h>
+ #endif
+ 
+ #if defined(__WXWINCE__)
