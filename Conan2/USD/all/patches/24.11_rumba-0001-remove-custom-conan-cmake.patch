@@ -1,0 +1,50 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 4b7dd08cf..111996164 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -13,45 +13,6 @@ if (NOT CMAKE_SIZEOF_VOID_P EQUAL 8)
+     endif()
+ endif()
+ 
+-#### This part is added to the original file in order to tweak the build for Rumba ##
+-set( CMAKE_EXPORT_COMPILE_COMMANDS ON )
+-if( DEFINED MAQUINA_CONAN_BUILD_INFO_PATH )
+-    include( "${MAQUINA_CONAN_BUILD_INFO_PATH}" )
+-else()
+-    include( "${CMAKE_BINARY_DIR}/conanbuildinfo.cmake" )
+-endif()
+-conan_basic_setup(TARGETS)
+-
+-# help Usd build to use our dependencies
+-if( DEFINED HDF5_ROOT )
+-    # set HDF5_ROOT in the env so FindHDF5.cmake can find it
+-    message( status "Using HDF5_ROOT: ${HDF5_ROOT}" )
+-    set( ENV{HDF5_ROOT} ${HDF5_ROOT} )
+-endif()
+-
+-if( UNIX )
+-    set( OPENGL_gl_LIBRARY "${CONAN_LIB_DIRS_GLU}/libGLU.a" )
+-    include_directories( "${CONAN_INCLUDE_DIRS_GLU}" )
+-else()
+-    if( NOT DEFINED CONAN_DEFINES )
+-        set( CONAN_DEFINES ${CONAN_DEFINES_RELEASE} )
+-    endif()
+-    
+-    if( NOT DEFINED CONAN_LIB_DIRS_GLEW )
+-        set( CONAN_LIB_DIRS_GLEW ${CONAN_LIB_DIRS_GLEW_RELEASE} )
+-    endif()
+-    set( GLEW_LIBRARY "${CONAN_LIB_DIRS_GLEW}/glew32.lib" )
+-endif()
+-add_definitions(${CONAN_DEFINES})
+-
+-# tweak compile options
+-if( UNIX ) 
+-    add_compile_options( -DUSD_FORCE_GNU_STL_EXTENSIONS )
+-    # there are too much warnings, disable them completely to not flood the console output
+-    add_compile_options(-Wno-everything -Wno-inconsistent-missing-override -Wno-potentially-evaluated-exp -Wno-shadow -Wno-shadow-field -Wno-shadow-uncaptured-local -Wno-unused-private-field -Wno-expansion-to-defined -Wno-unneeded-internal-declaration -Wno-unused-variable )
+-endif()
+-#### end of tweaks ##
+-
+ list(APPEND CMAKE_MODULE_PATH
+     ${PROJECT_SOURCE_DIR}/cmake/defaults
+     ${PROJECT_SOURCE_DIR}/cmake/modules

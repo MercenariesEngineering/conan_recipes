@@ -1,0 +1,9 @@
+sources:
+  "24.11":
+    url: "https://github.com/MercenariesEngineering/USD/archive/3c49873688d556fab86540de2c97d16372e41fd6.zip"
+    sha256: "a5bdf94f147a3ab6d3b6a0e33fb762bcc8fbe4e28a048dee77c9004aa5b0ad9c"
+patches:
+  "24.11":
+    - patch_file: "patches/24.11_rumba-0001-remove-custom-conan-cmake.patch"
+      patch_description: "Remove Conan 1 CMake code"
+      patch_type: "conan"
