@@ -1,0 +1,55 @@
+environment:
+  matrix:
+    - job_name: Ubuntu Linux build
+      appveyor_build_worker_image: Ubuntu2004
+      
+    - job_name: MacOS build
+      appveyor_build_worker_image: macos-bigsur
+      
+    - job_name: Windows VS 2019 build
+      appveyor_build_worker_image: Visual Studio 2019
+      
+for:
+-
+  matrix:
+    only:
+      - job_name: Ubuntu Linux build
+
+  install:
+  - source ~/venv3.10/bin/activate
+  - pip install --upgrade pip
+  - pip install conan
+  - conan profile detect
+
+  test_script:
+  - conan create . --version=19.7.0 --build=missing -c tools.system.package_manager:mode=install -c tools.system.package_manager:sudo=True
+
+-
+  matrix:
+    only:
+      - job_name: MacOS build
+  install:
+  - source ~/venv3.10/bin/activate
+  - pip install --upgrade pip
+  - pip install conan
+  - conan profile detect
+  
+  test_script:
+  - conan create . -s compiler.cppstd=gnu17 --version=19.7.0 --build=missing
+ 
+-
+  matrix:
+    only:
+      - job_name: Windows VS 2019 build
+
+  install:
+  - set PATH=C:\Python38-x64;C:\Python38-x64\scripts;%PATH%
+  - python -m pip install --upgrade pip
+  - pip install conan
+  - conan profile detect
+
+  
+  test_script:
+  - conan create . --version=19.7.0 --build=missing
+
+build: off
