@@ -975,7 +975,7 @@ class QtConan(ConanFile):
         tools.get(**self.conan_data["sources"][self.version])
         shutil.move("qt-everywhere-src-%s" % self.version, "qt5")
 
-        for patch in ["cc04651dea4c4678c626cb31b3ec8394426e2b25.diff", "99e43db7cea1c838993c151d2d40fc2874a94256.diff", "qt_glfont_patch.diff"]:
+        for patch in ["cc04651dea4c4678c626cb31b3ec8394426e2b25.diff", "99e43db7cea1c838993c151d2d40fc2874a94256.diff", "qt_glfont_patch.diff", "4c4693cf964e9d7370c27a26e1d263a262aee568.diff"]:
             tools.patch("qt5/qtbase", patch)
         for patch in ["a9cc8aa.diff"]:
             tools.patch("qt5/qtmultimedia", patch)
@@ -1346,6 +1346,9 @@ list(APPEND Qt5Gui_OPENGL_LIBRARIES Qt5::Gui_GL)
         """Edit package info."""
         self.cpp_info.libs = tools.collect_libs(self)
         self.cpp_info.libs.remove("Qt5Bootstrap")
+        if "Qt5AxBase" in self.cpp_info.libs: self.cpp_info.libs.remove("Qt5AxBase")
+        if "Qt5AxContainer" in self.cpp_info.libs: self.cpp_info.libs.remove("Qt5AxContainer")
+        if "Qt5AxServer" in self.cpp_info.libs: self.cpp_info.libs.remove("Qt5AxServer")
         self.cpp_info.includedirs = [os.path.join("include", name) for name in next(os.walk(os.path.join(self.package_folder, "include")))[1]]
         self.cpp_info.includedirs.append("include")
         self.env_info.PATH.append(os.path.join(self.package_folder, "bin"))

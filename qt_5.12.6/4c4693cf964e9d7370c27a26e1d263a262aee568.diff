@@ -1,0 +1,177 @@
+diff --git a/src/platformheaders/windowsfunctions/qwindowswindowfunctions.h b/src/platformheaders/windowsfunctions/qwindowswindowfunctions.h
+index e51c2fde67..b8a366b053 100644
+--- a/src/platformheaders/windowsfunctions/qwindowswindowfunctions.h
++++ b/src/platformheaders/windowsfunctions/qwindowswindowfunctions.h
+@@ -99,6 +99,14 @@ public:
+         IsTabletModeType func = reinterpret_cast<IsTabletModeType>(QGuiApplication::platformFunction(isTabletModeIdentifier()));
+         return func && func();
+     }
++
++    typedef bool (*SetWinTabEnabled)(bool enabled);
++    static const QByteArray setWinTabEnabledIdentifier() { return QByteArrayLiteral("WindowsSetWinTabEnabled"); }
++    static bool setWinTabEnabled(bool enabled)
++    {
++        SetWinTabEnabled func = reinterpret_cast<SetWinTabEnabled>(QGuiApplication::platformFunction(setWinTabEnabledIdentifier()));
++        return func && func(enabled);
++    }
+ };
+ 
+ Q_DECLARE_OPERATORS_FOR_FLAGS(QWindowsWindowFunctions::TouchWindowTouchTypes)
+diff --git a/src/platformheaders/windowsfunctions/qwindowswindowfunctions.qdoc b/src/platformheaders/windowsfunctions/qwindowswindowfunctions.qdoc
+index a52bbe061b..bfa3b362ce 100644
+--- a/src/platformheaders/windowsfunctions/qwindowswindowfunctions.qdoc
++++ b/src/platformheaders/windowsfunctions/qwindowswindowfunctions.qdoc
+@@ -176,3 +176,30 @@
+     \sa QWidget::showMaximized(), QWidget::saveGeometry(), QWidget::restoreGeometry()
+     \since 5.9
+ */
++
++/*!
++    \typedef QWindowsWindowFunctions::SetWinTabEnabled
++    \since 6.0
++
++    This is the typedef for the function returned by QGuiApplication::platformFunction
++    when passed setWinTabEnabledIdentifier().
++*/
++
++/*!
++    \fn QByteArray QWindowsWindowFunctions::setWinTabEnabledIdentifier()
++    \since 6.0
++
++    This function returns the bytearray that can be used to query
++    QGuiApplication::platformFunction to retrieve the SetWinTabEnabled function.
++*/
++
++/*!
++    \fn bool QWindowsWindowFunctions::setWinTabEnabled(bool enabled)
++    \since 6.0
++
++    This is a convenience function that can be used directly instead of resolving
++    the function pointer.
++
++    \a enabled determines whether the WinTab API will be used for tablet input instead
++    of the native API. Returns true if the operation was successful.
++*/
+diff --git a/src/plugins/platforms/windows/qwindowscontext.cpp b/src/plugins/platforms/windows/qwindowscontext.cpp
+index 38b9823d6b..81d937b80c 100644
+--- a/src/plugins/platforms/windows/qwindowscontext.cpp
++++ b/src/plugins/platforms/windows/qwindowscontext.cpp
+@@ -365,6 +365,16 @@ bool QWindowsContext::initTablet(unsigned integrationOptions)
+ #endif
+ }
+ 
++bool QWindowsContext::disposeTablet()
++{
++#if QT_CONFIG(tabletevent)
++    d->m_tabletSupport.reset();
++    return true;
++#else
++    return false;
++#endif
++}
++
+ bool QWindowsContext::initPointer(unsigned integrationOptions)
+ {
+     if (integrationOptions & QWindowsIntegration::DontUseWMPointer)
+diff --git a/src/plugins/platforms/windows/qwindowscontext.h b/src/plugins/platforms/windows/qwindowscontext.h
+index 4908f14629..2e1c136703 100644
+--- a/src/plugins/platforms/windows/qwindowscontext.h
++++ b/src/plugins/platforms/windows/qwindowscontext.h
+@@ -175,6 +175,7 @@ public:
+     bool initTouch(unsigned integrationOptions); // For calls from QWindowsIntegration::QWindowsIntegration() only.
+     bool initTablet(unsigned integrationOptions);
+     bool initPointer(unsigned integrationOptions);
++    bool disposeTablet();
+ 
+     int defaultDPI() const;
+ 
+diff --git a/src/plugins/platforms/windows/qwindowsintegration.cpp b/src/plugins/platforms/windows/qwindowsintegration.cpp
+index 5c1fa00088..0093591e24 100644
+--- a/src/plugins/platforms/windows/qwindowsintegration.cpp
++++ b/src/plugins/platforms/windows/qwindowsintegration.cpp
+@@ -138,6 +138,7 @@ struct QWindowsIntegrationPrivate
+     ~QWindowsIntegrationPrivate();
+ 
+     unsigned m_options = 0;
++    int m_tabletAbsoluteRange = -1;
+     QWindowsContext m_context;
+     QPlatformFontDatabase *m_fontDatabase = nullptr;
+ #if QT_CONFIG(clipboard)
+@@ -229,19 +230,18 @@ QWindowsIntegrationPrivate::QWindowsIntegrationPrivate(const QStringList &paramL
+     initOpenGlBlacklistResources();
+ 
+     static bool dpiAwarenessSet = false;
+-    int tabletAbsoluteRange = -1;
+     // Default to per-monitor awareness to avoid being scaled when monitors with different DPI
+     // are connected to Windows 8.1
+     QtWindows::ProcessDpiAwareness dpiAwareness = QtWindows::ProcessPerMonitorDpiAware;
+-    m_options = parseOptions(paramList, &tabletAbsoluteRange, &dpiAwareness);
++    m_options = parseOptions(paramList, &m_tabletAbsoluteRange, &dpiAwareness);
+     QWindowsFontDatabase::setFontOptions(m_options);
+ 
+     if (m_context.initPointer(m_options)) {
+         QCoreApplication::setAttribute(Qt::AA_CompressHighFrequencyEvents);
+     } else {
+         m_context.initTablet(m_options);
+-        if (tabletAbsoluteRange >= 0)
+-            m_context.setTabletAbsoluteRange(tabletAbsoluteRange);
++        if (m_tabletAbsoluteRange >= 0)
++            m_context.setTabletAbsoluteRange(m_tabletAbsoluteRange);
+     }
+ 
+     if (!dpiAwarenessSet) { // Set only once in case of repeated instantiations of QGuiApplication.
+@@ -625,6 +625,28 @@ void QWindowsIntegration::beep() const
+     MessageBeep(MB_OK);  // For QApplication
+ }
+ 
++bool QWindowsIntegration::setWinTabEnabled(bool enabled)
++{
++    bool ret = false;
++    if (QWindowsIntegration *p = QWindowsIntegration::instance()) {
++        if (enabled) {
++            if (p->d->m_context.tabletSupport()) {
++                ret = true;
++            } else {
++                ret = p->d->m_context.initTablet(p->d->m_options);
++                if (ret && p->d->m_tabletAbsoluteRange >= 0)
++                    p->d->m_context.setTabletAbsoluteRange(p->d->m_tabletAbsoluteRange);
++            }
++        } else {
++            if (p->d->m_context.tabletSupport())
++                ret = p->d->m_context.disposeTablet();
++            else
++                ret = true;
++        }
++    }
++    return ret;
++}
++
+ #if QT_CONFIG(vulkan)
+ QPlatformVulkanInstance *QWindowsIntegration::createPlatformVulkanInstance(QVulkanInstance *instance) const
+ {
+diff --git a/src/plugins/platforms/windows/qwindowsintegration.h b/src/plugins/platforms/windows/qwindowsintegration.h
+index e28b2c2fb3..0bf6d38371 100644
+--- a/src/plugins/platforms/windows/qwindowsintegration.h
++++ b/src/plugins/platforms/windows/qwindowsintegration.h
+@@ -107,6 +107,8 @@ public:
+ 
+     static QWindowsIntegration *instance() { return m_instance; }
+ 
++    static bool setWinTabEnabled(bool enabled);
++
+     unsigned options() const;
+ 
+     void beep() const override;
+diff --git a/src/plugins/platforms/windows/qwindowsnativeinterface.cpp b/src/plugins/platforms/windows/qwindowsnativeinterface.cpp
+index ed945ec4b1..c915c72164 100644
+--- a/src/plugins/platforms/windows/qwindowsnativeinterface.cpp
++++ b/src/plugins/platforms/windows/qwindowsnativeinterface.cpp
+@@ -281,6 +281,8 @@ QFunctionPointer QWindowsNativeInterface::platformFunction(const QByteArray &fun
+         return QFunctionPointer(QWindowsNativeInterface::setWindowActivationBehavior);
+     if (function == QWindowsWindowFunctions::isTabletModeIdentifier())
+         return QFunctionPointer(QWindowsNativeInterface::isTabletMode);
++    if (function == QWindowsWindowFunctions::setWinTabEnabledIdentifier())
++        return QFunctionPointer(QWindowsIntegration::setWinTabEnabled);
+     return nullptr;
+ }
+ 
