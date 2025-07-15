@@ -975,7 +975,7 @@ class QtConan(ConanFile):
         tools.get(**self.conan_data["sources"][self.version])
         shutil.move("qt-everywhere-src-%s" % self.version, "qt5")
 
-        for patch in ["cc04651dea4c4678c626cb31b3ec8394426e2b25.diff", "99e43db7cea1c838993c151d2d40fc2874a94256.diff", "qt_glfont_patch.diff", "4c4693cf964e9d7370c27a26e1d263a262aee568.diff"]:
+        for patch in ["cc04651dea4c4678c626cb31b3ec8394426e2b25.diff", "99e43db7cea1c838993c151d2d40fc2874a94256.diff", "qt_glfont_patch.diff", "4c4693cf964e9d7370c27a26e1d263a262aee568.diff", "gl_context_release_behavior_none.diff"]:
             tools.patch("qt5/qtbase", patch)
         for patch in ["a9cc8aa.diff"]:
             tools.patch("qt5/qtmultimedia", patch)
