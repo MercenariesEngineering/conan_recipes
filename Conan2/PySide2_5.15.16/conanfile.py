@@ -209,8 +209,8 @@ macro(collect_essential_modules)
         #copy(self, pattern=clang_file, src="C:/Users/pierre/Downloads", dst=self.build_folder)
         
         # Conan won't natively handle 7z files. Cmake is actually the easiest unzipping tool at hand.
-        self.run("cmake -E tar xf "+clang_file)
-        os.unlink(clang_file)
+        self.run("cmake -E tar xf clang.7z")
+        os.unlink("clang.7z")
 
     def build(self):
         self._patch_sources()

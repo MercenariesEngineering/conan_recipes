@@ -22,7 +22,8 @@ class FBX(ConanFile):
 
     def config_options(self):
         if self.settings.os != "Windows":
-            self.settings.remove("compiler")
+            #self.settings.remove("compiler")
+            pass
 
     def requirements(self):
         self.requires("libxml2/2.13.8")

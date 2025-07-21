@@ -45,7 +45,7 @@ class OpenEXRIdConan(ConanFile):
         ## Download lib source for build
         #copy(self, "*", src="x:/Dev/openexrid/", dst=self.source_folder)
         #get(self, "https://github.com/MercenariesEngineering/openexrid/archive/refs/tags/v%s.tar.gz" % self.version, strip_root=True)
-        get(self, "https://github.com/MercenariesEngineering/openexrid/archive/d4357b2b397bdce5c6fe554e72e6c6d6bedec932.zip", strip_root=True)
+        get(self, "https://github.com/MercenariesEngineering/openexrid/archive/8d19200828649c40b7840947fca9f424f4d35c0f.zip", strip_root=True)
         #
         # Download pre-built plugins to package
         linux_filename = "openexrid-%s-linux.tar.gz" % self.version

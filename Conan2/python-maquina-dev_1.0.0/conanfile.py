@@ -72,7 +72,7 @@ class PythonPackages(ConanFile):
             python_shebang = "#!/usr/bin/env python\n"
             bin_directory = os.path.join(self.package_folder, "bin")
             if os.path.exists(bin_directory):
-                with chdir(bin_directory):
+                with chdir(self, bin_directory):
                     for filename in [entry for entry in os.listdir(".") if os.path.isfile(entry)]:
                         try:
                             with open(filename, "r", encoding="utf-8") as infile:
