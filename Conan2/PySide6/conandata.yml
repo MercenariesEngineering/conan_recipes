@@ -1,0 +1,7 @@
+sources:
+  "6.8.3":
+    url: "https://download.qt.io/official_releases/QtForPython/pyside6/PySide6-6.8.3-src/pyside-setup-everywhere-src-6.8.3.tar.xz"
+    sha256: "d2c896f7f1a6a7ea4c9f98cfe317272fd139703ddf612b86999f09e48aeef0e6"
+patches:
+  "6.8.3":
+    - patch_file: "patches/pyside_pysidesignal.diff"
