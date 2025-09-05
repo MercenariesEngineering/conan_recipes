@@ -1046,8 +1046,8 @@ class QtConan(ConanFile):
 
         # consumers will need the QT_PLUGIN_PATH defined in runenv
         self.runenv_info.define("QT_PLUGIN_PATH", os.path.join(self.package_folder, "plugins"))
+        self.buildenv_info.append_path("PATH", os.path.join(self.package_folder, "bin"))
         self.buildenv_info.define("QT_PLUGIN_PATH", os.path.join(self.package_folder, "plugins"))
-
         self.buildenv_info.define("QT_HOST_PATH", self.package_folder)
 
         build_modules = {}

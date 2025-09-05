@@ -204,6 +204,12 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}")
                         except UnicodeDecodeError:
                             pass
 
+        elif self.settings.os == "Windows":
+            # package minimal libclang
+            copy(self, pattern="*", src=os.path.join(self.source_folder, "libclang", "include"), dst=os.path.join(self.package_folder, "libclang", "include"))
+            copy(self, pattern="*", src=os.path.join(self.source_folder, "libclang", "lib", "clang"), dst=os.path.join(self.package_folder, "libclang", "lib", "clang"))
+            copy(self, pattern="libclang.dll", src=os.path.join(self.source_folder, "libclang", "bin"), dst=os.path.join(self.package_folder, "libclang", "bin"))
+
     def package_info(self):
         self.cpp_info.set_property("cmake_file_name", "PySide6")
         self.cpp_info.set_property("cmake_target_name", "PySide::PySide6")
@@ -216,9 +222,10 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}")
 
         self.runenv_info.append_path("PYTHONPATH", self.user_info.site_package)
         if self.settings.os == "Windows":
-            self.cpp_info.bindirs = ['bin', 'Scripts']
+            self.cpp_info.bindirs = ['bin']
             self.runenv_info.append_path("PATH", os.path.join(self.package_folder, "bin"))
-            self.runenv_info.append_path("PATH", os.path.join(self.package_folder, "Scripts"))
+            self.runenv_info.append_path("PATH", os.path.join(self.package_folder, "libclang", "bin"))
+            self.buildenv_info.prepend_path("PATH", os.path.join(self.package_folder, "libclang", "bin"))
         else:
             self.cpp_info.bindirs = ['bin']
             self.runenv_info.append_path("PATH", os.path.join(self.package_folder, "bin"))
