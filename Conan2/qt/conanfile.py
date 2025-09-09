@@ -50,7 +50,7 @@ class QtConan(ConanFile):
         "shared": [True, False],
         "opengl": ["no", "desktop", "dynamic"],
         "with_vulkan": [True, False],
-        "openssl": [True, "system", False],
+        "openssl": [True, False],
         "with_pcre2": [True, False],
         "with_glib": [True, False],
         "with_doubleconversion": [True, False],
@@ -94,13 +94,13 @@ class QtConan(ConanFile):
     default_options = {
         "shared": False,
         "opengl": "desktop",
-        "with_vulkan": True, # ASWF: for OpenRV
+        "with_vulkan": False, # ASWF: for OpenRV
         "openssl": True,
         "with_pcre2": True,
-        "with_glib": True,
+        "with_glib": False,
         "with_doubleconversion": True,
         "with_freetype": True,
-        "with_fontconfig": True,
+        "with_fontconfig": False,
         "with_icu": True,
         "with_harfbuzz": False, # ASWF: we would need harfbuzz 2.0
         "with_libjpeg": "libjpeg-turbo", # ASWF: EL distros have -turbo
@@ -111,7 +111,7 @@ class QtConan(ConanFile):
         "with_odbc": False,
         "with_zstd": True,
         "with_brotli": True,
-        "with_dbus": True, # ASWF: for OpenRV
+        "with_dbus": False, # ASWF: for OpenRV
         "with_libalsa": False,
         "with_openal": True,
         "with_gstreamer": False,
@@ -140,8 +140,7 @@ class QtConan(ConanFile):
 
     @property
     def _lib(self):
-        #return "lib64"
-        return "lib"
+        return "lib" if self.settings.os == "Windows" else "lib64"
 
     @property
     def _settings_build(self):
@@ -387,7 +386,7 @@ class QtConan(ConanFile):
 
     def requirements(self):
         self.requires("zlib/[>=1.2.11 <2]")
-        if self.options.openssl is True:
+        if self.options.openssl:
            self.requires("openssl/[>=1.1 <4]")
         if self.options.with_pcre2:
             self.requires("pcre2/10.42")
@@ -576,7 +575,7 @@ class QtConan(ConanFile):
         else:
             tc.variables["HAVE_openssl"] = "ON"
             # ASWF: avoid openssl package, system one is shared
-            if self.options.openssl == "system" or self.dependencies["openssl"].options.shared:
+            if self.dependencies["openssl"].options.shared:
                 tc.variables["INPUT_openssl"] = "runtime"
                 tc.variables["QT_FEATURE_openssl_runtime"] = "ON"
             else:
@@ -1121,7 +1120,7 @@ class QtConan(ConanFile):
         if self.options.with_glib:
             core_reqs.append("glib::glib")
         # ASWF: openssl dependency is tricky
-        if self.options.openssl is True:
+        if self.options.openssl:
             core_reqs.append("openssl::openssl") # used by QCryptographicHash
 
         _create_module("Core", core_reqs)
@@ -1283,7 +1282,7 @@ class QtConan(ConanFile):
                 self.cpp_info.components["QODBCDriverPlugin"].system_libs.append("odbc32")
         networkReqs = []
         # ASWF: openssl dependency is tricky
-        if self.options.openssl is True:
+        if self.options.openssl:
             networkReqs.append("openssl::openssl")
         if self.options.with_brotli:
             networkReqs.append("brotli::brotli")
