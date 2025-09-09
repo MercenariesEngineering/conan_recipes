@@ -2,7 +2,7 @@ from conan import ConanFile
 from conan.tools.build import build_jobs
 from conan.tools.cmake import CMake, CMakeToolchain, CMakeDeps
 from conan.tools.env import Environment
-from conan.tools.files import get, download, copy, replace_in_file, export_conandata_patches, apply_conandata_patches
+from conan.tools.files import get, download, copy, chdir, replace_in_file, export_conandata_patches, apply_conandata_patches
 from conan.tools.microsoft import VCVars
 from conan.tools.scm import Version
 import os
@@ -38,7 +38,7 @@ class PySide6(ConanFile):
         self.requires("python-maquina/1.0.0@mercs")
         self.requires("qt/"+self.version)
         self.requires("md4c/0.4.8")
-
+ 
     def build_requirements(self):
         self.tool_requires("cpython/<host_version>", options={"shared": True})
         self.tool_requires("python-maquina/<host_version>@mercs")
@@ -123,7 +123,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}")
     def _get_clang(self):        
         clang_file = self.clang_source_file
         download(self, "http://download.qt.io/development_releases/prebuilt/libclang/%s" % clang_file, clang_file)
-        #copy(self, pattern=clang_file, src="C:/Users/pierre/Downloads", dst=self.build_folder)
+        #copy(self, pattern=clang_file, src="/mnt/work/code/3rdparty", dst=self.build_folder)
         
         # Conan won't natively handle 7z files. Cmake is actually the easiest unzipping tool at hand.
         self.run("cmake -E tar xf "+clang_file)
@@ -157,7 +157,33 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}")
         else:
             python_exe = "python"
         setup = os.path.join(self.source_folder, "setup.py")
-        self.run(python_exe + " %s install %s" % (setup, " ".join(arguments)))
+
+        env = Environment()
+        if self.settings.os != "Windows":
+            # From ASWF:
+            #env.define("LLVM_INSTALL_DIR", clang_info.package_folder)
+            #pythonInfo = self.dependencies["cpython"]
+            #env.append("LD_LIBRARY_PATH", pythonInfo.cpp_info.libdirs[0], separator=':')
+            # Something in Qt depends on md4c and freetype. This should be fixed in Qt package.
+            #md4cInfo = self.dependencies["md4c"]
+            #env.append("LD_LIBRARY_PATH", md4cInfo.cpp_info.libdirs[0],separator=':')
+            #freetypeInfo = self.dependencies["freetype"]
+            #env.append("LD_LIBRARY_PATH", freetypeInfo.cpp_info.libdirs[0],separator=':')
+            #env.append("CMAKE_PREFIX_PATH", f"{qt_package}:{clang_info.package_folder}:{self.source_folder}", separator=':')
+            #if self.settings.os == "Linux":
+            #    env.append("LD_LIBRARY_PATH", clang_info.cpp_info.libdirs[0],separator=':')
+            #env.define("CPATH", f"/opt/rh/gcc-toolset-{os.environ['ASWF_DTS_VERSION']}/root/usr/lib/gcc/x86_64-redhat-linux/{os.environ['ASWF_DTS_VERSION']}/include")
+            env.append("CMAKE_PREFIX_PATH", f"{qt_package}:{self.source_folder}", separator=':')
+
+        env_vars = env.vars(self)
+
+        self.output.info ("Running pyside setup with: "+(python_exe + " %s install %s" % (setup, " ".join(arguments))))
+        self.output.info ("  with environment:")
+        for env_name, env_value in env_vars.items():
+            self.output.info ("    "+env_name+": '"+env_value+"'")
+
+        with env_vars.apply():
+            self.run(python_exe + " %s install %s" % (setup, " ".join(arguments)))
 
     @property
     def _install_dir(self):
@@ -183,15 +209,20 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}")
 
         if self.settings.os == "Linux":
             # package minimal libclang
-            copy(self, pattern="*", src=os.path.join(self.source_folder, "libclang", "include"), dst=os.path.join(self.package_folder, "libclang", "include"))
-            copy(self, pattern="*", src=os.path.join(self.source_folder, "libclang", "lib", "clang"), dst=os.path.join(self.package_folder, "libclang", "lib", "clang"))
-            copy(self, pattern="libclang.so.18", src=os.path.join(self.source_folder, "libclang", "lib"), dst=os.path.join(self.package_folder, "libclang", "lib"))
+            self.output.info ("Packaging libclang from "+str(os.path.join(self.source_folder, "libclang"))+" to "+str(os.path.join(self.package_folder, "libclang")))
+            # Packaging the whole libclang as it's already painful
+            # TODO: Improve the package size
+            copy(self, pattern="*", src=os.path.join(self.source_folder, "libclang"), dst=os.path.join(self.package_folder, "libclang"))
+            #copy(self, pattern="*", src=os.path.join(self.source_folder, "libclang", "include"), dst=os.path.join(self.package_folder, "libclang", "include"))
+            #copy(self, pattern="*", src=os.path.join(self.source_folder, "libclang", "lib", "clang"), dst=os.path.join(self.package_folder, "libclang", "lib", "clang"))
+            #copy(self, pattern="libclang.so.20", src=os.path.join(self.source_folder, "libclang", "lib"), dst=os.path.join(self.package_folder, "libclang", "lib"))
+            #copy(self, pattern="libclang-cpp.so.20", src=os.path.join(self.source_folder, "libclang", "lib"), dst=os.path.join(self.package_folder, "libclang", "lib"))
 
             # fix shebangs
             python_shebang = "#!/usr/bin/env python\n"
             bin_directory = os.path.join(self.package_folder, "bin")
             if os.path.exists(bin_directory):
-                with chdir(bin_directory):
+                with chdir(self, bin_directory):
                     for filename in [entry for entry in os.listdir(".") if os.path.isfile(entry)]:
                         try:
                             with open(filename, "r", encoding="utf-8") as infile:
@@ -230,4 +261,4 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}")
             self.cpp_info.bindirs = ['bin']
             self.runenv_info.append_path("PATH", os.path.join(self.package_folder, "bin"))
             self.runenv_info.append_path("LD_LIBRARY_PATH", os.path.join(self.package_folder, "libclang", "lib"))
-            self.runenv_info.append_path("CLANG_INSTALL_DIR", os.path.join(self.package_folder, "libclang"))
+            self.runenv_info.define("CLANG_INSTALL_DIR", os.path.join(self.package_folder, "libclang"))
