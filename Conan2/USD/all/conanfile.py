@@ -245,6 +245,7 @@ class USDConan(ConanFile):
         if self.options.with_python:
             self.runenv_info.append_path("PYTHONPATH", os.path.join(self.package_folder, "lib", "python"))
         self.runenv_info.append_path("PXR_PLUGINPATH_NAME", os.path.join(self.package_folder, "plugin", "usd"))
+        self.runenv_info.prepend_path("PATH", os.path.join(self.package_folder, "lib"))
 
         if self.settings.os in ["Linux", "FreeBSD"]:
             self.cpp_info.system_libs.append("m")
