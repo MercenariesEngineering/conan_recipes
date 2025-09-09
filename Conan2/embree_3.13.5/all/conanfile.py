@@ -235,7 +235,7 @@ class EmbreeConan(ConanFile):
         copy(self, "*.h", src=os.path.join(self.source_folder, "common") , dst=os.path.join(self.package_folder, "common"))
         copy(self, "*.h", src=os.path.join(self.source_folder, "kernels") , dst=os.path.join(self.package_folder, "kernels"))
         copy(self, "*.lib", src=os.path.join(self.build_folder, str(self.settings.build_type)) , dst=os.path.join(self.package_folder, "lib"))
-        copy(self, "*.a", src=os.path.join(self.build_folder, "lib") , dst=os.path.join(self.package_folder, "lib"))
+        copy(self, "*.a", src=self.build_folder, dst=os.path.join(self.package_folder, "lib"))
 
         rmdir(self, os.path.join(self.package_folder, "cmake"))
         rmdir(self, os.path.join(self.package_folder, "lib", "cmake"))
