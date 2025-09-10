@@ -897,11 +897,14 @@ class CPythonConan(ConanFile):
             bindir = os.path.join(self.package_folder, "bin")
             self.runenv_info.append_path("PATH", bindir)
             self.buildenv_info.append_path("PATH", bindir)
-            self.runenv_info.append_path("PYTHONPATH", os.path.join(bindir, "Lib"))
-            self.runenv_info.append_path("PYTHONPATH", os.path.join(bindir, "DLLs"))
-            if self.options.shared:  # So the find_package(Python) works
-                self.buildenv_info.append_path("LD_LIBRARY_PATH", os.path.join(self.package_folder, "lib"))
-                self.buildenv_info.append_path("DYLD_LIBRARY_PATH", os.path.join(self.package_folder, "lib"))
+            if self.settings.os == "Windows":
+                self.runenv_info.append_path("PYTHONPATH", os.path.join(bindir, "Lib"))
+                self.runenv_info.append_path("PYTHONPATH", os.path.join(bindir, "DLLs"))
+            else:
+                self.runenv_info.append_path("PYTHONPATH", os.path.join(self.package_folder, "lib", "python"+self._version_suffix))
+                if self.options.shared:  # So the find_package(Python) works
+                    self.buildenv_info.append_path("LD_LIBRARY_PATH", os.path.join(self.package_folder, "lib"))
+                    self.buildenv_info.append_path("DYLD_LIBRARY_PATH", os.path.join(self.package_folder, "lib"))
 
             # TODO remove once Conan 1.x is no longer supported
             self.output.info(f"Appending PATH environment variable: {bindir}")
