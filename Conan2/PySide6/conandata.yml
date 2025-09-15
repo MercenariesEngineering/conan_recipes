@@ -5,3 +5,4 @@ sources:
 patches:
   "6.8.3":
     - patch_file: "patches/pyside_pysidesignal.diff"
+    - patch_file: "patches/pyside_sbkerrors.diff"
