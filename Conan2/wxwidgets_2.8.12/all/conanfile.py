@@ -2,7 +2,7 @@ from conan import ConanFile
 from conan.tools.apple import is_apple_os
 from conan.tools.cmake import CMake, CMakeDeps, CMakeToolchain, cmake_layout
 from conan.tools.files import copy, get, replace_in_file, rmdir, unzip, collect_libs, apply_conandata_patches, export_conandata_patches
-from conan.tools.gnu import Autotools
+from conan.tools.gnu import Autotools, AutotoolsDeps, AutotoolsToolchain
 from conan.tools.microsoft import MSBuildDeps, MSBuildToolchain, MSBuild, is_msvc, is_msvc_static_runtime, msvc_runtime_flag, msvs_toolset
 from conan.tools.scm import Version
 from conan.tools.system import package_manager
@@ -23,67 +23,59 @@ class wxWidgetsConan(ConanFile):
     settings = "os", "arch", "compiler", "build_type"
 
     package_type = "library"
+
     options = {
                "aui": [True, False],
+               #"compatibility": ["2.8", "3.0", "3.1"],
                "cairo": [True, False],
-               "custom_disables": ["ANY"],
-               "custom_enables": ["ANY"], # comma splitted list
                "debugreport": [True, False],
+               "expat": [None, "system", "expat"],
                "fPIC": [True, False],
-               "fs_inet": [True, False],
-               "help": [True, False],
-               "html": [True, False],
-               "html_help": [True, False],
                "jpeg": [None, "system", "libjpeg", "libjpeg-turbo", "mozjpeg"],
+               "html": [True, False],
                "mediactrl": [True, False],  # disabled by default as wxWidgets still uses deprecated GStreamer 0.10
                "opengl": [True, False],
+               "png": [None, "system", "libpng"],
                "propgrid": [True, False],
-               "protocol": [True, False],
                "ribbon": [True, False],
                "richtext": [True, False],
                "secretstore": [True, False],
                "shared": [True, False],
                "sockets": [True, False],
                "stc": [True, False],
+               "tiff": [None, "system", "libtiff"],
                "unicode": [True, False],
-               "url": [True, False],
                "webview": [True, False],
                "xml": [True, False],
                "xrc": [True, False],
-               #"compatibility": ["2.8", "3.0", "3.1"],
+               "zlib": [None, "system", "zlib"]
     }
     default_options = {
                "aui": True,
-               "cairo": True,
-               "custom_disables": "",
-               "custom_enables": "",
+               #"compatibility": "2.8",
+               "cairo": False,
                "debugreport": True,
+               "expat": "expat",
                "fPIC": True,
-               "fs_inet": True,
-               "help": True,
+               "jpeg": "libjpeg-turbo",
                "html": True,
-               "html_help": True,
-               "jpeg": "libjpeg",
                "mediactrl": False,
                "opengl": True,
-               "propgrid": True,
-               "protocol": True,
-               "ribbon": True,
+               "png": "libpng",
+               "propgrid": False,
+               "ribbon": False,
                "richtext": True,
-               "secretstore": True,
+               "secretstore": False,
                "shared": False,
                "sockets": True,
                "stc": True,
+               "tiff": "libtiff",
                "unicode": True,
-               "url": True,
                "webview": False,
                "xml": True,
                "xrc": True,
-               #"compatibility": "2.8",
-               # WebKitGTK for GTK2 is not available as a system dependency on modern distros.
-               # When gtk/system defaults to GTK3, turn this back on.
+               "zlib": "zlib"
     }
-
 
     def export_sources(self):
         export_conandata_patches(self)
@@ -181,7 +173,7 @@ class wxWidgetsConan(ConanFile):
     def _configure_autotools(self):
         autotools = Autotools(self)
         configure_args = []
-        if ("fPIC" in self.options.fields and self.options.fPIC == True):
+        if ("fPIC" in self.options and self.options.fPIC == True):
             autotools.fpic = True
             configure_args.append("--with-fpic")
         else:
@@ -222,12 +214,9 @@ class wxWidgetsConan(ConanFile):
         if self.options.xrc :
             configure_args.append("--enable-xrc")
 
-        configure_args.append("--with-zlib=sys")
+        #configure_args.append("--with-zlib=sys")
 
-        autotools.cxx_flags.append("-Wno-narrowing")
-        autotools.cxx_flags.append("-Wno-unused-local-typedefs")
-
-        autotools.configure(configure_dir=self.source_folder, args=configure_args)
+        autotools.configure(args=configure_args)
         return autotools
 
     def generate(self):
@@ -239,6 +228,11 @@ class wxWidgetsConan(ConanFile):
             toolchain = MSBuildToolchain(self)
             toolchain.properties["IncludeExternals"] = "true"
             toolchain.generate()
+        else:
+            tc = AutotoolsToolchain (self)
+            tc.extra_cxxflags.append("-Wno-narrowing")
+            tc.extra_cxxflags.append("-Wno-unused-local-typedefs")
+            tc.generate()
 
     def _patch_sources(self):
         apply_conandata_patches(self)
@@ -253,8 +247,9 @@ class wxWidgetsConan(ConanFile):
             autotools = self._configure_autotools()
             autotools.make()
             if self.options.stc :
-                with tools.environment_append(autotools.vars):
-                    self.run("cd contrib/src/stc && make && cd ../../..")
+                self.run("cd contrib/src/stc && make -j$(nproc) && cd ../../..")
+                #with autotools.vars.apply():
+                #    self.run("cd contrib/src/stc && make && cd ../../..")
 
     def package(self):
         copy(self, pattern="LICENSE",  dst=os.path.join(self.package_folder, "licenses"),      src=self.source_folder)
@@ -333,7 +328,7 @@ class wxWidgetsConan(ConanFile):
             if self.options.xrc:
                 libs.append(library_pattern('xrc'))
             for lib in reversed(libs):
-                self.cpp_info.libs.append(lib.format(prefix=prefix, toolkit=toolkit, version=version, unicode=unicode_, debug=debug, suffix=suffix))
+                self.cpp_info.libs.append(lib.format(prefix=prefix, toolkit=toolkit, version=version, unicode_=unicode_, debug=debug, suffix=suffix))
         elif self.settings.os == 'Windows':
             self.cpp_info.libs = collect_libs(self)
 
@@ -344,9 +339,9 @@ class wxWidgetsConan(ConanFile):
             self.cpp_info.defines.append('WXUSINGDLL')
         if self.settings.os == 'Linux':
             self.cpp_info.defines.append('__WXGTK__')
-            self.add_libraries_from_pc('gtk+-2.0')
-            self.add_libraries_from_pc('x11')
-            self.cpp_info.libs.extend(['dl', 'pthread', 'SM'])
+            #self.add_libraries_from_pc('gtk+-2.0')
+            #self.add_libraries_from_pc('x11')
+            self.cpp_info.system_libs.extend(['dl', 'pthread', 'SM'])
         elif self.settings.os == 'Macos':
             self.cpp_info.defines.extend(['__WXMAC__', '__WXOSX__', '__WXOSX_COCOA__'])
             for framework in ['Carbon',
@@ -427,5 +422,5 @@ class wxWidgetsConan(ConanFile):
         if is_msvc(self):
             self.cpp_info.includedirs.append(os.path.join('include', 'msvc'))
         elif self.settings.os != 'Windows':
-            unix_include_path = os.path.join("include", "wx{}".format(version_suffix_major_minor))
-            self.cpp_info.includedirs = [unix_include_path] + self.cpp_info.includedirs
+            self.cpp_info.includedirs.append(os.path.join("include"))
+            self.cpp_info.includedirs.append(os.path.join("lib", "wx", "include", "gtk2-unicode-release-static-2.8"))

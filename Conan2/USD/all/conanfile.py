@@ -57,7 +57,7 @@ class USDConan(ConanFile):
         self.requires("onetbb/2020.3.3")
 
         #self.requires("glu/system")
-        if self.settings.os == 'Linux':
+        if self.settings.os == 'Linux' and self.options.use_imaging:
             self.requires("opengl/system")
         #self.requires("glew/2.2.0")
 
