@@ -79,7 +79,7 @@ class wxWidgetsConan(ConanFile):
 
     def export_sources(self):
         export_conandata_patches(self)
-        copy(self, "vc140.tar.gz", self.recipe_folder, self.export_sources_folder)
+        copy(self, "vc170.tar.gz", self.recipe_folder, self.export_sources_folder)
 
     def config_options(self):
         if self.settings.os == "Windows":
@@ -168,7 +168,7 @@ class wxWidgetsConan(ConanFile):
 
     def source(self):
         get(self, **self.conan_data["sources"][self.version], strip_root=True)
-        unzip(self, os.path.join(self.export_sources_folder, "vc140.tar.gz"), self.source_folder)
+        unzip(self, os.path.join(self.export_sources_folder, "vc170.tar.gz"), self.source_folder)
 
     def _configure_autotools(self):
         autotools = Autotools(self)
