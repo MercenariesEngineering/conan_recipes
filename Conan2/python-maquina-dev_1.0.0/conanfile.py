@@ -9,6 +9,9 @@ class PythonPackages(ConanFile):
     user="mercs"
     description = "List of python packages used by Maquina."
     settings = "os", "compiler", "build_type", "arch"
+    user = "mercs"
+    channel = "v0"
+
     package_type = "shared-library"
     packages = [
         # Python 3.9
@@ -45,8 +48,8 @@ class PythonPackages(ConanFile):
         self.requires("python-maquina/1.0.0@mercs")
         
     def build_requirements(self):
-        self.tool_requires("cpython/<host_version>", options={"shared": True})
-        self.tool_requires("python-maquina/<host_version>@mercs")
+        self.tool_requires("cpython/3.9.19", options={"shared": True})
+        self.tool_requires("python-maquina/1.0.0@mercs")
 
     def build(self):
         env = Environment()

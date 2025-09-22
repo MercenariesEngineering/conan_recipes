@@ -14,6 +14,9 @@ class PySide6(ConanFile):
     license = "LGPL-3.0"
     url = "https://doc.qt.io/qtforpython"
     settings = "os", "compiler", "build_type", "arch"
+    user = "mercs"
+    channel = "v0"
+
     package_type = "library"
     options = {
         "shared": [True, False],
@@ -36,13 +39,14 @@ class PySide6(ConanFile):
         self.requires("opengl/system")
         self.requires("openssl/1.1.1w")
         self.requires("python-maquina/1.0.0@mercs")
+        self.requires("python-maquina-dev/1.0.0@mercs")
         self.requires("qt/"+self.version)
         self.requires("md4c/0.4.8")
  
     def build_requirements(self):
-        self.tool_requires("cpython/<host_version>", options={"shared": True})
-        self.tool_requires("python-maquina/<host_version>@mercs")
-        self.tool_requires("python-maquina-dev/1.0.0@mercs")
+        self.tool_requires("cpython/3.9.19")
+        #self.tool_requires("python-maquina/1.0.0@mercs")
+        #self.tool_requires("python-maquina-dev/1.0.0@mercs")
         self.tool_requires("ninja/[>=1.10.2 <2]")
         #if self.settings.os == "Windows" and self.settings.compiler == "msvc":
         #    self.build_requires("jom/1.1.4")
@@ -204,6 +208,10 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}")
         return install_dir
 
     def package(self):
+
+        self.output.info ("Copy licence")
+        copy(self, pattern="LICENSE.LGPLv3", src=self.source_folder, dst=os.path.join(self.package_folder, "licenses"))
+
         pyside6_build_folder=os.path.join (self.build_folder, "build")
         self.output.info (f"Locating install directory in {pyside6_build_folder}")
         install_dir=os.path.join (pyside6_build_folder, "install")
@@ -220,11 +228,13 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}")
             raise RuntimeError (f"Could not find install directory in build, looking for {install_dir}")
 
         self.output.info (f"install found in {install_dir}")
-        self.output.info ("Copy licence")
-        copy(self, pattern="LICENSE.LGPLv3", src=self.source_folder, dst=os.path.join(self.package_folder, "licenses"))
-        for entry in os.listdir(install_dir):
-            self.output.info (f"Copy {entry} into {self.package_folder}")
-            copy(self, pattern="*", src=os.path.join (install_dir, entry), dst=self.package_folder)
+        if self.settings.os == "Linux":
+            self.output.info (f"Copy {install_dir} into {self.package_folder}")
+            copy(self, pattern="*", src=install_dir, dst=self.package_folder)
+        else:
+            for entry in os.listdir(install_dir):
+                self.output.info (f"Copy {entry} into {self.package_folder}")
+                copy(self, pattern="*", src=os.path.join (install_dir, entry), dst=self.package_folder)
 
         #copy(self, pattern="*", src=self._install_dir, dst=self.package_folder)
 

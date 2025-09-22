@@ -23,6 +23,8 @@ class CPythonConan(ConanFile):
     url = "https://github.com/conan-io/conan-center-index"
     homepage = "https://www.python.org"
     topics = ("python", "cpython", "language", "script")
+    user = "mercs"
+    channel = "v0"
 
     package_type = "library"
     settings = "os", "arch", "compiler", "build_type"

@@ -15,6 +15,9 @@ class USDConan(ConanFile):
     url = "https://graphics.pixar.com/usd/docs/index.html"
     description = "Universal scene description"
     license = "Modified Apache 2.0 License"
+    user = "mercs"
+    channel = "v0"
+
     package_type = "library"
     settings = "os", "compiler", "build_type", "arch"
     options = {
@@ -63,7 +66,6 @@ class USDConan(ConanFile):
 
         if self.options.with_python:
             self.requires("cpython/3.10.14")
-            #self.requires("python-maquina/1.0.0@mercseng/v2")
         if self.options.with_qt:
             self.requires("qt/5.15.16")
         if self.options.with_python and self.options.with_qt:
@@ -71,7 +73,7 @@ class USDConan(ConanFile):
 
     def build_requirements(self):
         if self.options.with_python:
-            self.tool_requires("cpython/<host_version>", options={"shared": True})
+            self.tool_requires("cpython/3.9.19", options={"shared": True})
         else:
             self.tool_requires("cpython/3.10.14", options={"shared": True})
 

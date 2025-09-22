@@ -44,6 +44,9 @@ class QtConan(ConanFile):
     url = "https://github.com/AcademySoftwareFoundation/aswf-docker/tree/main/packages/conan/recipes/qt"
     homepage = "https://www.qt.io"
     license = "LGPL-3.0-only"
+    user = "mercs"
+    channel = "v0"
+
     settings = "os", "arch", "compiler", "build_type"
 
     options = {
