@@ -177,13 +177,13 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}")
 
         env_vars = env.vars(self)
 
-        self.output.info ("Running pyside setup with: "+(python_exe + " %s install %s" % (setup, " ".join(arguments))))
+        self.output.info ("Running pyside setup with: "+(python_exe + " %s build %s" % (setup, " ".join(arguments))))
         self.output.info ("  with environment:")
         for env_name, env_value in env_vars.items():
             self.output.info ("    "+env_name+": '"+env_value+"'")
 
         with env_vars.apply():
-            self.run(python_exe + " %s install %s" % (setup, " ".join(arguments)))
+            self.run(python_exe + " %s build %s" % (setup, " ".join(arguments)))
 
     @property
     def _install_dir(self):
@@ -204,8 +204,29 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}")
         return install_dir
 
     def package(self):
-        copy(self, pattern="*", src=self._install_dir, dst=self.package_folder)
+        pyside6_build_folder=os.path.join (self.build_folder, "build")
+        self.output.info (f"Locating install directory in {pyside6_build_folder}")
+        install_dir=os.path.join (pyside6_build_folder, "install")
+        if not os.path.isdir (install_dir):
+            self.output.info (f"install not in {pyside6_build_folder}, trying subfolder ...")
+            # probably a venv stuff...
+            for entry in os.listdir(os.path.join (self.build_folder, "build")):
+                self.output.info (f"trying {entry}")
+                if os.path.isdir (os.path.join (self.build_folder, "build", entry)) and os.path.isdir (os.path.join (self.build_folder, "build", entry, "install")):
+                    install_dir=os.path.join (self.build_folder, "build", entry, "install")
+                    break
+
+        if not os.path.isdir (install_dir):
+            raise RuntimeError (f"Could not find install directory in build, looking for {install_dir}")
+
+        self.output.info (f"install found in {install_dir}")
+        self.output.info ("Copy licence")
         copy(self, pattern="LICENSE.LGPLv3", src=self.source_folder, dst=os.path.join(self.package_folder, "licenses"))
+        for entry in os.listdir(install_dir):
+            self.output.info (f"Copy {entry} into {self.package_folder}")
+            copy(self, pattern="*", src=os.path.join (install_dir, entry), dst=self.package_folder)
+
+        #copy(self, pattern="*", src=self._install_dir, dst=self.package_folder)
 
         if self.settings.os == "Linux":
             # package minimal libclang
