@@ -11,7 +11,7 @@ class USDConan(ConanFile):
     license = "Modified Apache 2.0 License"
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False], "fPIC": [True, False], "with_python": [True, False], "with_qt": [True, False], "debug_symbols": [True, False], "use_imaging": [True, False]}
-    default_options = "shared=True", "fPIC=True", "with_python=False", "with_qt=False", "debug_symbols=False", "use_imaging=True", "*:shared=False", "glew:shared=True", "tbb:shared=True", "*:fPIC=True", "boost:i18n_backend=icu", "boost:zstd=True", "boost:lzma=True"
+    default_options = "shared=True", "fPIC=True", "with_python=True", "with_qt=False", "debug_symbols=False", "use_imaging=True", "*:shared=False", "glew:shared=True", "tbb:shared=True", "*:fPIC=True", "boost:i18n_backend=icu", "boost:zstd=True", "boost:lzma=True"
     exports_sources = "CMakeLists.txt"
     generators = "cmake"
     short_paths = True
