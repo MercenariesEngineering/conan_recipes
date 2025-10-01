@@ -41,7 +41,7 @@ class PySide6(ConanFile):
         self.requires("md4c/0.4.8")
  
     def build_requirements(self):
-        self.tool_requires("cpython/3.9.19")
+        #self.tool_requires("cpython/3.9.19")
         #self.tool_requires("python-maquina/1.0.0@mercs")
         #self.tool_requires("python-maquina-dev/1.0.0@mercs")
         self.tool_requires("ninja/[>=1.10.2 <2]")
@@ -225,13 +225,15 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}")
             raise RuntimeError (f"Could not find install directory in build, looking for {install_dir}")
 
         self.output.info (f"install found in {install_dir}")
-        if self.settings.os == "Linux":
-            self.output.info (f"Copy {install_dir} into {self.package_folder}")
-            copy(self, pattern="*", src=install_dir, dst=self.package_folder)
-        else:
-            for entry in os.listdir(install_dir):
-                self.output.info (f"Copy {entry} into {self.package_folder}")
-                copy(self, pattern="*", src=os.path.join (install_dir, entry), dst=self.package_folder)
+        self.output.info (f"Copy {install_dir} into {self.package_folder}")
+        copy(self, pattern="*", src=install_dir, dst=self.package_folder)
+        #if self.settings.os == "Linux":
+        #    self.output.info (f"Copy {install_dir} into {self.package_folder}")
+        #    copy(self, pattern="*", src=install_dir, dst=self.package_folder)
+        #else:
+        #    for entry in os.listdir(install_dir):
+        #        self.output.info (f"Copy {entry} into {self.package_folder}")
+        #        copy(self, pattern="*", src=os.path.join (install_dir, entry), dst=self.package_folder)
 
         #copy(self, pattern="*", src=self._install_dir, dst=self.package_folder)
 

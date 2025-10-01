@@ -68,11 +68,11 @@ class USDConan(ConanFile):
         if self.options.with_python and self.options.with_qt:
             self.requires("PySide2/5.15.6")
 
-    def build_requirements(self):
-        if self.options.with_python:
-            self.tool_requires("cpython/3.9.19", options={"shared": True})
-        else:
-            self.tool_requires("cpython/3.10.14", options={"shared": True})
+    #def build_requirements(self):
+    #    if self.options.with_python:
+    #        self.tool_requires("cpython/3.9.19", options={"shared": True})
+    #    else:
+    #        self.tool_requires("cpython/3.10.14", options={"shared": True})
 
     def validate(self):
         if self.options.use_imaging:

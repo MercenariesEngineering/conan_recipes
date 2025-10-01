@@ -41,12 +41,12 @@ class PythonPackages(ConanFile):
             del self.settings.compiler
 
     def requirements(self):
-        self.requires("cpython/3.9.19", package_id_mode="minor_mode")
+        self.requires("cpython/3.9.19")
         self.requires("python-maquina/1.0.0@mercs")
         
-    def build_requirements(self):
-        self.tool_requires("cpython/3.9.19", options={"shared": True})
-        self.tool_requires("python-maquina/1.0.0@mercs")
+    #def build_requirements(self):
+    #    self.tool_requires("cpython/3.9.19", options={"shared": True})
+    #    self.tool_requires("python-maquina/1.0.0@mercs")
 
     def build(self):
         env = Environment()
