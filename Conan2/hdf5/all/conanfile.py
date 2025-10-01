@@ -19,8 +19,6 @@ class Hdf5Conan(ConanFile):
     topics = "hdf", "data"
     homepage = "https://www.hdfgroup.org/solutions/hdf5/"
     url = "https://github.com/conan-io/conan-center-index"
-    user = "mercs"
-    channel = "v0"
 
     package_type = "library"
     settings = "os", "arch", "compiler", "build_type"

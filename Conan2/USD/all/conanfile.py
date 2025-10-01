@@ -11,12 +11,9 @@ required_conan_version = ">=2.0"
 
 class USDConan(ConanFile):
     name = "usd"
-    user="mercs"
     url = "https://graphics.pixar.com/usd/docs/index.html"
     description = "Universal scene description"
     license = "Modified Apache 2.0 License"
-    user = "mercs"
-    channel = "v0"
 
     package_type = "library"
     settings = "os", "compiler", "build_type", "arch"

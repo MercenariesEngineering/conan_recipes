@@ -9,13 +9,10 @@ import os
 
 class PySide6(ConanFile):
     name = "pyside6"
-    user="mercs"
     description = "Qt for Python"
     license = "LGPL-3.0"
     url = "https://doc.qt.io/qtforpython"
     settings = "os", "compiler", "build_type", "arch"
-    user = "mercs"
-    channel = "v0"
 
     package_type = "library"
     options = {
@@ -38,8 +35,8 @@ class PySide6(ConanFile):
         self.requires("libxslt/1.1.42")
         self.requires("opengl/system")
         self.requires("openssl/1.1.1w")
-        self.requires("python-maquina/1.0.0@mercs")
-        self.requires("python-maquina-dev/1.0.0@mercs")
+        self.requires("python-maquina/1.0.0")
+        self.requires("python-maquina-dev/1.0.0")
         self.requires("qt/"+self.version)
         self.requires("md4c/0.4.8")
  

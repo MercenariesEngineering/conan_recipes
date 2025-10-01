@@ -19,8 +19,6 @@ class EmbreeConan(ConanFile):
     topics = ("embree", "raytracing", "rendering")
     description = "Intel's collection of high-performance ray tracing kernels."
     homepage = "https://embree.github.io/"
-    user = "mercs"
-    channel = "v0"
 
     package_type = "library"
     settings = "os", "arch", "compiler", "build_type"

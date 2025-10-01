@@ -20,8 +20,6 @@ class wxWidgetsConan(ConanFile):
     url = "https://github.com/conan-io/conan-center-index"
     homepage = "https://www.wxwidgets.org"
     license = "wxWidgets"
-    user = "mercs"
-    channel = "v0"
 
     settings = "os", "arch", "compiler", "build_type"
 

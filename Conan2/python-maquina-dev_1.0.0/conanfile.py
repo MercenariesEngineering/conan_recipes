@@ -6,11 +6,8 @@ import os
 class PythonPackages(ConanFile):
     name = "python-maquina-dev"
     version = "1.0.0"
-    user="mercs"
     description = "List of python packages used by Maquina."
     settings = "os", "compiler", "build_type", "arch"
-    user = "mercs"
-    channel = "v0"
 
     package_type = "shared-library"
     packages = [
