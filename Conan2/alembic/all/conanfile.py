@@ -37,10 +37,8 @@ class AlembicConan(ConanFile):
             del self.options.fPIC
 
     def configure(self):
-        self.options["hdf5"].threadsafe = True
         if self.options.shared:
             self.options.rm_safe("fPIC")
-            self.options["hdf5"].shared = True
 
     def layout(self):
         cmake_layout(self, src_folder="src")

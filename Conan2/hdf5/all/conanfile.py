@@ -62,10 +62,8 @@ class Hdf5Conan(ConanFile):
         if not self.options.enable_cxx:
             self.settings.rm_safe("compiler.cppstd")
             self.settings.rm_safe("compiler.libcxx")
-        if (not self.options.enable_unsupported and (self.options.enable_cxx or self.options.hl))\
-            or (self.settings.os == "Windows" and not self.options.shared):
-            if self.options.get_safe ("threadsafe", False):
-                self.output.warning("removing threadsafe!")
+        if (not self.options.enable_unsupported and (self.options.enable_cxx or self.options.hl)) or (self.settings.os == "Windows" and not self.options.shared):
+            self.output.warning("*** removing threadsafe! ***")
             del self.options.threadsafe
         if not bool(self.options.szip_support):
             del self.options.szip_encoding
