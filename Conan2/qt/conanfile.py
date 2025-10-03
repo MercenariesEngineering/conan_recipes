@@ -1044,9 +1044,12 @@ class QtConan(ConanFile):
         self.cpp_info.names["cmake_find_package"] = "Qt6"
         self.cpp_info.names["cmake_find_package_multi"] = "Qt6"
 
-        # Mercs: The qt libs path is not properly set on Linux in the run environment
         if self.settings.os == "Linux":
-            self.runenv_info.append_path("LD_LIBRARY_PATH", os.path.join(self.package_folder, "lib64"))
+            _lib64 = os.path.join(self.package_folder, "lib64")
+            # Shiboken requires libQt*.so
+            self.buildenv_info.append_path("LD_LIBRARY_PATH", _lib64)
+            # Mercs: The qt libs path is not properly set on Linux in the run environment
+            self.runenv_info.append_path("LD_LIBRARY_PATH", _lib64)
 
         # consumers will need the QT_PLUGIN_PATH defined in runenv
         self.runenv_info.define("QT_PLUGIN_PATH", os.path.join(self.package_folder, "plugins"))

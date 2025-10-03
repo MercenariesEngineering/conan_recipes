@@ -19,7 +19,7 @@ class pythonConan(ConanFile):
         elif self.settings.os == "Linux" :
             copy(self, "*.h", src=os.path.join(self.source_folder, "dist", "linux", "include"), dst=os.path.join(self.package_folder, "include"))
             copy(self, "libpython3.10.so.1.0", src=os.path.join(self.source_folder, "dist", "linux", "lib"), dst=os.path.join(self.package_folder, "lib"))
-            self.run("ln -s "+str(os.path.join(self.package_folder, "lib", "libpython3.10.so.1.0"))+" "+str(os.path.join(self.package_folder, "lib", "libpython3.10.so")))
+            self.run("ln -s libpython3.10.so.1.0 "+str(os.path.join(self.package_folder, "lib", "libpython3.10.so")))
 
     def package_info(self):
         self.cpp_info.set_property("cmake_file_name", "python3.10-headers")

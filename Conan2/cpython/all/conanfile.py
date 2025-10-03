@@ -687,10 +687,12 @@ class CPythonConan(ConanFile):
         endif()
         set(Python${_CONAN_PYTHON_SUFFIX}_EXECUTABLE @PYTHON_EXECUTABLE@)
         set(Python${_CONAN_PYTHON_SUFFIX}_LIBRARY @PYTHON_LIBRARY@)
+        set(Python${_CONAN_PYTHON_SUFFIX}_INCLUDE_DIRS @PYTHON_INCLUDE_DIRS@)
+        set(Python${_CONAN_PYTHON_SUFFIX}_INCLUDE_DIR @PYTHON_INCLUDE_DIR@)
 
         # Fails if these are set beforehand
-        unset(Python${_CONAN_PYTHON_SUFFIX}_INCLUDE_DIRS)
-        unset(Python${_CONAN_PYTHON_SUFFIX}_INCLUDE_DIR)
+        #unset(Python${_CONAN_PYTHON_SUFFIX}_INCLUDE_DIRS)
+        #unset(Python${_CONAN_PYTHON_SUFFIX}_INCLUDE_DIR)
 
         include(${CMAKE_ROOT}/Modules/FindPython${_CONAN_PYTHON_SUFFIX}.cmake)
 
@@ -714,12 +716,19 @@ class CPythonConan(ConanFile):
         if is_msvc(self):
             python_exe = "${CMAKE_CURRENT_LIST_DIR}/../../" + self._cpython_interpreter_name
             python_library = "${CMAKE_CURRENT_LIST_DIR}/../" + self._exact_lib_name
+            python_include_dirs = "${CMAKE_CURRENT_LIST_DIR}/../../include/python3.9"
+            python_include_dir = "${CMAKE_CURRENT_LIST_DIR}/../../include/python3.9"
         else:
             python_exe = "${CMAKE_CURRENT_LIST_DIR}/../../bin/" + self._cpython_interpreter_name
             python_library = "${CMAKE_CURRENT_LIST_DIR}/../" + self._exact_lib_name
+            python_include_dirs = "${CMAKE_CURRENT_LIST_DIR}/../../include/python3.9"
+            python_include_dir = "${CMAKE_CURRENT_LIST_DIR}/../../include/python3.9"
 
         cmake_file = os.path.join(self.package_folder, self._cmake_module_path, "use_conan_python.cmake")
-        content = template.replace("@PYTHON_EXECUTABLE@", python_exe).replace("@PYTHON_LIBRARY@", python_library)
+        content = template.replace("@PYTHON_EXECUTABLE@", python_exe)
+        content = content.replace("@PYTHON_LIBRARY@", python_library)
+        content = content.replace("@PYTHON_INCLUDE_DIRS@", python_include_dirs)
+        content = content.replace("@PYTHON_INCLUDE_DIR@", python_include_dir)
         save(self, cmake_file, content)
 
     def package(self):

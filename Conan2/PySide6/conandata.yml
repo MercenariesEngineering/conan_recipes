@@ -6,3 +6,4 @@ patches:
   "6.8.3":
     - patch_file: "patches/pyside_pysidesignal.diff"
     - patch_file: "patches/pyside_sbkerrors.diff"
+    - patch_file: "patches/shiboken_build_verbose.diff"
