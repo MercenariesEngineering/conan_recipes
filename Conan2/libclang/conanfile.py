@@ -15,8 +15,12 @@ class PySide6(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
 
     package_type = "library"
-    options = {}
-    default_options = {}
+    options = {
+        "shared": [True,False]
+    }
+    default_options = {
+        "shared": True
+    }
     short_paths = True
 
     @property
@@ -43,6 +47,8 @@ class PySide6(ConanFile):
         copy(self, pattern="*", src=os.path.join(self.source_folder, "libclang", "bin"), dst=os.path.join(self.package_folder, "bin"))
 
     def package_info(self):
+        self.cpp_info.set_property("cmake_file_name", "Clang")
+        self.cpp_info.set_property("cmake_target_name", "Clang::Clang")
         if self.settings.os == "Windows":
             self.buildenv_info.define("CLANG_INSTALL_DIR", os.path.join(self.package_folder, "libclang"))
             self.buildenv_info.prepend_path("PATH", os.path.join(self.package_folder, "libclang", "bin"))

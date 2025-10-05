@@ -716,8 +716,8 @@ class CPythonConan(ConanFile):
         if is_msvc(self):
             python_exe = "${CMAKE_CURRENT_LIST_DIR}/../../" + self._cpython_interpreter_name
             python_library = "${CMAKE_CURRENT_LIST_DIR}/../" + self._exact_lib_name
-            python_include_dirs = "${CMAKE_CURRENT_LIST_DIR}/../../include/python3.9"
-            python_include_dir = "${CMAKE_CURRENT_LIST_DIR}/../../include/python3.9"
+            python_include_dirs = "${CMAKE_CURRENT_LIST_DIR}/../../include"
+            python_include_dir = "${CMAKE_CURRENT_LIST_DIR}/../../include"
         else:
             python_exe = "${CMAKE_CURRENT_LIST_DIR}/../../bin/" + self._cpython_interpreter_name
             python_library = "${CMAKE_CURRENT_LIST_DIR}/../" + self._exact_lib_name
