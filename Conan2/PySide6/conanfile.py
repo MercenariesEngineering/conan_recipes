@@ -237,17 +237,20 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}")
 
         #copy(self, pattern="*", src=self._install_dir, dst=self.package_folder)
 
+        # package minimal libclang
+        self.output.info ("Packaging libclang from "+str(os.path.join(self.source_folder, "libclang"))+" to "+str(os.path.join(self.package_folder, "libclang")))
         if self.settings.os == "Linux":
-            # package minimal libclang
-            self.output.info ("Packaging libclang from "+str(os.path.join(self.source_folder, "libclang"))+" to "+str(os.path.join(self.package_folder, "libclang")))
             # Packaging the whole libclang as it's already painful
             # TODO: Improve the package size
             copy(self, pattern="*", src=os.path.join(self.source_folder, "libclang"), dst=os.path.join(self.package_folder, "libclang"))
-            #copy(self, pattern="*", src=os.path.join(self.source_folder, "libclang", "include"), dst=os.path.join(self.package_folder, "libclang", "include"))
-            #copy(self, pattern="*", src=os.path.join(self.source_folder, "libclang", "lib", "clang"), dst=os.path.join(self.package_folder, "libclang", "lib", "clang"))
-            #copy(self, pattern="libclang.so.20", src=os.path.join(self.source_folder, "libclang", "lib"), dst=os.path.join(self.package_folder, "libclang", "lib"))
-            #copy(self, pattern="libclang-cpp.so.20", src=os.path.join(self.source_folder, "libclang", "lib"), dst=os.path.join(self.package_folder, "libclang", "lib"))
 
+        elif self.settings.os == "Windows":
+            # package minimal libclang
+            copy(self, pattern="*", src=os.path.join(self.source_folder, "libclang", "include"), dst=os.path.join(self.package_folder, "libclang", "include"))
+            copy(self, pattern="*", src=os.path.join(self.source_folder, "libclang", "lib", "clang"), dst=os.path.join(self.package_folder, "libclang", "lib", "clang"))
+            copy(self, pattern="*", src=os.path.join(self.source_folder, "libclang", "bin"), dst=os.path.join(self.package_folder, "libclang", "bin"))
+
+        if self.settings.os == "Linux":
             # fix shebangs
             python_shebang = "#!/usr/bin/env python\n"
             bin_directory = os.path.join(self.package_folder, "bin")
@@ -264,12 +267,6 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}")
                                     outfile.writelines(lines)
                         except UnicodeDecodeError:
                             pass
-
-        elif self.settings.os == "Windows":
-            # package minimal libclang
-            copy(self, pattern="*", src=os.path.join(self.source_folder, "libclang", "include"), dst=os.path.join(self.package_folder, "libclang", "include"))
-            copy(self, pattern="*", src=os.path.join(self.source_folder, "libclang", "lib", "clang"), dst=os.path.join(self.package_folder, "libclang", "lib", "clang"))
-            copy(self, pattern="*", src=os.path.join(self.source_folder, "libclang", "bin"), dst=os.path.join(self.package_folder, "libclang", "bin"))
 
     def package_info(self):
         self.cpp_info.set_property("cmake_file_name", "PySide6")
