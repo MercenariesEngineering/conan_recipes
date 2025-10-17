@@ -62,6 +62,7 @@ class USDConan(ConanFile):
         #self.requires("glew/2.2.0")
 
         if self.options.with_python:
+            self.requires("boost/1.84.0")
             self.requires("cpython/3.10.14")
         if self.options.with_qt:
             self.requires("qt/5.15.16")
@@ -269,7 +270,7 @@ class USDConan(ConanFile):
             self.cpp_info.components["boost"].requires = []
             self.cpp_info.components["boost"].libs = ['usd_arch']
             # arch
-            self.cpp_info.components["python"].requires = ['boost', 'cpython::cpython']
+            self.cpp_info.components["python"].requires = ['boost::headers', 'cpython::cpython']
             self.cpp_info.components["python"].libs = ['usd_python']
 
         # arch
