@@ -29,7 +29,7 @@ class QtADS(ConanFile):
         "fPIC": [True, False],
     }
     default_options = {
-        "shared": False,
+        "shared": True,
         "fPIC": True,
     }
     implements = ["auto_shared_fpic"]
@@ -52,7 +52,7 @@ class QtADS(ConanFile):
         self.requires("qt/6.8.3#35efa2c3fe49c6aeb64da8de89fc7f57")
 
     def build_requirements(self):
-        self.tool_requires("qt/6.8.3#35efa2c3fe49c6aeb64da8de89fc7f57")
+        #self.tool_requires("qt/6.8.3#35efa2c3fe49c6aeb64da8de89fc7f57")
         self.tool_requires("cmake/[>=3.27 <4]") # to be able to use CMAKE_AUTOMOC_EXECUTABLE
 
     def validate(self):
@@ -73,8 +73,8 @@ class QtADS(ConanFile):
         tc.cache_variables[f"Qt{self._qt_major}Gui_PRIVATE_INCLUDE_DIRS"] = os.path.join(qt_include_root, "QtGui", qt_version, "QtGui")
 
         qt_bin_dir = self.dependencies["qt"].cpp_info.bindirs[0]
-        moc_exe = "moc.exe" if self.settings_build.os == "Windows" else "moc"
-        rcc_exe = "rcc.exe" if self.settings_build.os == "Windows" else "rcc"
+        moc_exe = "moc.exe" if self.settings_build.os == "Windows" else "../libexec/moc"
+        rcc_exe = "rcc.exe" if self.settings_build.os == "Windows" else "../libexec/rcc"
         tc.cache_variables["CMAKE_AUTOMOC_EXECUTABLE"] = os.path.join(qt_bin_dir, moc_exe)
         tc.cache_variables["CMAKE_AUTORCC_EXECUTABLE"] = os.path.join(qt_bin_dir, rcc_exe)
         
