@@ -58,6 +58,7 @@
 #conan export  ninja_1.10.0/conanfile.py                        ninja/1.10.0@mercseng/v0
 #conan export  OpenColorIO_1.1.1/conanfile.py                   OpenColorIO/1.1.1@mercseng/v0
 #conan export  OpenColorIO_2.0/conanfile.py                     OpenColorIO/2.0@mercseng/v2
+#conan export  OpenColorIO_2.1/conanfile.py                     OpenColorIO/2.1@mercseng/v0
 #conan export  OpenEXR_2.5.1/conanfile.py                       OpenEXR/2.5.1@mercseng/v0
 #conan export  OpenExrId_1.0-beta.22/conanfile.py               OpenExrId/1.0-beta.22@mercseng/v0
 #conan export  OpenImageDenoise_1.0.0/conanfile.py              OpenImageDenoise/1.0.0@mercseng/v2

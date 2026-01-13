@@ -1,0 +1,12 @@
+diff --git a/sources/pyside6/libpyside/pysidesignal.cpp b/sources/pyside6/libpyside/pysidesignal.cpp
+index 996968f..a072dfd 100644
+--- a/sources/pyside6/libpyside/pysidesignal.cpp
++++ b/sources/pyside6/libpyside/pysidesignal.cpp
+@@ -9,6 +9,7 @@
+ #include "pysidestaticstrings.h"
+ #include "pysideweakref.h"
+ #include "signalmanager.h"
++#include "pysideqobject.h"
+
+ #include <shiboken.h>
+ #include <sbkstaticstrings.h>

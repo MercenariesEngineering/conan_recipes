@@ -1,0 +1,6 @@
+sources:
+  "5.6.0":
+    url: "https://github.com/NVIDIA-Omniverse/PhysX/archive/refs/tags/107.0-physx-5.6.0.zip"
+    sha256: "3b8022df1fac232520582b2629a3452b40b0b1c6a2ff8573a4aba0706c699187"
+patches:
+  "5.6.0":

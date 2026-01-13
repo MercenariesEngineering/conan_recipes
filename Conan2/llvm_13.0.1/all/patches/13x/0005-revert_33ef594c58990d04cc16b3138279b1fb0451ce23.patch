@@ -1,0 +1,165 @@
+--- a/lib/ExecutionEngine/RuntimeDyld/Targets/RuntimeDyldCOFFX86_64.h
++++ b/lib/ExecutionEngine/RuntimeDyld/Targets/RuntimeDyldCOFFX86_64.h
+@@ -29,40 +29,18 @@ private:
+   // unregisteredEH frame sections with the memory manager.
+   SmallVector<SID, 2> UnregisteredEHFrameSections;
+   SmallVector<SID, 2> RegisteredEHFrameSections;
+-  uint64_t ImageBase;
+-
+-  // Fake an __ImageBase pointer by returning the section with the lowest adress
+-  uint64_t getImageBase() {
+-    if (!ImageBase) {
+-      ImageBase = std::numeric_limits<uint64_t>::max();
+-      for (const SectionEntry &Section : Sections)
+-        // The Sections list may contain sections that weren't loaded for
+-        // whatever reason: they may be debug sections, and ProcessAllSections
+-        // is false, or they may be sections that contain 0 bytes. If the
+-        // section isn't loaded, the load address will be 0, and it should not
+-        // be included in the ImageBase calculation.
+-        if (Section.getLoadAddress() != 0)
+-          ImageBase = std::min(ImageBase, Section.getLoadAddress());
+-    }
+-    return ImageBase;
+-  }
+-
+-  void write32BitOffset(uint8_t *Target, int64_t Addend, uint64_t Delta) {
+-    uint64_t Result = Addend + Delta;
+-    assert(Result <= UINT32_MAX && "Relocation overflow");
+-    writeBytesUnaligned(Result, Target, 4);
+-  }
+ 
+ public:
+   RuntimeDyldCOFFX86_64(RuntimeDyld::MemoryManager &MM,
+                         JITSymbolResolver &Resolver)
+-      : RuntimeDyldCOFF(MM, Resolver, 8, COFF::IMAGE_REL_AMD64_ADDR64),
+-        ImageBase(0) {}
++      : RuntimeDyldCOFF(MM, Resolver, 8, COFF::IMAGE_REL_AMD64_ADDR64) {}
+ 
+   unsigned getStubAlignment() override { return 1; }
+ 
+-  // 2-byte jmp instruction + 32-bit relative address + 64-bit absolute jump
+-  unsigned getMaxStubSize() const override { return 14; }
++  unsigned getMaxStubSize() const override 
++  {
++    return 6; // 2-byte jmp instruction + 32-bit relative address
++  }
+ 
+   // The target location for the relocation is described by RE.SectionID and
+   // RE.Offset.  RE.SectionID can be used to find the SectionEntry.  Each
+@@ -108,17 +86,14 @@ public:
+       break;
+     }
+ 
+-    case COFF::IMAGE_REL_AMD64_ADDR32NB: {
+-      // ADDR32NB requires an offset less than 2GB from 'ImageBase'.
+-      // The MemoryManager can make sure this is always true by forcing the
+-      // memory layout to be: CodeSection < ReadOnlySection < ReadWriteSection.
+-      const uint64_t ImageBase = getImageBase();
+-      if (Value < ImageBase || ((Value - ImageBase) > UINT32_MAX))
+-        report_fatal_error("IMAGE_REL_AMD64_ADDR32NB relocation requires an "
+-                           "ordered section layout");
+-      else {
+-        write32BitOffset(Target, RE.Addend, Value - ImageBase);
+-      }
++    case COFF::IMAGE_REL_AMD64_ADDR32NB: { 
++      // Note ADDR32NB requires a well-established notion of
++      // image base. This address must be less than or equal
++      // to every section's load address, and all sections must be
++      // within a 32 bit offset from the base.
++      //
++      // For now we just set these to zero.
++      writeBytesUnaligned(0, Target, 4);
+       break;
+     }
+ 
+@@ -140,52 +115,6 @@ public:
+     }
+   }
+ 
+-  std::tuple<uint64_t, uint64_t, uint64_t>
+-  generateRelocationStub(unsigned SectionID, StringRef TargetName,
+-                         uint64_t Offset, uint64_t RelType, uint64_t Addend,
+-                         StubMap &Stubs) {
+-    uintptr_t StubOffset;
+-    SectionEntry &Section = Sections[SectionID];
+-
+-    RelocationValueRef OriginalRelValueRef;
+-    OriginalRelValueRef.SectionID = SectionID;
+-    OriginalRelValueRef.Offset = Offset;
+-    OriginalRelValueRef.Addend = Addend;
+-    OriginalRelValueRef.SymbolName = TargetName.data();
+-
+-    auto Stub = Stubs.find(OriginalRelValueRef);
+-    if (Stub == Stubs.end()) {
+-      LLVM_DEBUG(dbgs() << " Create a new stub function for "
+-                        << TargetName.data() << "\n");
+-
+-      StubOffset = Section.getStubOffset();
+-      Stubs[OriginalRelValueRef] = StubOffset;
+-      createStubFunction(Section.getAddressWithOffset(StubOffset));
+-      Section.advanceStubOffset(getMaxStubSize());
+-    } else {
+-      LLVM_DEBUG(dbgs() << " Stub function found for " << TargetName.data()
+-                        << "\n");
+-      StubOffset = Stub->second;
+-    }
+-
+-    // FIXME: If RelType == COFF::IMAGE_REL_AMD64_ADDR32NB we should be able
+-    // to ignore the __ImageBase requirement and just forward to the stub
+-    // directly as an offset of this section:
+-    // write32BitOffset(Section.getAddressWithOffset(Offset), 0, StubOffset);
+-    // .xdata exception handler's aren't having this though.
+-
+-    // Resolve original relocation to stub function.
+-    const RelocationEntry RE(SectionID, Offset, RelType, Addend);
+-    resolveRelocation(RE, Section.getLoadAddressWithOffset(StubOffset));
+-
+-    // adjust relocation info so resolution writes to the stub function
+-    Addend = 0;
+-    Offset = StubOffset + 6;
+-    RelType = COFF::IMAGE_REL_AMD64_ADDR64;
+-
+-    return std::make_tuple(Offset, RelType, Addend);
+-  }
+-
+   Expected<object::relocation_iterator>
+   processRelocationRef(unsigned SectionID,
+                        object::relocation_iterator RelI,
+@@ -245,11 +174,6 @@ public:
+     case COFF::IMAGE_REL_AMD64_ADDR32NB: {
+       uint8_t *Displacement = (uint8_t *)ObjTarget;
+       Addend = readBytesUnaligned(Displacement, 4);
+-
+-      if (IsExtern)
+-        std::tie(Offset, RelType, Addend) = generateRelocationStub(
+-          SectionID, TargetName, Offset, RelType, Addend, Stubs);
+-
+       break;
+     }
+ 
+@@ -263,10 +187,6 @@ public:
+       break;
+     }
+ 
+-    LLVM_DEBUG(dbgs() << "\t\tIn Section " << SectionID << " Offset " << Offset
+-                      << " RelType: " << RelType << " TargetName: "
+-                      << TargetName << " Addend " << Addend << "\n");
+-
+     if (IsExtern) {
+       RelocationEntry RE(SectionID, Offset, RelType, Addend);
+       addRelocationForSymbol(RE, TargetName);
+@@ -297,11 +217,9 @@ public:
+       Expected<StringRef> NameOrErr = Section.getName();
+       if (!NameOrErr)
+         return NameOrErr.takeError();
+-
+-      // Note unwind info is stored in .pdata but often points to .xdata
+-      // with an IMAGE_REL_AMD64_ADDR32NB relocation. Using a memory manager
+-      // that keeps sections ordered in relation to __ImageBase is necessary.
+-      if ((*NameOrErr) == ".pdata")
++      // Note unwind info is split across .pdata and .xdata, so this
++      // may not be sufficiently general for all users.
++      if (*NameOrErr == ".xdata")
+         UnregisteredEHFrameSections.push_back(SectionPair.second);
+     }
+     return Error::success();

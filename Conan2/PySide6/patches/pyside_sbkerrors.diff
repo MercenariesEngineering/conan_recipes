@@ -1,0 +1,11 @@
+--- sources/shiboken6/libshiboken/sbkerrors.cpp	2025-09-12 18:59:11.095557119 +0200
++++ sources/shiboken6/libshiboken/sbkerrors.cpp	2025-09-12 19:01:29.332965127 +0200
+@@ -108,6 +108,8 @@
+ // argument.
+ static bool prependToExceptionMessage(PyObject *exc, const char *context)
+ {
++    if (exc == NULL || !PyExceptionInstance_Check(exc))
++        return false;
+     Shiboken::AutoDecRef args(PepException_GetArgs(exc));
+     if (args.isNull() || PyTuple_Check(args.object()) == 0 || PyTuple_Size(args) != 1)
+         return false;

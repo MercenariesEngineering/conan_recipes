@@ -60,6 +60,7 @@ export REPO="mercenaries"
 #conan upload ninja/1.10.0@mercseng/v0                                           -r $REPO --all --confirm
 #conan upload OpenColorIO/1.1.1@mercseng/v0                                      -r $REPO --all --confirm
 #conan upload OpenColorIO/2.0@mercseng/v2                                        -r $REPO --all --confirm
+#conan upload OpenColorIO/2.1@mercseng/v0                                        -r $REPO --all --confirm
 #conan upload OpenEXR/2.5.1@mercseng/v0                                          -r $REPO --all --confirm
 #conan upload OpenExrId/1.0-beta.22@mercseng/v0                                  -r $REPO --all --confirm
 #conan upload OpenImageDenoise/1.0.0@mercseng/v2                                 -r $REPO --all --confirm

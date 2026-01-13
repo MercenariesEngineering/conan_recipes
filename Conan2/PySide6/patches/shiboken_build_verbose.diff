@@ -1,0 +1,35 @@
+--- a/sources/shiboken6/cmake/ShibokenHelpers.cmake
++++ b/sources/shiboken6/cmake/ShibokenHelpers.cmake
+@@ -198,19 +198,19 @@
+ endmacro()
+ 
+ macro(set_quiet_build)
+-    # Don't display "up-to-date / install" messages when installing, to reduce visual clutter.
+-    set(CMAKE_INSTALL_MESSAGE NEVER)
+-    # Override message not to display info messages when doing a quiet build.
+-    function(message)
+-        list(GET ARGV 0 MessageType)
+-        if (MessageType STREQUAL FATAL_ERROR OR
+-            MessageType STREQUAL SEND_ERROR OR
+-            MessageType STREQUAL WARNING OR
+-            MessageType STREQUAL AUTHOR_WARNING)
+-                list(REMOVE_AT ARGV 0)
+-                _message(${MessageType} "${ARGV}")
+-        endif()
+-    endfunction()
++    ## Don't display "up-to-date / install" messages when installing, to reduce visual clutter.
++    #set(CMAKE_INSTALL_MESSAGE NEVER)
++    ## Override message not to display info messages when doing a quiet build.
++    #function(message)
++    #    list(GET ARGV 0 MessageType)
++    #    if (MessageType STREQUAL FATAL_ERROR OR
++    #        MessageType STREQUAL SEND_ERROR OR
++    #        MessageType STREQUAL WARNING OR
++    #        MessageType STREQUAL AUTHOR_WARNING)
++    #            list(REMOVE_AT ARGV 0)
++    #            _message(${MessageType} "${ARGV}")
++    #    endif()
++    #endfunction()
+ endmacro()
+ 
+ macro(get_python_extension_suffix)
