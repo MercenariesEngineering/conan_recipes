@@ -14,13 +14,14 @@ class PortAudio(ConanFile):
     exports_sources = "CMakeLists.txt"
     generators = "cmake"
     _source_subfolder = "source_subfolder"
+    recipe_version = "1"
 
     def build_requirements(self):
         """Define runtime requirements."""
         if self.settings.os == "Linux":
             # Build requirements because we need it to build but we do not want to use it on dev 
             # machines or include it in packages.
-            self.build_requires("libalsa/1.2.2@mercseng/v0")
+            self.build_requires("libalsa/1.2.2@mercseng/v2")
 
     def config_options(self):
         """fPIC is linux only."""

@@ -9,12 +9,12 @@ class EmbreeConan(ConanFile):
     description = "High Performance Ray Tracing Kernels"
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False], "fPIC": [True, False]}
-    requires = "tbb/2020.02@mercseng/v2"
+    requires = "tbb/2020.02@mercseng/v3"
     default_options = "shared=True", "fPIC=True", "TBB:shared=True"
     exports_sources = "CMakeLists.txt"
     generators = "cmake"
     _source_subfolder = "source_subfolder"
-    recipe_version="v0"
+    recipe_version="1"
 
     def config_options(self):
         """fPIC is linux only."""

@@ -26,8 +26,8 @@ class PythonPackages(ConanFile):
             self.settings.remove("compiler")
 
     def requirements(self):
-        self.requires("cpython/3.7.7@mercseng/v1")
-        self.requires("python-maquina/1.0.0@mercseng/v2")
+        self.requires("cpython/3.9.25@mercseng/v0")
+        self.requires("python-maquina/1.0.0@mercseng/v3")
 
     def build(self):
         """Build the elements to package."""
@@ -46,7 +46,7 @@ class PythonPackages(ConanFile):
         """Assemble the package."""
         if self.settings.os == "Linux":
             # fix shebangs
-            python_shebang = "#!/usr/bin/env python3.7\n"
+            python_shebang = "#!/usr/bin/env python3.9\n"
             bin_directory = os.path.join(self.package_folder, "bin")
             if os.path.exists(bin_directory):
                 with tools.chdir(bin_directory):

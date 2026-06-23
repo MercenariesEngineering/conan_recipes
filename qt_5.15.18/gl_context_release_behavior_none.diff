@@ -1,0 +1,43 @@
+--- a/src/plugins/platforms/windows/qwindowsglcontext.cpp
++++ b/src/plugins/platforms/windows/qwindowsglcontext.cpp
+@@ -149,6 +150,11 @@
+ #define WGL_FRAMEBUFFER_SRGB_CAPABLE_EXT 0x20A9
+ #endif
+ 
++// KHR_context_flush_control
++#define WGL_CONTEXT_RELEASE_BEHAVIOR_ARB            0x2097
++#define WGL_CONTEXT_RELEASE_BEHAVIOR_NONE_ARB       0x0000
++#define WGL_CONTEXT_RELEASE_BEHAVIOR_FLUSH_ARB      0x2098
++
+ QT_BEGIN_NAMESPACE
+ 
+ QWindowsOpengl32DLL QOpenGLStaticContext::opengl32;
+@@ -722,7 +728,7 @@
+                            const QWindowsOpenGLAdditionalFormat &,
+                            HGLRC shared = nullptr)
+ {
+-    enum { attribSize = 11 };
++    enum { attribSize = 13 };
+ 
+     if (!staticContext.hasExtensions())
+         return nullptr;
+@@ -776,6 +782,19 @@
+         attributes[attribIndex++] = LOSE_CONTEXT_ON_RESET_ARB;
+     }
+ 
++    if (staticContext.wglGetExtensionsStringARB)
++    {
++      const char *exts = staticContext.wglGetExtensionsStringARB(hdc);
++      if (exts)
++      {
++        if (strstr(exts, "WGL_ARB_context_flush_control"))
++        {
++          attributes[attribIndex++] = WGL_CONTEXT_RELEASE_BEHAVIOR_ARB;
++          attributes[attribIndex++] = WGL_CONTEXT_RELEASE_BEHAVIOR_NONE_ARB;
++        }
++      }
++    }
++
+     qCDebug(lcQpaGl) << __FUNCTION__ << "Creating context version"
+         << majorVersion << '.' << minorVersion <<  attribIndex / 2 << "attributes";
+ 

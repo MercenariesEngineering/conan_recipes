@@ -31,6 +31,7 @@ class LibtiffConan(ConanFile):
                        "webp": True,
                        "cxx":  True}
     _cmake = None
+    recipe_version="1"
 
     @property
     def _source_subfolder(self):
@@ -56,7 +57,7 @@ class LibtiffConan(ConanFile):
         if self.options.zlib:
             self.requires("zlib/1.2.11@mercseng/v0")
         if self.options.lzma:
-            self.requires("lzma/5.2.4@mercseng/v0")
+            self.requires("lzma/5.2.4@mercseng/v1")
         if self.options.jpeg:
             self.requires("libjpeg-turbo/1.5.2@mercseng/v0")
         if self.options.jbig:

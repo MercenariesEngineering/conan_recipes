@@ -1,0 +1,21 @@
+--- a/source/configure
++++ b/source/configure
+@@ -2979,7 +2979,7 @@ $as_echo "$ac_try_echo"; } >&5
+   fi
+   rm -f conftest.er1 conftest.err
+   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+-  test $ac_status = 0; }
++  if test $ac_status = 0; then break; fi }
+ done
+
+ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+@@ -3578,7 +3578,7 @@ $as_echo "$ac_try_echo"; } >&5
+   fi
+   rm -f conftest.er1 conftest.err
+   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+-  test $ac_status = 0; }
++  if test $ac_status = 0; then break; fi }
+ done
+
+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether we are using the GNU C++ compiler" >&5
+

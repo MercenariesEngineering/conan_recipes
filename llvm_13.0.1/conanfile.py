@@ -59,7 +59,7 @@ class LlvmConan(ConanFile):
     short_paths = True # LLVM uses long filenames, which are a problem on windows. This helps.
     no_copy_source = True
     _source_subfolder = "source_subfolder"
-    recipe_version = "0"
+    recipe_version = "1"
 
     def _supports_compiler(self):
         compiler = self.settings.compiler.value
@@ -163,7 +163,7 @@ class LlvmConan(ConanFile):
         if self.options.get_safe('with_zlib', False):
             self.requires('zlib/1.2.11@mercseng/v0')
         if self.options.get_safe('with_xml2', False):
-            self.requires('libxml2/2.9.12@mercseng/v0')
+            self.requires('libxml2/2.9.9@mercseng/v1')
 
     def validate(self):
         if self.options.shared:  # Shared builds disabled just due to the CI

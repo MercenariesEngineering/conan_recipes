@@ -15,7 +15,7 @@ class USDConan(ConanFile):
     exports_sources = "CMakeLists.txt"
     generators = "cmake"
     short_paths = True
-    recipe_version = "2"
+    recipe_version = "4"
     _source_subfolder = "source_subfolder"
     
 
@@ -26,23 +26,23 @@ class USDConan(ConanFile):
         self.requires("materialx/1.38.10@mercseng/v0")
         if self.options.use_imaging:
             self.requires("OpenColorIO/1.1.1@mercseng/v0")
-            self.requires("OpenImageIO/2.1.15.0@mercseng/v3")
+            self.requires("OpenImageIO/2.1.15.0@mercseng/v5")
             self.requires("ptex/2.3.2@mercseng/v0")
-        self.requires("OpenSubdiv/3.4.3@mercseng/v1")
+        self.requires("OpenSubdiv/3.4.3@mercseng/v2")
         self.requires("tbb/2020.02@mercseng/v3")
         self.requires("zlib/1.2.11@mercseng/v0")
         #self.requires("glu/9.0.1@mercseng/v0")
         #self.requires("glew/2.1.0@mercseng/v0")
         if self.options.with_python:
-            self.requires("cpython/3.7.7@mercseng/v1")
-            self.requires("python-maquina/1.0.0@mercseng/v2")
+            self.requires("cpython/3.9.25@mercseng/v0")
+            self.requires("python-maquina/1.0.0@mercseng/v3")
         if self.options.with_qt:
-            self.requires("qt/5.12.6@mercseng/v5")
+            self.requires("qt/5.15.18@mercseng/v0")
         if self.options.with_python and self.options.with_qt:
-            self.requires("PySide2/5.12.6@mercseng/v6")
+            self.requires("PySide2/5.15.18@mercseng/v0")
 
     def build_requirements(self):
-        self.build_requires("cpython/3.7.7@mercseng/v1")
+        self.build_requires("cpython/3.9.25@mercseng/v0")
 
     def config_options(self):
         """fPIC is linux only."""
@@ -117,7 +117,7 @@ class USDConan(ConanFile):
 
         if self.settings.os == "Linux":
             # fix shebangs
-            python_shebang = "#!/usr/bin/env python3.7\n"
+            python_shebang = "#!/usr/bin/env python3.9\n"
             bin_directory = os.path.join(self.package_folder, "bin")
             if os.path.exists(bin_directory):
                 with tools.chdir(bin_directory):
