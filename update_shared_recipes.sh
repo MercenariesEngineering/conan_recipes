@@ -103,4 +103,4 @@
 #conan export  wxwidgets_2.8.12/conanfile.py                    wxwidgets/2.8.12@mercseng/v1
 #conan export  yaml-cpp_0.6.3/conanfile.py                      yaml-cpp/0.6.3@mercseng/v0
 #conan export  zlib_1.2.11/conanfile.py                         zlib/1.2.11@mercseng/v0
-#conan export  zstd_1.4.5/conanfile.py                          zstd/1.4.5@mercseng/v0
+#conan export  zstd_1.4.5/conanfile.py                          zstd/1.4.5@mercseng/v1

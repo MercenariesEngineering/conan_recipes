@@ -18,6 +18,7 @@ class LiunwindConan(ConanFile):
     requires = "lzma/5.2.4@mercseng/v1"
     _autotools = None
     recipe_version="1"
+    __sub_version__ = 0 # test from docker
 
     @property
     def _source_subfolder(self):

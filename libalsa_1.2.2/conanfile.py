@@ -16,6 +16,7 @@ class LibalsaConan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     _autotools = None
     recipe_version = "2"
+    __sub_version__ = 0 # test from docker
 
     @property
     def _source_subfolder(self):

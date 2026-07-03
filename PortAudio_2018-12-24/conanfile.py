@@ -33,9 +33,9 @@ class PortAudio(ConanFile):
 
     def source(self):
         """Retrieve source code."""
-        tools.get("https://app.assembla.com/spaces/portaudio/git/source/b7870b08f770c1e84b754e662c08b6942ff7d021?_format=zip",
-            filename="root.zip",
-            destination=self._source_subfolder)
+        tools.get("https://github.com/PortAudio/portaudio/archive/b7870b08f770c1e84b754e662c08b6942ff7d021.zip")
+        extracted_dir = "portaudio-b7870b08f770c1e84b754e662c08b6942ff7d021"
+        os.rename(extracted_dir, self._source_subfolder)
 
     def cmake_definitions(self):
         """Setup CMake definitions."""
