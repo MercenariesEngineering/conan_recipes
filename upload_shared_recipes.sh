@@ -85,7 +85,7 @@ export REPO="mercenaries"
 #conan upload python3/3.7@mercseng/v0                                            -r $REPO --all --confirm
 #conan upload python3/3.10@mercseng/v0                                           -r $REPO --all --confirm
 #conan upload python3.10_headers/3.10@mercseng/v0                                -r $REPO --all --confirm
-#conan upload python-maquina/1.0.0@mercseng/v3                                   -r $REPO --all --confirm
+#conan upload python-maquina/1.0.0@mercseng/v4                                   -r $REPO --all --confirm
 #conan upload python-maquina-dev/1.0.0@mercseng/v4                               -r $REPO --all --confirm
 #conan upload qt/5.12.6@mercseng/v6                                              -r $REPO --all --confirm
 #conan upload qt/5.15.18@mercseng/v0                                              -r $REPO --all --confirm

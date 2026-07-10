@@ -35,7 +35,7 @@ class USDConan(ConanFile):
         #self.requires("glew/2.1.0@mercseng/v0")
         if self.options.with_python:
             self.requires("cpython/3.9.25@mercseng/v0")
-            self.requires("python-maquina/1.0.0@mercseng/v3")
+            self.requires("python-maquina/1.0.0@mercseng/v4")
         if self.options.with_qt:
             self.requires("qt/5.15.18@mercseng/v0")
         if self.options.with_python and self.options.with_qt:

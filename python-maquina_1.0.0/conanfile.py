@@ -7,19 +7,20 @@ class PythonPackages(ConanFile):
     version = "1.0.0"
     settings = "os", "compiler", "build_type", "arch"
     packages = [
-        ("wheel", "0.34.1"),
-        ("numpy", "1.17.5"),
-        ("psutil", "5.6.7"),
-        ("pylint", "2.4.4"),
-        ("docutils", "0.17.1"),
-        ("Sphinx", "2.3.1"),
+        ("wheel", "0.46.2"),
+        ("numpy", "2.0.0"),
+        ("psutil", "7.1.2"),
+        ("pylint", "3.0.0"),
+        ("docutils", "0.19"),
+        ("Sphinx", "7.0.0"),
         ("recommonmark", "0.7.1"),
-        ("sphinx-rtd-theme", "0.4.3"),
-        ("sphinx-markdown-tables", "0.0.10"),
-        ("pytest", "5.3.4"),
-        ("PyOpenGL", "3.1.5")
+        ("sphinx-rtd-theme", "3.1.0"),
+        ("sphinx-markdown-tables", "0.0.17"),
+        ("pytest", "8.0.0"),
+        ("PyOpenGL", "3.1.10"),
+        ("charset-normalizer", "3.4.0")
     ]
-    recipe_version = "2"
+    recipe_version = "4"
 
     def config_options(self):
         if self.settings.os == "Windows":
@@ -27,7 +28,7 @@ class PythonPackages(ConanFile):
             self.settings.remove("compiler")
 
     def requirements(self):
-        self.requires("cpython/3.7.7@mercseng/v1")
+        self.requires("cpython/3.9.25@mercseng/v0")
 
     def build(self):
         """Build the elements to package."""
@@ -46,7 +47,7 @@ class PythonPackages(ConanFile):
         """Assemble the package."""
         if self.settings.os == "Linux":
             # fix shebangs
-            python_shebang = "#!/usr/bin/env python3.7\n"
+            python_shebang = "#!/usr/bin/env python3.9\n"
             bin_directory = os.path.join(self.package_folder, "bin")
             if os.path.exists(bin_directory):
                 with tools.chdir(bin_directory):

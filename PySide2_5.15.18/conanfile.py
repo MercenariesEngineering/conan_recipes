@@ -26,7 +26,7 @@ class PySide2(ConanFile):
         self.requires("OpenSSL/1.1.1g@mercseng/v0")
         self.requires("libxml2/2.9.9@mercseng/v1")
         self.requires("cpython/3.9.25@mercseng/v0")
-        self.requires("python-maquina/1.0.0@mercseng/v3")
+        self.requires("python-maquina/1.0.0@mercseng/v4")
 
     def config_options(self):
         """fPIC is linux only."""
