@@ -10,6 +10,7 @@ class FBX(ConanFile):
     name = "FBX"
     options = {"shared": [True, False]}
     default_options = {"shared": False}
+    recipe_version="1"
 
     def config_options(self):
         if self.settings.os != "Windows":
@@ -18,7 +19,7 @@ class FBX(ConanFile):
             raise RuntimeError("Only Visual Studio is supported on Windows.")
 
     def requirements(self):
-        self.requires("libxml2/2.9.9@mercseng/v0")
+        self.requires("libxml2/2.9.9@mercseng/v1")
 
     @property
     def _filename(self):

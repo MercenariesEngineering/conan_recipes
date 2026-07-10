@@ -8,14 +8,15 @@ class PythonPackages(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     packages = [
         ("conan", "1.62"),
-        ("docutils", "0.17.1"),
-        ("pip", "23.0.1"),
-        ("pytest", "5.3.4"),
-        ("pylint", "2.4.4"),
+        ("docutils", "0.19"),
+        ("pip", "26.0.1"),
+        ("pytest", "8.0.0"),
+        ("pylint", "3.0.0"),
         ("stdlib-list", "0.8.0"),
-        ("sphinx", "5.3.0"),
+        ("sphinx", "7.0.0"),
         ("sphinx-code-tabs", "0.5.3"),
-        ("sphinx-rtd-theme", "1.2.0")
+        ("sphinx-rtd-theme", "3.1.0"),
+        ("charset-normalizer", "3.4.0")
     ]
     exports_sources = "bootloader_Windows-64bit.zip"
     recipe_version = "2"
@@ -26,8 +27,8 @@ class PythonPackages(ConanFile):
             self.settings.remove("compiler")
 
     def requirements(self):
-        self.requires("cpython/3.7.7@mercseng/v1")
-        self.requires("python-maquina/1.0.0@mercseng/v2")
+        self.requires("cpython/3.9.25@mercseng/v0")
+        self.requires("python-maquina/1.0.0@mercseng/v4")
 
     def build(self):
         """Build the elements to package."""
@@ -46,7 +47,7 @@ class PythonPackages(ConanFile):
         """Assemble the package."""
         if self.settings.os == "Linux":
             # fix shebangs
-            python_shebang = "#!/usr/bin/env python3.7\n"
+            python_shebang = "#!/usr/bin/env python3.9\n"
             bin_directory = os.path.join(self.package_folder, "bin")
             if os.path.exists(bin_directory):
                 with tools.chdir(bin_directory):

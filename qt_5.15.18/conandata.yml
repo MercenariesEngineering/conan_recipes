@@ -1,0 +1,4 @@
+sources:
+  "5.15.18":
+    url: "https://download.qt.io/archive/qt/5.15/5.15.18/single/qt-everywhere-opensource-src-5.15.18.tar.xz"
+    md5: "51d97438bd33f8f0042593cf6cc4490c"

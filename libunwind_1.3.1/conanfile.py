@@ -15,8 +15,10 @@ class LiunwindConan(ConanFile):
     settings = "os", "arch", "compiler", "build_type"
     options = {"shared": [True, False], "fPIC": [True, False], "coredump": [True, False], "ptrace": [True, False], "setjmp": [True, False]}
     default_options = {"shared": True, "fPIC": True, "coredump": True, "ptrace": True, "setjmp": True}
-    requires = "lzma/5.2.4@mercseng/v0"
+    requires = "lzma/5.2.4@mercseng/v1"
     _autotools = None
+    recipe_version="1"
+    __sub_version__ = 0 # test from docker
 
     @property
     def _source_subfolder(self):

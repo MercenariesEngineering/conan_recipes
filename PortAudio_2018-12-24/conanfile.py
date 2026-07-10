@@ -14,13 +14,14 @@ class PortAudio(ConanFile):
     exports_sources = "CMakeLists.txt"
     generators = "cmake"
     _source_subfolder = "source_subfolder"
+    recipe_version = "1"
 
     def build_requirements(self):
         """Define runtime requirements."""
         if self.settings.os == "Linux":
             # Build requirements because we need it to build but we do not want to use it on dev 
             # machines or include it in packages.
-            self.build_requires("libalsa/1.2.2@mercseng/v0")
+            self.build_requires("libalsa/1.2.2@mercseng/v2")
 
     def config_options(self):
         """fPIC is linux only."""
@@ -32,9 +33,9 @@ class PortAudio(ConanFile):
 
     def source(self):
         """Retrieve source code."""
-        tools.get("https://app.assembla.com/spaces/portaudio/git/source/b7870b08f770c1e84b754e662c08b6942ff7d021?_format=zip",
-            filename="root.zip",
-            destination=self._source_subfolder)
+        tools.get("https://github.com/PortAudio/portaudio/archive/b7870b08f770c1e84b754e662c08b6942ff7d021.zip")
+        extracted_dir = "portaudio-b7870b08f770c1e84b754e662c08b6942ff7d021"
+        os.rename(extracted_dir, self._source_subfolder)
 
     def cmake_definitions(self):
         """Setup CMake definitions."""

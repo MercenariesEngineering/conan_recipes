@@ -7,6 +7,7 @@ class PythonPackages(ConanFile):
     version = "0.2.0"
     settings = "os", "arch"
     default_options = "*:shared=False"
+    recipe_version = "1"
 
     packages = [
         ("compdb", "0.2.0")
@@ -16,7 +17,7 @@ class PythonPackages(ConanFile):
         self.options["cpython"].shared = True
 
     def build_requirements(self):
-        self.build_requires("cpython/3.7.7@mercseng/v0")
+        self.build_requires("cpython/3.9.25@mercseng/v0")
 
     def build(self):
         """Build the elements to package."""
@@ -31,7 +32,7 @@ class PythonPackages(ConanFile):
         """Assemble the package."""
         if self.settings.os == "Linux":
             # fix shebangs
-            python_shebang = "#!/usr/bin/env python3.7\n"
+            python_shebang = "#!/usr/bin/env python3.9\n"
             bin_directory = os.path.join(self.package_folder, "bin")
             if os.path.exists(bin_directory):
                 with tools.chdir(bin_directory):
