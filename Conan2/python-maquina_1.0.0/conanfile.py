@@ -45,10 +45,10 @@ class PythonPackages(ConanFile):
             del self.settings.compiler
 
     def requirements(self):
-        self.requires("cpython/3.9.19")
+        self.requires("cpython/3.13.12")
 
     #def build_requirements(self):
-    #    self.tool_requires("cpython/3.9.19", options={"shared": True})
+    #    self.tool_requires("cpython/3.13.12", options={"shared": True})
 
     def build(self):
         env = Environment()
