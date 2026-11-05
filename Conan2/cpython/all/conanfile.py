@@ -605,7 +605,7 @@ class CPythonConan(ConanFile):
         else:
             autotools = Autotools(self)
             autotools.configure()
-            autotools.make()
+            autotools.make(target="sharedmods", args=["MODULE__POSIXSHMEM_LDFLAGS=-lrt"])
             # Now we make sure that pip and wheel are installed by default as on Windows
             env = Environment()
             env.append_path("LD_LIBRARY_PATH", ".")
@@ -787,8 +787,8 @@ class CPythonConan(ConanFile):
         else:
             python_exe = "${CMAKE_CURRENT_LIST_DIR}/../../bin/" + self._cpython_interpreter_name
             python_library = "${CMAKE_CURRENT_LIST_DIR}/../" + self._exact_lib_name
-            python_include_dirs = "${CMAKE_CURRENT_LIST_DIR}/../../include/python3.9"
-            python_include_dir = "${CMAKE_CURRENT_LIST_DIR}/../../include/python3.9"
+            python_include_dirs = "${CMAKE_CURRENT_LIST_DIR}/../../include/python3.13"
+            python_include_dir = "${CMAKE_CURRENT_LIST_DIR}/../../include/python3.13"
 
         cmake_file = os.path.join(self.package_folder, self._cmake_module_path, "use_conan_python.cmake")
         content = template.replace("@PYTHON_EXECUTABLE@", python_exe)
@@ -810,7 +810,7 @@ class CPythonConan(ConanFile):
             if is_apple_os(self):
                 # FIXME: See https://github.com/python/cpython/issues/109796, this workaround is mentioned there
                 autotools.make(target="sharedinstall", args=["DESTDIR="])
-            autotools.install(args=["DESTDIR="])
+            autotools.install(args=["DESTDIR=", "COMPILEALL_OPTS=-j1"])
             rmdir(self, os.path.join(self.package_folder, "lib", "pkgconfig"))
             rmdir(self, os.path.join(self.package_folder, "share"))
 

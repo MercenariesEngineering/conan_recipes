@@ -53,6 +53,7 @@ export REPO="conan2_packages"   # conan2
 #conan upload libuuid/1.0.3@mercseng/v0                                          -r $REPO --all --confirm
 #conan upload libwebp/1.1.0@mercseng/v0                                          -r $REPO --all --confirm
 #conan upload libxml2/2.9.9@mercseng/v1                                          -r $REPO --all --confirm
+#conan upload libxslt/1.1.42                                                     -r $REPO --confirm
 #conan upload llvm/3.5.1@mercseng/v1                                             -r $REPO --all --confirm
 #conan upload llvm/13.0.1@mercseng/v1                                            -r $REPO --all --confirm
 #conan upload lzma/5.2.4@mercseng/v1                                             -r $REPO --all --confirm
