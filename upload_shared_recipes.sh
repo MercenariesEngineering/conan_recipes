@@ -1,6 +1,7 @@
 #!/bin/sh
 
-export REPO="mercenaries"
+#export REPO="mercenaries"       # conan1
+export REPO="conan2_packages"   # conan2
 
 #conan upload Alembic/1.7.12@mercseng/v1                                         -r $REPO --all --confirm
 #conan upload b2/4.2.0@mercseng/v0                                               -r $REPO --all --confirm
@@ -12,11 +13,12 @@ export REPO="mercenaries"
 #conan upload cmake/3.17.3@mercseng/v0                                           -r $REPO --all --confirm
 #conan upload cmake/3.28.1@mercseng/v0                                           -r $REPO --all --confirm
 #conan upload cpython/3.7.7@mercseng/v1                                          -r $REPO --all --confirm
-#conan upload cpython/3.9.25@mercseng/v0                                          -r $REPO --all --confirm
+#conan upload cpython/3.9.25@mercseng/v0                                         -r $REPO --all --confirm
+#conan upload cpython/3.13.12                                                    -r $REPO --confirm
 #conan upload double-conversion/3.1.5@mercseng/v0                                -r $REPO --all --confirm
 #conan upload eigen/3.3.7@mercseng/v0                                            -r $REPO --all --confirm
 #conan upload embree/3.9.0@mercseng/v2                                           -r $REPO --all --confirm
-#conan upload embree/3.13.5@mercseng/v1                                           -r $REPO --all --confirm
+#conan upload embree/3.13.5@mercseng/v1                                          -r $REPO --all --confirm
 #conan upload expat/2.2.9@mercseng/v0                                            -r $REPO --all --confirm
 #conan upload FBX/2020.0.1@mercseng/v0                                           -r $REPO --all --confirm
 #conan upload FBX/2020.2.1@mercseng/v1                                           -r $REPO --all --confirm
@@ -51,12 +53,14 @@ export REPO="mercenaries"
 #conan upload libuuid/1.0.3@mercseng/v0                                          -r $REPO --all --confirm
 #conan upload libwebp/1.1.0@mercseng/v0                                          -r $REPO --all --confirm
 #conan upload libxml2/2.9.9@mercseng/v1                                          -r $REPO --all --confirm
+#conan upload libxslt/1.1.42                                                     -r $REPO --confirm
 #conan upload llvm/3.5.1@mercseng/v1                                             -r $REPO --all --confirm
 #conan upload llvm/13.0.1@mercseng/v1                                            -r $REPO --all --confirm
 #conan upload lzma/5.2.4@mercseng/v1                                             -r $REPO --all --confirm
 #conan upload m4/1.4.18@mercseng/v0                                              -r $REPO --all --confirm
 #conan upload materialx/1.37.1@mercseng/v0                                       -r $REPO --all --confirm
-#conan upload materialx/1.38.10@mercseng/v0                                       -r $REPO --all --confirm
+#conan upload materialx/1.38.10@mercseng/v0                                      -r $REPO --all --confirm
+#conan upload mpdecimal/4.0.0                                                    -r $REPO --confirm
 #conan upload nasm/2.13.02@mercseng/v0                                           -r $REPO --all --confirm
 #conan upload ncurses/6.2@mercseng/v0                                            -r $REPO --all --confirm
 #conan upload ninja/1.10.0@mercseng/v0                                           -r $REPO --all --confirm
@@ -80,15 +84,18 @@ export REPO="mercenaries"
 #conan upload pybind11/2.5.0@mercseng/v0                                         -r $REPO --all --confirm
 #conan upload pystring/1.1.3@mercseng/v0                                         -r $REPO --all --confirm
 #conan upload PySide2/5.12.6@mercseng/v7                                         -r $REPO --all --confirm
-#conan upload PySide2/5.15.18@mercseng/v0                                         -r $REPO --all --confirm
+#conan upload PySide2/5.15.18@mercseng/v0                                        -r $REPO --all --confirm
+#conan upload pyside6/6.8.3                                                      -r $REPO --confirm
 #conan upload python/2.6@mercseng/v1                                             -r $REPO --all --confirm
 #conan upload python3/3.7@mercseng/v0                                            -r $REPO --all --confirm
 #conan upload python3/3.10@mercseng/v0                                           -r $REPO --all --confirm
 #conan upload python3.10_headers/3.10@mercseng/v0                                -r $REPO --all --confirm
 #conan upload python-maquina/1.0.0@mercseng/v4                                   -r $REPO --all --confirm
+#conan upload python-maquina/1.0.0                                               -r $REPO --confirm
 #conan upload python-maquina-dev/1.0.0@mercseng/v4                               -r $REPO --all --confirm
+#conan upload python-maquina-dev/1.0.0                                           -r $REPO --confirm
 #conan upload qt/5.12.6@mercseng/v6                                              -r $REPO --all --confirm
-#conan upload qt/5.15.18@mercseng/v0                                              -r $REPO --all --confirm
+#conan upload qt/5.15.18@mercseng/v0                                             -r $REPO --all --confirm
 #conan upload rapidjson/1.1.0@mercseng/v0                                        -r $REPO --all --confirm
 #conan upload re2/2019-06-01@mercseng/v1                                         -r $REPO --all --confirm
 #conan upload readline/8.0@mercseng/v0                                           -r $REPO --all --confirm
@@ -101,6 +108,7 @@ export REPO="mercenaries"
 #conan upload USD/20.11-rumba@mercseng/v6                                        -r $REPO --all --confirm
 #conan upload USD/23.11-rumba@mercseng/v3                                        -r $REPO --all --confirm
 #conan upload USD/24.11-rumba@mercseng/v4                                        -r $REPO --all --confirm
+#conan upload usd/24.11                                                          -r $REPO --confirm
 #conan upload winflexbison/2.5.22@mercseng/v0                                    -r $REPO --all --confirm
 #conan upload wxwidgets/2.8.12@mercseng/v1                                       -r $REPO --all --confirm
 #conan upload yaml-cpp/0.6.3@mercseng/v0                                         -r $REPO --all --confirm

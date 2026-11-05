@@ -30,7 +30,7 @@ class PySide6(ConanFile):
             raise ConanInvalidConfiguration("This recipe does not support MSVC < 2019")
 
     def requirements(self):
-        self.requires("cpython/3.9.19")
+        self.requires("cpython/3.13.12")
         self.requires("libxml2/2.13.8")
         self.requires("libxslt/1.1.42")
         self.requires("opengl/system")
@@ -41,7 +41,7 @@ class PySide6(ConanFile):
         self.requires("md4c/0.4.8")
  
     def build_requirements(self):
-        #self.tool_requires("cpython/3.9.19")
+        #self.tool_requires("cpython/3.13.12")
         #self.tool_requires("python-maquina/1.0.0@mercs")
         #self.tool_requires("python-maquina-dev/1.0.0@mercs")
         self.tool_requires("ninja/[>=1.10.2 <2]")
